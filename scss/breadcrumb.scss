@@ -1,0 +1,35 @@
+.breadcrumb
+{
+    font-size:0;
+    background-color:#AAA;
+    min-height:25px;
+    list-style-type: none;
+    padding:0px;
+    li
+    {
+        font-size:1rem;
+        padding-left:15px;
+        padding-right:15px;
+        display: inline-block;
+        height:25px;
+        color:#222;
+        line-height:25px;
+        text-align: center;
+    }
+    li:not(:last-child)::after
+    {
+        content:" >";
+        color:orangered;
+    }
+    li:not(:last-child):hover
+    {
+        color:black;
+        text-decoration:underline;
+        cursor:pointer;
+    }
+    li:last-child
+    {
+        color:black;
+        font-weight: bold;
+    }
+}

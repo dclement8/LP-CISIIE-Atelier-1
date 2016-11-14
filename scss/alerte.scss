@@ -1,0 +1,63 @@
+﻿$default:#F4F4F4;
+$success:#00B700;
+$info:#3366FF;
+$avert:#FFCC00;
+$danger:#FF0000;
+
+.alert
+{
+	border-style:ridge;
+	border-radius:12px;
+	padding:12px;
+	background-color:$default;
+	border-color:darken($default,10%);
+	box-shadow:2px 2px 10px darken($default,10%) inset;
+}
+.alert:before
+{
+	font-weight: bold;
+}
+.alert.alert-success:before
+{
+  content:"O Réussi : ";
+}
+.alert.alert-success
+{
+	border-color:darken($success,10%);
+	background-color:$success;
+	box-shadow:2px 2px 10px darken($success,10%) inset;
+	color:white;
+}
+.alert.alert-info:before
+{
+  content:"! Information : ";
+}
+.alert.alert-info
+{
+	border-color:darken($info,10%);
+	background-color:$info;
+	box-shadow:2px 2px 10px darken($info,10%) inset;
+	color:white;
+}
+.alert.alert-avert:before
+{
+  content:"/!\\ Avertissement : ";
+}
+.alert.alert-avert
+{
+	border-color:darken($avert,10%);
+	background-color:$avert;
+	box-shadow:2px 2px 10px darken($avert,10%) inset;
+	color:black;
+}
+.alert.alert-danger:before
+{
+  content:"/!!\\ Erreur : ";
+}
+.alert.alert-danger
+{
+	border-color:darken($danger,10%);
+	background-color:$danger;
+	box-shadow:2px 2px 10px darken($danger,10%) inset;
+	color:white;
+}

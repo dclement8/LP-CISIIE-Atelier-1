@@ -1,0 +1,39 @@
+.navbar
+{
+    font-size:0;
+    background-color:#333;
+    min-height:50px;
+    list-style-type: none;
+    padding:0px;
+
+    li
+    {
+        background-color:#666;
+        font-size:1rem;
+        padding-left:15px;
+        padding-right:15px;
+        display: inline-block;
+        height:50px;
+        color:white;
+        line-height:50px;
+        text-align: center;
+    }
+
+    li:hover:not(.active):not(.disabled)
+    {
+        background-color:#BBB;
+        color:black;
+        cursor:pointer;
+    }
+
+    .active
+    {
+        color:gold;
+    }
+    
+    .disabled
+    {
+        color:#BBB;
+        cursor:not-allowed;
+    }
+}
