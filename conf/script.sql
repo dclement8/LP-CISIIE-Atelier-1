@@ -12,6 +12,8 @@ CREATE TABLE evenement(
         nom             Varchar (150) ,
         description     Varchar (1000) ,
         etat            Int ,
+		dateheureLimiteInscription Datetime ,
+        tarif                      Decimal (25,2) ,
         id_discipline   Int ,
         id_organisateur Int ,
         PRIMARY KEY (id )
