@@ -7,9 +7,9 @@ class Router extends AbstractRouter
 		
 	}
 	
-	public function addRoute($url, $ctrl, $mth, $level)
+	public function addRoute($url, $ctrl, $mth)
 	{
-		self::$routes[$url] = array($ctrl, $mth, $level);
+		self::$routes[$url] = array($ctrl, $mth);
 	}
 	
 	public static function dispatch(HttpRequest $http_request)
