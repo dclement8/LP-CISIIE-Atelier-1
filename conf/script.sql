@@ -83,9 +83,9 @@ CREATE TABLE organisateur(
 
 CREATE TABLE inscrit(
         dossard    Int ,
-        id         Int NOT NULL ,
+        id_participant         Int NOT NULL ,
         id_epreuve Int NOT NULL ,
-        PRIMARY KEY (id ,id_epreuve )
+        PRIMARY KEY (id_participant ,id_epreuve )
 )ENGINE=InnoDB;
 
 
@@ -94,15 +94,16 @@ CREATE TABLE inscrit(
 #------------------------------------------------------------
 
 CREATE TABLE classer(
+        position       Int ,
         temps          Int ,
-        id             Int NOT NULL ,
+        id_epreuve             Int NOT NULL ,
         id_participant Int NOT NULL ,
-        PRIMARY KEY (id ,id_participant )
+        PRIMARY KEY (id_epreuve ,id_participant )
 )ENGINE=InnoDB;
 
 ALTER TABLE evenement ADD CONSTRAINT FK_evenement_id_discipline FOREIGN KEY (id_discipline) REFERENCES discipline(id);
 ALTER TABLE epreuve ADD CONSTRAINT FK_epreuve_id_evenement FOREIGN KEY (id_evenement) REFERENCES evenement(id);
-ALTER TABLE inscrit ADD CONSTRAINT FK_inscrit_id FOREIGN KEY (id) REFERENCES participant(id);
+ALTER TABLE inscrit ADD CONSTRAINT FK_inscrit_id FOREIGN KEY (id_participant) REFERENCES participant(id);
 ALTER TABLE inscrit ADD CONSTRAINT FK_inscrit_id_epreuve FOREIGN KEY (id_epreuve) REFERENCES epreuve(id);
-ALTER TABLE classer ADD CONSTRAINT FK_classer_id FOREIGN KEY (id) REFERENCES epreuve(id);
+ALTER TABLE classer ADD CONSTRAINT FK_classer_id FOREIGN KEY (id_epreuve) REFERENCES epreuve(id);
 ALTER TABLE classer ADD CONSTRAINT FK_classer_id_participant FOREIGN KEY (id_participant) REFERENCES participant(id);
