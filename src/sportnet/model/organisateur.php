@@ -1,5 +1,6 @@
 <?php
-class organisateur {
+namespace sportnet\model;
+class organisateur extends AbstractModel {
 	private  $id;
 	private  $login;
 	private  $mdp;

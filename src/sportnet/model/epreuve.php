@@ -1,5 +1,6 @@
 <?php
-class epreuve {
+namespace sportnet\model;
+class epreuve extends AbstractModel {
 	private  $id;
 	private  $nom;
 	private  $distance;

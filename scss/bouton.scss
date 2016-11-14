@@ -1,0 +1,87 @@
+$default: white;
+$red: red;
+$green: green;
+$blue: blue;
+$defaultColorFont: #333333;
+$dark: black;
+
+.btn
+{
+	font-size:16px;
+	padding:7px;
+	border-width:3px;
+	text-align:center;
+	background-color:darken($default, 10%);
+	color:$defaultColorFont;
+	border-style:outset;
+	border-radius: 7px;
+	cursor: pointer;
+	transition: background-color 0.5s;
+	text-decoration: none;
+	display: block;
+	margin-bottom:10px;
+}
+.btn:hover
+{
+	background-color:$default;
+	color:$dark;
+	border-color:$dark;
+	border-style:inset;
+}
+.btn.btn-lg
+{
+	padding:15px;
+	border-radius: 15px;
+	font-size:18px;
+	border-width:5px;
+}
+.btn.btn-sm
+{
+	padding:3px;
+	border-radius: 3px;
+	font-size:12px;
+	border-width:2px;
+}
+.btn.btn-red
+{
+	color:darken($default, 10%);
+	background-color:darken($red, 10%);
+}
+.btn.btn-red:hover
+{
+	color:$default;
+	background-color:$red;
+}
+.btn.btn-gr
+{
+	color:darken($default, 10%);
+	background-color:darken($green, 10%);
+}
+.btn.btn-gr:hover
+{
+	color:$default;
+	background-color:$green;
+}
+.btn.btn-bl
+{
+	color:darken($default, 10%);;
+	background-color:darken($blue, 10%);
+}
+.btn.btn-bl:hover
+{
+	color:$default;
+	background-color:$blue;
+}
+.btn.btn-fat
+{
+	border-style: none;
+	border-radius: 0px;
+}
+.btn.btn-exlg
+{
+	width:100%;
+}
+.btn.btn-fan
+{
+	box-shadow: 3px 3px 5px $dark;
+}
