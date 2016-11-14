@@ -85,7 +85,7 @@ CREATE TABLE organisateur(
 #------------------------------------------------------------
 
 CREATE TABLE inscrit(
-        dossard    Int ,
+        dossard    int (11),
         id_participant         Int NOT NULL ,
         id_epreuve Int NOT NULL ,
         PRIMARY KEY (id_participant ,id_epreuve )
