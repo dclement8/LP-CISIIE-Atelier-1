@@ -33,7 +33,7 @@ abstract class AbstractRouter {
      *
      */
     
-    abstract public function addRoute($url, $ctrl, $mth, $level);
+    abstract public function addRoute($url, $ctrl, $mth);
 
     /*
      * Méthode dispatch : execute une route en fonction de la requête 
