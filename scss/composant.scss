@@ -1,0 +1,35 @@
+$tailleTexteEntete: 14px;
+$tailleTexteJumbotron: 18px;
+$tailleTitreJumbotron: 35px;
+$couleurBoutonJumbotron: #008080;
+$couleurFondJumbotron: #E4E4E4;
+
+.entete
+{
+	text-align:center;
+	h2
+	{
+		font-size:$tailleTexteEntete;
+	}
+}
+.jumbotron
+{
+	text-align: center;
+	background-color:$couleurFondJumbotron;
+	padding:15px;
+	border-radius: 15px;
+
+	h1
+	{
+		font-size:$tailleTitreJumbotron;
+	}
+	p
+	{
+		font-size:$tailleTexteJumbotron;
+	}
+	.btn
+	{
+		background-color:$couleurBoutonJumbotron;
+		color:#EEEEEE;
+	}
+}

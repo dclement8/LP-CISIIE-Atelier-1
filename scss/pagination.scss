@@ -1,0 +1,43 @@
+.pagination
+{
+    list-style-type: none;
+    padding: 0px;
+
+    li
+    {
+        font-size:1rem;
+        background-color:#CCC;
+        border-radius: 4px;
+        padding-left:10px;
+        padding-right:10px;
+        display: inline-block;
+        height:40px;
+        color:#111;
+        line-height:40px;
+        text-align: center;
+        border-style:outset;
+        border-width: 2px;
+    }
+    
+    li:hover:not(.active):not(.disabled)
+    {
+        background-color:#EEE;
+        color:black;
+        cursor:pointer;
+        border-style:inset;
+    }
+
+    .active
+    {
+        color:black;
+        background-color:#FCFCFC;
+        border-style:inset;
+    }
+    
+    .disabled
+    {
+        background-color:#AAA;
+        color:#444;
+        cursor:not-allowed;
+    }
+}

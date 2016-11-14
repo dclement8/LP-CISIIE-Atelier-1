@@ -12,6 +12,8 @@ CREATE TABLE evenement(
         nom             Varchar (150) ,
         description     Varchar (1000) ,
         etat            Int ,
+		dateheureLimiteInscription Datetime ,
+        tarif                      Decimal (25,2) ,
         id_discipline   Int ,
         id_organisateur Int ,
         PRIMARY KEY (id )
@@ -83,7 +85,7 @@ CREATE TABLE organisateur(
 #------------------------------------------------------------
 
 CREATE TABLE inscrit(
-        dossard    Int ,
+        dossard    int (11),
         id_participant         Int NOT NULL ,
         id_epreuve Int NOT NULL ,
         PRIMARY KEY (id_participant ,id_epreuve )
