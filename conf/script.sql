@@ -8,11 +8,12 @@
 #------------------------------------------------------------
 
 CREATE TABLE evenement(
-        id            int (11) Auto_increment  NOT NULL ,
-        nom           Varchar (150) ,
-        description   Varchar (1000) ,
-        etat          Int ,
-        id_discipline Int ,
+        id              int (11) Auto_increment  NOT NULL ,
+        nom             Varchar (150) ,
+        description     Varchar (1000) ,
+        etat            Int ,
+        id_discipline   Int ,
+        id_organisateur Int ,
         PRIMARY KEY (id )
 )ENGINE=InnoDB;
 
@@ -102,6 +103,7 @@ CREATE TABLE classer(
 )ENGINE=InnoDB;
 
 ALTER TABLE evenement ADD CONSTRAINT FK_evenement_id_discipline FOREIGN KEY (id_discipline) REFERENCES discipline(id);
+ALTER TABLE evenement ADD CONSTRAINT FK_evenement_id_organisateur FOREIGN KEY (id_organisateur) REFERENCES organisateur(id);
 ALTER TABLE epreuve ADD CONSTRAINT FK_epreuve_id_evenement FOREIGN KEY (id_evenement) REFERENCES evenement(id);
 ALTER TABLE inscrit ADD CONSTRAINT FK_inscrit_id FOREIGN KEY (id_participant) REFERENCES participant(id);
 ALTER TABLE inscrit ADD CONSTRAINT FK_inscrit_id_epreuve FOREIGN KEY (id_epreuve) REFERENCES epreuve(id);
