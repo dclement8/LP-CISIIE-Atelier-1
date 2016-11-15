@@ -106,7 +106,9 @@ class SportnetController {
 				
 				if($evenement == null)
 				{
-					$view = new \sportnet\view\SportnetView(null);
+					$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+			
+					$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
 					$view->render('espaceOrganisateur');
 				}
 				else
@@ -202,7 +204,9 @@ class SportnetController {
 		
 		if($auth->logged_in == true)
 		{
-			$view = new \sportnet\view\SportnetView(null);
+			$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+			
+			$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
 			$view->render('espaceOrganisateur');
 		}
 		else
@@ -233,7 +237,9 @@ class SportnetController {
 				
 				if($epreuve == null)
 				{
-					$view = new \sportnet\view\SportnetView(null);
+					$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+			
+					$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
 					$view->render('espaceOrganisateur');
 				}
 				else
@@ -246,7 +252,9 @@ class SportnetController {
 					
 					if($evenement == null)
 					{
-						$view = new \sportnet\view\SportnetView(null);
+						$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+			
+						$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
 						$view->render('espaceOrganisateur');
 					}
 					else
@@ -269,20 +277,18 @@ class SportnetController {
 							$_SESSION["message"][] = "Erreur lors de l'enregistrement de l'épreuve.";
 						}
 						
-						$view = new \sportnet\view\SportnetView(null);
+						$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+			
+						$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
 						$view->render('espaceOrganisateur');
 					}
 				}
 			}
 			else
 			{
-				$epreuve = null;
-				if(isset($_GET["epreuve"]))
-				{
-					$epreuve = \sportnet\model\epreuve::findById($_GET["epreuve"]);
-				}
-				
-				$view = new \sportnet\view\SportnetView($epreuve);
+				$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+			
+				$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
 				$view->render('espaceOrganisateur');
 			}
 		}
@@ -304,35 +310,37 @@ class SportnetController {
 			if(isset($_GET["event"]))
 			{
 				$evenement = \sportnet\model\evenement::findById($_GET["event"]);
-			}
-			else
-			{
-				$view = new \sportnet\view\SportnetView(null);
-				$view->render('espaceOrganisateur');
-			}
-			
-			if($evenement == null)
-			{
-				$view = new \sportnet\view\SportnetView(null);
-				$view->render('espaceOrganisateur');
-			}
-			else
-			{
-				$retour = $evenement->delete();
 				
-				$_SESSION["message"] = array();
-				if($retour == true)
+				if($evenement == null)
 				{
-					$_SESSION["message"][] = 1;
-					$_SESSION["message"][] = "Evenement supprimé.";
+					$view = new \sportnet\view\SportnetView(null);
+					$view->render('espaceOrganisateur');
 				}
 				else
 				{
-					$_SESSION["message"][] = 4;
-					$_SESSION["message"][] = "Erreur lors de la suppression de l'événement.";
+					$retour = $evenement->delete();
+					
+					$_SESSION["message"] = array();
+					if($retour == true)
+					{
+						$_SESSION["message"][] = 1;
+						$_SESSION["message"][] = "Evenement supprimé.";
+					}
+					else
+					{
+						$_SESSION["message"][] = 4;
+						$_SESSION["message"][] = "Erreur lors de la suppression de l'événement.";
+					}
+					
+					$view = new \sportnet\view\SportnetView(null);
+					$view->render('espaceOrganisateur');
 				}
-				
-				$view = new \sportnet\view\SportnetView(null);
+			}
+			else
+			{
+				$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+			
+				$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
 				$view->render('espaceOrganisateur');
 			}
 		}
@@ -357,13 +365,17 @@ class SportnetController {
 			}
 			else
 			{
-				$view = new \sportnet\view\SportnetView(null);
+				$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+			
+				$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
 				$view->render('espaceOrganisateur');
 			}
 			
 			if($epreuve == null)
 			{
-				$view = new \sportnet\view\SportnetView(null);
+				$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+			
+				$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
 				$view->render('espaceOrganisateur');
 			}
 			else
@@ -382,7 +394,9 @@ class SportnetController {
 					$_SESSION["message"][] = "Erreur lors de la suppression de l'épreuve.";
 				}
 				
-				$view = new \sportnet\view\SportnetView(null);
+				$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+			
+				$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
 				$view->render('espaceOrganisateur');
 			}
 		}
@@ -400,7 +414,9 @@ class SportnetController {
 		
 		if($auth->logged_in == true)
 		{
-			$view = new \sportnet\view\SportnetView(null);
+			$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+			
+			$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
 			$view->render('espaceOrganisateur');
 		}
 		else
@@ -480,7 +496,9 @@ class SportnetController {
 				$auth->login($login, $mdp);
 				if($auth->logged_in == true)
 				{
-					$view = new \sportnet\view\SportnetView(null);
+					$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+			
+					$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
 					$view->render('espaceOrganisateur');
 				}
 				else
@@ -611,6 +629,25 @@ class SportnetController {
 		{
 			$ctrl = new \sportnet\control\SportnetController($this->request);
 			$ctrl->listEvents();
+		}
+	}
+	
+	// Evénements d'un organisateur (Mes événements)
+	public function evenementsOrganisateur()
+	{
+		$auth = new \sportnet\utils\Authentification();
+		
+		if($auth->logged_in == true)
+		{
+			$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+			
+			$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
+			$view->render('espaceOrganisateur');
+		}
+		else
+		{
+			$view = new \sportnet\view\SportnetView(null);
+			$view->render('authentification');
 		}
 	}
 	
