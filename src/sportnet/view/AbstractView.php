@@ -60,7 +60,9 @@ abstract class AbstractView {
      *
      */
     protected function renderHeader(){
-        $html ='<header>Sportnet</header>';
+        $html  = "<header class='entete'>\n";
+		$html .= "\t<a href='/'>SportNet</a>\n";
+		$html .= "</header>\n";
         return $html;
     }
 
@@ -80,14 +82,30 @@ abstract class AbstractView {
 		}
 		else
 		{
-			$html .= "\t<li><a href='".$this->script_name."/creerEvenement/'>Créer un événement</a></li>\n";
-			$html .= "\t<li><a href='".$this->script_name."/espace/'>Mes événements</a></li>\n";
-			$html .= "\t<li><a href='".$this->script_name."/connexion/'>Déconnexion</a></li>\n";
+			$html .= "\t\t<li><a href='".$this->script_name."/creerEvenement/'>Créer un événement</a></li>\n";
+			$html .= "\t\t<li><a href='".$this->script_name."/espace/'>Mes événements</a></li>\n";
+			$html .= "\t\t<li><a href='".$this->script_name."/connexion/'>Déconnexion</a></li>\n";
 		}
 
-        $html .= "</ul>\n";
+        $html .= "\t</ul>\n";
+		$html .= "</nav>\n";
         return $html;
     }
+
+	protected function renderBreadcrumb($breadcrumb = null) {
+		$html  = "<div>\n";
+		$html .= "\t<ul class='breadcrumb'>\n";
+		$html .= "\t\t<li><a href='/'>Accueil</a></li>\n";
+
+		if($breadcrumb !== null) {
+			foreach($breadcrumb as $elem)
+				$html .= "\t\t<li>$elem</li>\n";
+		}
+
+		$html .= "\t</ul>\n";
+		$html .= "</div>\n";
+		return $html;
+	}
 
 
     /*

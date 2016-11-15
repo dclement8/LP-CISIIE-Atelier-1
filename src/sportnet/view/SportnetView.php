@@ -38,8 +38,9 @@ class SportnetView extends AbstractView{
 
         $style_file = $this->app_root.'css/style.css';
 
-        $header = $this->renderHeader();
-        $menu   = $this->renderMenu();
+        $header 	= $this->renderHeader();
+        $menu   	= $this->renderMenu();
+		$breadcrumb = $this->renderBreadcrumb();
 
 
 /*
@@ -56,26 +57,20 @@ class SportnetView extends AbstractView{
 <html lang="fr">
     <head>
         <meta charset="utf-8">
-        <title>Sportnet</title>
+        <title>SportNet</title>
         <link rel="stylesheet" href="${style_file}">
+		<script type="text/javascript" src="../js/details.js"></script>
+		<script type="text/javascript" src="../js/spoiler.js"></script>
     </head>
 
     <body>
+        ${header}
+        ${menu}
+		${breadcrumb}
 
-        <header class="theme-backcolor1"> ${header}  </header>
-
-        <section>
-
-            <aside>
-
-                <nav id="menu" class="theme-backcolor1"> ${menu} </nav>
-
-            </aside>
-
-            <div id="main">  ${main} </div>
-
-        </section>
-
+		<div class="container line">
+			${main}
+		</div>
     </body>
 </html>
 EOT;
