@@ -133,7 +133,7 @@ abstract class AbstractModel {
      * @return renvoie un objet model ou faux
      */
     
-    abstract static public function findById($id);
+    //abstract static public function findById($id);
     
     
     /*
@@ -153,7 +153,7 @@ abstract class AbstractModel {
      *
      */
     
-    abstract static public function findAll();
+    //abstract static public function findAll();
 
 
 }
