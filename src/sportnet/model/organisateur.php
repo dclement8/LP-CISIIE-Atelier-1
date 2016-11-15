@@ -22,7 +22,7 @@ class organisateur extends AbstractModel {
 	
 	protected function update()
 	{
-		$update = ("UPDATE organisateur SET login = :login, mdp = :mdp, nom = :nom, prenom = :prenom, adresse = :adresse, cp = :cp, ville = :ville, tel = :tel WHERE id = :id");
+		$update = "UPDATE organisateur SET login = :login, mdp = :mdp, nom = :nom, prenom = :prenom, adresse = :adresse, cp = :cp, ville = :ville, tel = :tel WHERE id = :id";
 		$update_prep = self::$db->prepare($update);
 		$update_prep->bindParam(':login', $this->login, \PDO::PARAM_STR);
 		$update_prep->bindParam(':mdp', $this->mdp, \PDO::PARAM_STR);

@@ -20,7 +20,7 @@ class participant extends AbstractModel {
 	
 	protected function update()
 	{
-		$update = ("UPDATE participant SET nom = :nom, prenom = :prenom, rue = :rue, cp = :cp, ville = :ville, tel = :tel WHERE id = :id");
+		$update = "UPDATE participant SET nom = :nom, prenom = :prenom, rue = :rue, cp = :cp, ville = :ville, tel = :tel WHERE id = :id";
 		$update_prep = self::$db->prepare($update);
 		$update_prep->bindParam(':nom', $this->nom, \PDO::PARAM_STR);
         $update_prep->bindParam(':prenom', $this->prenom, \PDO::PARAM_STR);

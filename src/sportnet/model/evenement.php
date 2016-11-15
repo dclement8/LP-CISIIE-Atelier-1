@@ -21,13 +21,16 @@ class evenement extends AbstractModel {
 	
 	protected function update()
 	{
-		$update = ("UPDATE evenement SET nom = :nom, description = :description, etat = :etat, dateheureLimiteInscription = :dateheureLimiteInscription, tarif = :tarif WHERE id = :id");
+		$update = "UPDATE evenement SET nom = :nom, description = :description, etat = :etat, dateheureLimiteInscription = :dateheureLimiteInscription,
+		tarif = :tarif, id_discipline = :id_discipline, id_organisateur = :id_organisateur WHERE id = :id";
 		$update_prep = self::$db->prepare($update);
 		$update_prep->bindParam(':nom', $this->nom, \PDO::PARAM_STR);
         $update_prep->bindParam(':description', $this->description, \PDO::PARAM_STR);
         $update_prep->bindParam(':etat', $this->etat, \PDO::PARAM_INT);
         $update_prep->bindParam(':dateheureLimiteInscription', $this->dateheureLimiteInscription, \PDO::PARAM_STR);
-		$update_prep->bindParam(':tarif', $this->ville, \PDO::PARAM_STR);;
+		$update_prep->bindParam(':tarif', $this->ville, \PDO::PARAM_STR);
+		$update_prep->bindParam(':id_discipline', $this->discipline->id, \PDO::PARAM_INT);
+		$update_prep->bindParam(':id_organisateur', $this->organisateur->id, \PDO::PARAM_INT);
 		$update_prep->bindParam(':id', $this->id, \PDO::PARAM_INT);
 		if($update_prep->execute()){
 			return true;
@@ -39,13 +42,15 @@ class evenement extends AbstractModel {
 	
 	protected function insert()
 	{
-		$insert = "INSERT INTO evenement VALUES(:id, :login, :mdp, :nom, :prenom, :adresse, :cp, :ville, :tel)";
+		$insert = "INSERT INTO evenement VALUES(:id, :login, :mdp, :nom, :prenom, :adresse, :cp, :ville, :tel, :id_discipline, :id_organisateur)";
         $insert_prep = self::$db->prepare($insert);
 		$insert_prep->bindParam(':nom', $this->nom, \PDO::PARAM_STR);
         $insert_prep->bindParam(':description', $this->description, \PDO::PARAM_STR);
         $insert_prep->bindParam(':etat', $this->etat, \PDO::PARAM_INT);
         $insert_prep->bindParam(':dateheureLimiteInscription', $this->dateheureLimiteInscription, \PDO::PARAM_STR);
-		$insert_prep->bindParam(':tarif', $this->ville, \PDO::PARAM_STR);;
+		$insert_prep->bindParam(':tarif', $this->ville, \PDO::PARAM_STR);
+		$insert_prep->bindParam(':id_discipline', $this->discipline->id, \PDO::PARAM_INT);
+		$insert_prep->bindParam(':id_organisateur', $this->organisateur->id, \PDO::PARAM_INT);
 		$insert_prep->bindParam(':id', $this->id, \PDO::PARAM_INT);
 		if($insert_prep->execute()){
 			return true;

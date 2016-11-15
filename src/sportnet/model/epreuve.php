@@ -18,8 +18,9 @@ class epreuve extends AbstractModel {
 	
 	protected function update()
 	{
-		$update = ("UPDATE epreuve SET nom = :nom, distance = :distance, dateheure = :dateheure WHERE id = :id");
+		$update = "UPDATE epreuve SET nom = :nom, distance = :distance, dateheure = :dateheure, id_evenement = :id_evenement WHERE id = :id";
 		$update_prep = self::$db->prepare($update);
+		$update_prep->bindParam(':id_evenement', $this->evenement->id, \PDO::PARAM_INT);
 		$update_prep->bindParam(':nom', $this->nom, \PDO::PARAM_STR);
         $update_prep->bindParam(':distance', $this->distance, \PDO::PARAM_INT);
         $update_prep->bindParam(':dateheure', $this->dateheure, \PDO::PARAM_STR);
@@ -34,12 +35,13 @@ class epreuve extends AbstractModel {
 	
 	protected function insert()
 	{
-		$insert = "INSERT INTO epreuve VALUES(:id, :nom, :distance, :dateheure)";
+		$insert = "INSERT INTO epreuve VALUES(:id, :nom, :distance, :dateheure, :id_evenement)";
         $insert_prep = self::$db->prepare($insert);
+		$insert_prep->bindParam(':id', $this->id, \PDO::PARAM_INT);
 		$insert_prep->bindParam(':nom', $this->nom, \PDO::PARAM_STR);
         $insert_prep->bindParam(':distance', $this->distance, \PDO::PARAM_INT);
         $insert_prep->bindParam(':dateheure', $this->dateheure, \PDO::PARAM_STR);
-		$insert_prep->bindParam(':id', $this->id, \PDO::PARAM_INT);
+		$insert_prep->bindParam(':id_evenement', $this->evenement_id, \PDO::PARAM_INT);
 		if($insert_prep->execute()){
 			return true;
 		}
