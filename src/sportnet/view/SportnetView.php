@@ -12,8 +12,9 @@ class SportnetView extends AbstractView{
         parent::__construct($data);
     }
 
-    protected function method(){
-
+    protected function method()
+	{
+		$htmlRender = "";
 
 		return $htmlRender;
 	}
