@@ -69,10 +69,13 @@ VALUES ('Hockey');
 /* Table evenement */
 
 INSERT INTO evenement (nom, description, etat, dateheureLimiteInscription, tarif, id_discipline, id_organisateur)
+VALUES ('Course de nuit', 'Course de nuit', 4, '2016-02-02 03:30:0', 06, 2, 1);
 
 INSERT INTO evenement (nom, description, etat, dateheureLimiteInscription, tarif, id_discipline, id_organisateur)
+VALUES ('Randoné de noël', 'Randonné dans les bois de Velaine-en-hais', 2, '2016-12-24 11:00:00', 14, 1, 2);
 
 INSERT INTO evenement (nom, description, etat, dateheureLimiteInscription, tarif, id_discipline, id_organisateur)
+VALUES ('Tennis en salle', 'Tennis dans le gymnase Jaques Cartier', 3, '2016-09-25 14:30:00', 20, 3, 3);
 
 
 /* Table épreuve */
