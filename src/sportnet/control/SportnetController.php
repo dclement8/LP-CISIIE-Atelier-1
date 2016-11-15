@@ -691,7 +691,7 @@ class SportnetController {
 					$infoInscrit[] = "Code Postal";
 					$infoInscrit[] = "Ville";
 					$infoInscrit[] = "Téléphone";
-					$tabInscrits[] = $infoInscrit[];
+					$tabInscrits[] = $infoInscrit;
 					
 					foreach($lesInscrits as $unInscrit)
 					{
