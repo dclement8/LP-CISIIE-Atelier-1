@@ -2,8 +2,8 @@
 namespace sportnet\view;
 
 class SportnetView extends AbstractView{
-    
-    /* Constructeur 
+
+    /* Constructeur
     *
     * On appelle le constructeur de la classe parent
     *
@@ -13,16 +13,16 @@ class SportnetView extends AbstractView{
     }
 
     protected function method(){
-		
-		
+
+
 		return $htmlRender;
 	}
-	
+
 
     /*
-     * Affiche une page HTML complète.  
-     *  
-     * En focntion du sélécteur, le contenu de la page changera. 
+     * Affiche une page HTML complète.
+     *
+     * En fonction du sélecteur, le contenu de la page changera.
      *
      */
     public function render($selector){
@@ -30,43 +30,43 @@ class SportnetView extends AbstractView{
 			case 'view':
 				$main = $this->method();
 				break;
-				
+
 			default:
 				$main = $this->method();
 				break;
         }
 
         $style_file = $this->app_root.'css/style.css';
-        
+
         $header = $this->renderHeader();
         $menu   = $this->renderMenu();
-        
-        
-/*  
- * Utilisation de la syntaxe HEREDOC pour ecrire la chaine de caractère de 
+
+
+/*
+ * Utilisation de la syntaxe HEREDOC pour écrire la chaine de caractère de
  * la page entière. Voir la documentation ici:
  *
  * http://php.net/manual/fr/language.types.string.php#language.types.string.syntax.heredoc
  *
- * Noter bien l'utilisation des variable dans la chaine de caractère
+ * Noter bien l'utilisation des variables dans la chaine de caractère
  *
- */        
+ */
         $html = <<<EOT
 <!DOCTYPE html>
 <html lang="fr">
     <head>
         <meta charset="utf-8">
         <title>Sportnet</title>
-        <link rel="stylesheet" href="${style_file}"> 
+        <link rel="stylesheet" href="${style_file}">
     </head>
 
     <body>
-        
+
         <header class="theme-backcolor1"> ${header}  </header>
-        
+
         <section>
-    
-            <aside>    
+
+            <aside>
 
                 <nav id="menu" class="theme-backcolor1"> ${menu} </nav>
 
@@ -81,8 +81,8 @@ class SportnetView extends AbstractView{
 EOT;
 
     echo $html;
-        
+
     }
 
-    
+
 }

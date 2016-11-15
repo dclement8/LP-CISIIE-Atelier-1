@@ -2,40 +2,40 @@
 namespace sportnet\view;
 abstract class AbstractView {
 
-    
+
     protected $app_root = null;    /* répertoire racine de l'application */
     protected $script_name = null; /* le chemin vers le script */
     protected $data = null ;       /* une page ou un tableau de page */
-    
-    /* Constructeur 
+
+    /* Constructeur
     *
-    * Prend en paramète une variable (un objet page ou un tableau de page)
-    * 
-    * - Stock la variable dans l'attribut $data
-    * - Recupérer la racine de l'application depuis un objet HttpRequest, 
-    *   pour construire les URL des liens  et des actions des formulaire 
-    *   et le nom du scripte pour les stocker and les attributs 
+    * Prend en paramètre une variable (un objet page ou un tableau de page)
+    *
+    * - Stocke la variable dans l'attribut $data
+    * - Recupérer la racine de l'application depuis un objet HttpRequest,
+    *   pour construire les URL des liens  et des actions des formulaires
+    *   et le nom du script pour les stocker et les attributs
     *   $app_root et $script_name
     *
     */
     public function __construct($data){
         $this->data = $data;
-        
+
         $http = new \sportnet\utils\HttpRequest();
         $this->script_name  = $http->script_name;
         $this->app_root     = $http->getRoot();
     }
-    
+
     public function __get($attr_name) {
-        if (property_exists( $this, $attr_name)) 
+        if (property_exists( $this, $attr_name))
             return $this->$attr_name;
         $emess = __CLASS__ . ": unknown member $attr_name (__get)";
         throw new \Exception($emess);
     }
-    
+
     public function __set($attr_name, $attr_val) {
-        if (property_exists($this , $attr_name)) 
-            $this->$attr_name=$attr_val; 
+        if (property_exists($this , $attr_name))
+            $this->$attr_name=$attr_val;
         else{
             $emess = __CLASS__ . ": unknown member $attr_name (__set)";
             throw new \Exception($emess);
@@ -46,7 +46,7 @@ abstract class AbstractView {
         $prop = get_object_vars ($this);
         $str = "";
         foreach ($prop as $name => $val){
-            if( !is_array($val) ) 
+            if( !is_array($val) )
                 $str .= "$name : $val <br> ";
             else
                 $str .= "$name :". print_r($val, TRUE)."<br>";
@@ -55,10 +55,10 @@ abstract class AbstractView {
     }
 
 
-    /* 
-     *  Crée le fragment HTML de l'entête 
+    /*
+     *  Crée le fragment HTML de l'entête
      *
-     */ 
+     */
     protected function renderHeader(){
         $html ='<header>Sportnet</header>';
         return $html;
@@ -66,41 +66,38 @@ abstract class AbstractView {
 
 
     /*
-     * Crée le fragment HTML dumenu
+     * Crée le fragment HTML du menu
      *
      */
     protected function renderMenu(){
-        /*$html  = '<h2>Menu</h2>';
-        $html .= '<ul>';
-        $html .= '<li><a href="'.$this->script_name.'/wiki/list/">Tous les articles</a></li>';
-		
-		$auth = new \wikiapp\utils\Authentification();
+        $html  = "<nav class='menu'>\n";
+        $html .= "\t<ul class='navbar'>\n";
+
+		$auth = new \sportnet\utils\Authentification();
 		if($auth->logged_in == false)
 		{
-			$html .= '<li><a href="'.$this->script_name.'/admin/login/">Connexion</a></li>';
-			$html .= '<li><a href="'.$this->script_name.'/admin/create/">Créer un compte</a></li>';
-		}	
+			$html .= "\t\t<li><a href='".$this->script_name."/connexion/'>Espace organisation</a></li>\n";
+		}
 		else
 		{
-			$html .= '<li><a href="'.$this->script_name.'/wiki/new/">Créer une page</a></li>';
-			$html .= '<li><a href="'.$this->script_name.'/admin/perso/">Votre espace</a></li>';
-			$html .= '<li><a href="'.$this->script_name.'/admin/logout/">Déconnexion</a></li>';
+			$html .= "\t<li><a href='".$this->script_name."/creerEvenement/'>Créer un événement</a></li>\n";
+			$html .= "\t<li><a href='".$this->script_name."/espace/'>Mes événements</a></li>\n";
+			$html .= "\t<li><a href='".$this->script_name."/connexion/'>Déconnexion</a></li>\n";
 		}
-		
-        $html .= "</ul>"; */
+
+        $html .= "</ul>\n";
         return $html;
-        
     }
-    
-   
+
+
     /*
-     * Affiche une page HTML complète.  
+     * Affiche une page HTML complète.
      *
-     * A definir dans les classe concrètes  
-     * 
+     * A definir dans les classe concrètes
+     *
      */
     abstract public function render($selector);
-    
-    
+
+
 
 }

@@ -31,18 +31,18 @@
 			</ul>
 		</div>
 
-		<form method="post" action="">
+		<form method="post" action="creer.html">
 			<div class="container line">
 				<div class="event offset-0 span-9">
 					<h3>Evénement</h3>
 					<p><input type="text" name="nom" placeholder="Nom" required="required"></p>
 					<p>
 						<label>Discipline :</label>
-						<select name="discipline" required="required">
-							<option value="1">----</option>
+						<select name="discipline">
+							<option value="1">1</option>
 						</select>
 					</p>
-					<p>
+					<div>
 						Etat :
 						<p>
 							<label>Invisible :</label>
@@ -56,7 +56,7 @@
 							<label>Visible (Inscription ouvertes) :</label>
 							<input type="radio" name="etat" value="3">
 						</p>
-					</p>
+					</div>
 					<p>
 						<label>Date limite d'inscription :</label>
 						<input type="datetime-local" name="date" required="required">
@@ -76,7 +76,7 @@
 					<p><input type="text" name="nom_epreuve" placeholder="Nom" required="required"></p>
 					<p>
 						<label>Date :</label>
-						<input type="date_epreuve" name="date" required="required">
+						<input type="date" name="date_epreuve" required="required">
 					</p>
 					<p><input type="number" name="dist_epreuve" placeholder="Distance (en m)" min="1" max="100000" required="required"></p>
 				</div>
