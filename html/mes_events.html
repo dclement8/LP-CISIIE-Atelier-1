@@ -4,7 +4,7 @@
 		<meta charset="UTF-8">
 		<title>SportNet</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1.0">
-		<link rel="stylesheet" type="text/css" href="/css/style.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/main.css"/>
 		<script type="text/javascript" src="../js/spoiler.js"></script>
 	</head>
 	<body>
@@ -14,7 +14,7 @@
 			</a>
 		</header>
 
-		<section class="menu">
+		<nav class="menu">
 			<ul class="navbar">
 				<!-- Non enregistré -->
 				<li><a href="espace_organisation.html">Espace organisation</a></li>
@@ -23,18 +23,18 @@
 				<!--<li><a href="mes_events.html">Mes événements</a></li>-->
 				<!--<li><a href="logout.html">Déconnexion</a></li>-->
 			</ul>
-		</section>
+		</nav>
 
-		<section>
+		<div>
 			<ul class="breadcrumb">
-				<li>Accueil</li>
+				<li><a href="index.html">Accueil</a></li>
 				<li>Mes événements</li>
 			</ul>
-		</section>
+		</div>
 
-		<section class="container">
+		<div class="container line">
 			<!-- Evenement avec inscriptions en cours -->
-			<div class="event">
+			<div class="event offset-0 span-4">
 				<h3>Event 1</h3>
 				<form method="post" action="">
 					<p><input type="text" name="nom" placeholder="Nom" required="required"></p>
@@ -76,7 +76,6 @@
 				</form>
 
 				<h4><a href="#" onclick="spoiler('1')">≡ Ajouter une épreuve</a></h4>
-				<h4><a href="#" onclick="spoiler('2')">≡ Voir les épreuves</a></h4>
 
 				<div id="spoiler-1">
 					<!-- Div masquée par défaut -->
@@ -91,6 +90,8 @@
 						<p><input type="submit"></p>
 					</form>
 				</div>
+
+				<h4><a href="#" onclick="spoiler('2')">≡ Voir les épreuves</a></h4>
 
 				<div id="spoiler-2">
 					<!-- Div masquée par défaut -->
@@ -115,7 +116,7 @@
 			</div>
 
 			<!-- Evenement avec inscriptions terminées -->
-			<div class="event">
+			<div class="event offset-0 span-4">
 				<h3>Event 2</h3>
 				<form method="post" action="">
 					<p><input type="text" name="nom" placeholder="Nom" required="required"></p>
@@ -185,6 +186,6 @@
 					</p>
 				</div>
 			</div>
-		</section>
+		</div>
 	</body>
 </html>
