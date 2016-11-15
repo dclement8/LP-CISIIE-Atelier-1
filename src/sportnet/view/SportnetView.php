@@ -37,7 +37,7 @@ class SportnetView extends AbstractView{
 				break;
         }
 
-        $style_file = $this->app_root.'css/style.css';
+        $style_file = $this->app_root.'css/main.css';
 
         $header = $this->renderHeader();
         $menu   = $this->renderMenu();
