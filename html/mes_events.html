@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<title>SportNet</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="../css/main.css"/>
+		<script type="text/javascript" src="../js/spoiler.js"></script>
+	</head>
+	<body>
+		<header class="entete">
+			<a href="index.html">
+				SportNet
+			</a>
+		</header>
+
+		<nav class="menu">
+			<ul class="navbar">
+				<!-- Non enregistré -->
+				<li><a href="espace_organisation.html">Espace organisation</a></li>
+				<!-- Enregistré -->
+				<!--<li><a href="creer.html">Créer un événement</a></li>-->
+				<!--<li><a href="mes_events.html">Mes événements</a></li>-->
+				<!--<li><a href="logout.html">Déconnexion</a></li>-->
+			</ul>
+		</nav>
+
+		<div>
+			<ul class="breadcrumb">
+				<li><a href="index.html">Accueil</a></li>
+				<li>Mes événements</li>
+			</ul>
+		</div>
+
+		<div class="container line">
+			<!-- Evenement avec inscriptions en cours -->
+			<div class="event offset-0 span-4">
+				<h3>Event 1</h3>
+				<form method="post" action="">
+					<p><input type="text" name="nom" placeholder="Nom" required="required"></p>
+					<p>
+						<label>Discipline :</label>
+						<select name="discipline" required="required">
+							<option value="1">----</option>
+						</select>
+					</p>
+					<p>
+						Etat :
+						<p>
+							<label>Invisible :</label>
+							<input type="radio" name="etat" value="1">
+						</p>
+						<p>
+							<label>Visible (Inscription fermées) :</label>
+							<input type="radio" name="etat" value="2">
+						</p>
+						<p>
+							<label>Visible (Inscription ouvertes) :</label>
+							<input type="radio" name="etat" value="3" checked>
+						</p>
+					</p>
+					<p>
+						<label>Date limite d'inscription :</label>
+						<input type="datetime-local" name="date" required="required">
+					</p>
+					<p>
+						<label>Tarif :</label>
+						<input type="number" name="tarif" min="0" required="required"> €
+					</p>
+					<p>
+						<label>Description :</label>
+						<textarea name="description" required="required"></textarea>
+					</p>
+
+					<p><input type="submit" value="Modifier"></p>
+				</form>
+
+				<h4><a href="#" onclick="spoiler('1')">≡ Ajouter une épreuve</a></h4>
+
+				<div id="spoiler-1">
+					<!-- Div masquée par défaut -->
+					<!-- Ajout d'une épreuve -->
+					<form method="post" action="">
+						<p><input type="text" name="nom_epreuve" placeholder="Nom" required="required"></p>
+						<p>
+							<label>Date :</label>
+							<input type="date_epreuve" name="date" required="required">
+						</p>
+						<p><input type="number" name="dist_epreuve" placeholder="Distance (en m)" min="1" max="100000" required="required"></p>
+						<p><input type="submit"></p>
+					</form>
+				</div>
+
+				<h4><a href="#" onclick="spoiler('2')">≡ Voir les épreuves</a></h4>
+
+				<div id="spoiler-2">
+					<!-- Div masquée par défaut -->
+					<!-- Voir/modifier une épreuve -->
+					<h4>Epreuve 1</h4>
+					<form method="post" action="">
+						<p><input type="text" name="nom_epreuve" placeholder="Nom" required="required"></p>
+						<p>
+							<label>Date :</label>
+							<input type="date_epreuve" name="date" required="required">
+						</p>
+						<p><input type="number" name="dist_epreuve" placeholder="Distance (en m)" min="1" max="100000" required="required"></p>
+						<p><input type="submit"></p>
+					</form>
+					<p>Participants :
+						<ul>
+							<li>toto</li>
+							<li>bob</li>
+						</ul>
+					</p>
+				</div>
+			</div>
+
+			<!-- Evenement avec inscriptions terminées -->
+			<div class="event offset-0 span-4">
+				<h3>Event 2</h3>
+				<form method="post" action="">
+					<p><input type="text" name="nom" placeholder="Nom" required="required"></p>
+					<p>
+						<label>Discipline :</label>
+						<select name="discipline" required="required">
+							<option value="1">----</option>
+						</select>
+					</p>
+					<p>
+						Etat :
+						<p>
+							<label>Invisible :</label>
+							<input type="radio" name="etat" value="1">
+						</p>
+						<p>
+							<label>Visible (Inscription fermées) :</label>
+							<input type="radio" name="etat" value="2" checked>
+						</p>
+						<p>
+							<label>Visible (Inscription ouvertes) :</label>
+							<input type="radio" name="etat" value="3">
+						</p>
+					</p>
+					<p>
+						<label>Date limite d'inscription :</label>
+						<input type="datetime-local" name="date" required="required">
+					</p>
+					<p>
+						<label>Tarif :</label>
+						<input type="number" name="tarif" min="0" required="required"> €
+					</p>
+					<p>
+						<label>Description :</label>
+						<textarea name="description" required="required"></textarea>
+					</p>
+
+					<p><input type="submit" value="Modifier"></p>
+				</form>
+
+				<h4><a href="#" onclick="spoiler('3')">≡ Voir les épreuves</a></h4>
+
+				<div id="spoiler-3">
+					<!-- Div masquée par défaut -->
+					<!-- Voir/modifier une épreuve -->
+					<h4>Epreuve 1</h4>
+					<form method="post" action="">
+						<p><input type="text" name="nom_epreuve" placeholder="Nom" required="required"></p>
+						<p>
+							<label>Date :</label>
+							<input type="date_epreuve" name="date" required="required">
+						</p>
+						<p><input type="number" name="dist_epreuve" placeholder="Distance (en m)" min="1" max="100000" required="required"></p>
+						<p><input type="submit"></p>
+					</form>
+
+					<p>
+						<button>Télécharger liste d'engagement</button>
+						<button>Upload classement</button>
+					</p>
+
+					<p>Participants :
+						<ul>
+							<li>toto</li>
+							<li>bob</li>
+						</ul>
+					</p>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

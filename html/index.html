@@ -1,20 +1,49 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 	<head>
 		<meta charset="UTF-8">
 		<title>SportNet</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1.0">
-		<link rel="stylesheet" type="text/css" href="/css/style.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/main.css"/>
 	</head>
-	<body>
-		<header>
+	<body class="grid">
+		<header class="entete">
 			<a href="index.html">
 				SportNet
 			</a>
 		</header>
-		<div class="container">
 
+		<nav class="menu">
+			<ul class="navbar">
+				<!-- Non enregistré -->
+				<li><a href="espace_organisation.html">Espace organisation</a></li>
+				<!-- Enregistré -->
+				<!--<li><a href="creer.html">Créer un événement</a></li>-->
+				<!--<li><a href="mes_events.html">Mes événements</a></li>-->
+				<!--<li><a href="logout.html">Déconnexion</a></li>-->
+			</ul>
+		</nav>
+
+		<div>
+			<ul class="breadcrumb">
+				<li><a href="index.html">Accueil</a></li>
+			</ul>
+		</div>
+
+		<div class="container line">
+			<div class="event offset-0 span-3">
+				<h3>Event 1</h3>
+				<p>Description avec un maximum de x caractères</p>
+				<p>Le 01/01/1970 à 00:00</p>
+				<h4><a href="details1.html">≡ En savoir plus</a></h4>
+			</div>
+
+			<div class="event offset-0 span-3">
+				<h3>Event 2</h3>
+				<p>Description avec un maximum de x caractères</p>
+				<p>Le 01/01/1970 à 00:00</p>
+				<h4><a href="details2.html">≡ En savoir plus</a></h4>
+			</div>
 		</div>
 	</body>
 </html>
