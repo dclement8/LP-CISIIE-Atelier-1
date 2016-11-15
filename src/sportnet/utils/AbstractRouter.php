@@ -55,7 +55,7 @@ abstract class AbstractRouter {
      * 
      */
     
-    abstract public static function dispatch(HttpRequest $http_request);
+    
 
 }
     
