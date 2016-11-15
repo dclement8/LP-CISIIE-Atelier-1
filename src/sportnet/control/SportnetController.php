@@ -515,7 +515,7 @@ class SportnetController {
 			{
 				$inscrit = new \sportnet\model\inscrit();
 				
-				$inscrit->dossard = $inscrit->getMaxDossard($epreuve);
+				$inscrit->dossard = \sportnet\model\inscrit::getMaxDossard($epreuve);
 				$inscrit->epreuve = $epreuve;
 				$inscrit->participant = $participant;
 				
@@ -579,7 +579,7 @@ class SportnetController {
 				{
 					$inscrit = new \sportnet\model\inscrit();
 				
-					$inscrit->dossard = $inscrit->getMaxDossard($epreuve);
+					$inscrit->dossard = \sportnet\model\inscrit::getMaxDossard($epreuve);
 					$inscrit->epreuve = $epreuve;
 					$inscrit->participant = $participant;
 					
@@ -589,7 +589,7 @@ class SportnetController {
 					if($retour == true)
 					{
 						$_SESSION["message"][] = 1;
-						$_SESSION["message"][] = "Vous êtes à présent inscrit à cette épreuve.";
+						$_SESSION["message"][] = "Vous êtes à présent inscrit à cette épreuve. Notez votre numéro de participant : ".\sportnet\model\participant::findByName($nom)->id;
 					}
 					else
 					{
@@ -621,7 +621,69 @@ class SportnetController {
 		
 		if($auth->logged_in == true)
 		{
+			$epreuve = \sportnet\model\epreuve::findById($_GET["epreuve"]);
 			
+			if($epreuve == null)
+			{
+				$ctrl = new \sportnet\control\SportnetController($this->request);
+				$ctrl->listEvents();
+			}
+			else
+			{
+				$tabInscrits = array();
+				
+				$lesInscrits = \sportnet\model\inscrit::findById($_GET["epreuve"]);
+				
+				if($lesInscrits == null)
+				{
+					$ctrl = new \sportnet\control\SportnetController($this->request);
+					$ctrl->listEvents();
+				}
+				else
+				{
+					$nomFichier = 'upload/listeParticipants_epreuve'.$_GET["epreuve"].'_'.time().'.csv';
+					$csv = new SplFileObject($nomFichier, 'w');
+					
+					// Entête CSV
+					$infoInscrit = array();
+					$infoInscrit[] = "Numéro dossard";
+					$infoInscrit[] = "Numéro participant";
+					$infoInscrit[] = "Nom";
+					$infoInscrit[] = "Prénom";
+					$infoInscrit[] = "Rue";
+					$infoInscrit[] = "Code Postal";
+					$infoInscrit[] = "Ville";
+					$infoInscrit[] = "Téléphone";
+					$tabInscrits[] = $infoInscrit[];
+					
+					foreach($lesInscrits as $unInscrit)
+					{
+						$infoInscrit = array();
+						$infoInscrit[] = $unInscrit->dossard;
+						$infoInscrit[] = $unInscrit->participant->id;
+						$infoInscrit[] = $unInscrit->participant->nom;
+						$infoInscrit[] = $unInscrit->participant->prenom;
+						$infoInscrit[] = $unInscrit->participant->rue;
+						$infoInscrit[] = $unInscrit->participant->cp;
+						$infoInscrit[] = $unInscrit->participant->ville;
+						$infoInscrit[] = $unInscrit->participant->tel;
+						$tabInscrits[] = $infoInscrit[];
+					}
+					
+					foreach ($tabInscrits as $unInscrit)
+					{
+						$line = '"';
+						$line .= implode('";"', $unInscrit);
+						$line .= '"';
+						$line .= "\r\n";
+					 
+						 $csv->fwrite($line);
+					}
+					
+					header("Location: ".$nomFichier);
+					exit;
+				}
+			}
 		}
 		else
 		{
