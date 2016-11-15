@@ -31,14 +31,6 @@ class SportnetController {
 			}
 			else
 			{
-				// $data[0] contient les données de l'événement
-				// $data[1] contient les données des épreuves de l'événement
-				// $data[2] contient les données du classement des épreuves de l'évenement
-				
-				$data[] = $event;
-				$listeEpreuves = $event->getEpreuves();
-				$data[] = $listeEpreuves;
-				
 				// Etats d'un événement :
 				//
 				//	1 ==> événement créé mais invisible pour les participants
@@ -53,28 +45,14 @@ class SportnetController {
 	
 					if($auth->logged_in == true)
 					{
-						$view = new \sportnet\view\SportnetView($data);
+						$view = new \sportnet\view\SportnetView($event);
 						$view->render('detailEvenement');
 					}
 					else
 					{
-						$view = new \sportnet\view\SportnetView($data);
-						$view->render('listEvents');
+						$ctrl = new \sportnet\control\SportnetController($this->request);
+						$ctrl->listEvents();
 					}
-				}
-				else
-				{
-					if($event->etat == 4)
-					{
-						$epreuves = $event->getEpreuves();
-						foreach($epreuves as $uneEpreuve)
-						{
-							$data[][] = \sportnet\model\classer::findById($uneEpreuve->id);
-						}
-					}
-					
-					$view = new \sportnet\view\SportnetView($data);
-					$view->render('detailEvenement');
 				}
 			}
 		}
