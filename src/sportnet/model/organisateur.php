@@ -87,7 +87,13 @@ class organisateur extends AbstractModel {
 	
 	public static function findById($leId)
 	{
-		$db = ConnectionFactory::makeConnection();
+		if(self::$db == null)
+		{
+			$connect = new \sportnet\utils\ConnectionFactory();
+			$connect->setConfig("conf/config.ini");
+			self::$db = $connect->makeConnection();
+			self::$db->query("SET CHARACTER SET utf8");
+		}
         $selectById = "SELECT * FROM organisateur WHERE id = :id";
         $selectById_prep = self::$db->prepare($selectById);
         $selectById_prep->bindParam(':id', $leId, \PDO::PARAM_INT);
@@ -99,7 +105,13 @@ class organisateur extends AbstractModel {
 	
 	public static function findAll()
 	{
-		$db = ConnectionFactory::makeConnection();
+		if(self::$db == null)
+		{
+			$connect = new \sportnet\utils\ConnectionFactory();
+			$connect->setConfig("conf/config.ini");
+			self::$db = $connect->makeConnection();
+			self::$db->query("SET CHARACTER SET utf8");
+		}
         $select = "SELECT * FROM organisateur";
         $resultat = self::$db->query($select);
         if ($resultat) {
@@ -111,7 +123,13 @@ class organisateur extends AbstractModel {
 	
 	public static function findByLogin($leLogin)
 	{
-		$db = ConnectionFactory::makeConnection();
+		if(self::$db == null)
+		{
+			$connect = new \sportnet\utils\ConnectionFactory();
+			$connect->setConfig("conf/config.ini");
+			self::$db = $connect->makeConnection();
+			self::$db->query("SET CHARACTER SET utf8");
+		}
         $selectByName = "SELECT * FROM organisateur WHERE login = :login";
         $selectByName_prep = self::$db->prepare($selectById);
         $selectByName_prep->bindParam(':login', $leLogin, \PDO::PARAM_STR);
