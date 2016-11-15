@@ -93,7 +93,6 @@ class organisateur extends AbstractModel {
         $selectById_prep->bindParam(':id', $leId, \PDO::PARAM_INT);
         if ($selectById_prep->execute()) {
             return $selectById_prep->fetchObject(__CLASS__);
-        }else{
             return null;
         }
 	}
