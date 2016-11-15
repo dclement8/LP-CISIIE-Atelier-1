@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<title>SportNet</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="/css/style.css"/>
+		<script type="text/javascript" src="../js/details.js"></script>
+		<script type="text/javascript" src="../js/spoiler.js"></script>
+	</head>
+	<body>
+		<header class="entete">
+			<a href="index.html">
+				SportNet
+			</a>
+		</header>
+
+		<section class="menu">
+			<ul class="navbar">
+				<!-- Non enregistré -->
+				<li><a href="espace_organisation.html">Espace organisation</a></li>
+				<!-- Enregistré -->
+				<!--<li><a href="creer.html">Créer un événement</a></li>-->
+				<!--<li><a href="mes_events.html">Mes événements</a></li>-->
+				<!--<li><a href="logout.html">Déconnexion</a></li>-->
+			</ul>
+		</section>
+
+		<section>
+			<ul class="breadcrumb">
+				<li>Accueil</li>
+				<li>Evenement</li>
+				<li>Détails</li>
+			</ul>
+		</section>
+
+		<section class="container">
+			<div class="event">
+				<h6>Partager : <input type="text" id="partager" size="64"></h6>
+				<p>Début le 01/01/1970 à 00:00</p>
+				<hr>
+				<p>Description complète</p>
+
+				<div class="alert alert-success">Les inscriptions sont ouvertes</div>
+
+				<div class="epreuve">
+					<h4>Epreuve 1</h4>
+					<ul>
+						<li>Le 01/01/1970 à 00:00</li>
+						<li>100m</li>
+					</ul>
+
+					<button onclick="spoiler('1')">S'Inscrire</button>
+
+					<div id="spoiler-1">
+						<!-- Div masquée par défaut -->
+						<div>
+							<form method="post" action="">
+								Numéro de participant :
+								<input type="number" name="num" required="required">
+								<input type="submit">
+							</form>
+						</div>
+
+						<div>
+							<form method="post" action="">
+								OU
+								<p><input type="text" name="nom" placeholder="Nom" required="required"></p>
+								<p><input type="text" name="prenom" placeholder="Prénom" required="required"></p>
+								<p><input type="text" name="adresse" placeholder="Adresse" required="required"></p>
+								<p><input type="text" name="ville" placeholder="Ville" required="required"></p>
+								<p><input type="number" name="cp" placeholder="Code Postal" min="01000" max="99999" required="required"></p>
+								<p><input type="tel" name="tel" placeholder="Téléphone" required="required"></p>
+								<p><input type="submit" value="Inscription"></p>
+							</form>
+						</div>
+					</div>
+				</div>
+
+				<div class="epreuve">
+					<h4>Epreuve 2</h4>
+					<ul>
+						<li>Le 01/01/1970 à 00:00</li>
+						<li>200m</li>
+					</ul>
+
+					<button onclick="spoiler('2')">S'Inscrire</button>
+
+					<div id="spoiler-2">
+						<!-- Div masquée par défaut -->
+						<div>
+							<form method="post" action="">
+								Numéro de participant :
+								<input type="number" name="num" required="required">
+								<input type="submit">
+							</form>
+						</div>
+
+						<div>
+							<form method="post" action="">
+								OU
+								<p><input type="text" name="nom" placeholder="Nom" required="required"></p>
+								<p><input type="text" name="prenom" placeholder="Prénom" required="required"></p>
+								<p><input type="text" name="adresse" placeholder="Adresse" required="required"></p>
+								<p><input type="text" name="ville" placeholder="Ville" required="required"></p>
+								<p><input type="number" name="cp" placeholder="Code Postal" min="01000" max="99999" required="required"></p>
+								<p><input type="tel" name="tel" placeholder="Téléphone" required="required"></p>
+								<p><input type="submit" value="Inscription"></p>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</body>
+</html>
