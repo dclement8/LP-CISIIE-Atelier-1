@@ -19,11 +19,12 @@ class classer extends AbstractModel {
 	
 	protected function update()
 	{
-		$update = ("UPDATE classer SET position = :position, temps = :temps WHERE id = :id");
+		$update = "UPDATE classer SET position = :position, temps = :temps WHERE id_epreuve = :id_epreuve AND id_participant = :id_participant";
 		$update_prep = self::$db->prepare($update);
 		$update_prep->bindParam(':position', $this->position, \PDO::PARAM_INT);
 		$update_prep->bindParam(':temps', $this->temps, \PDO::PARAM_INT);
-		$update_prep->bindParam(':id', $this->epreuve->id, \PDO::PARAM_INT);
+		$update_prep->bindParam(':id_epreuve', $this->epreuve->id, \PDO::PARAM_INT);
+		$update_prep->bindParam(':id_participant', $this->participant->id, \PDO::PARAM_INT);
 		if($update_prep->execute()){
 			return true;
 		}
@@ -34,10 +35,12 @@ class classer extends AbstractModel {
 	
 	protected function insert()
 	{
-		$insert = "INSERT INTO classer VALUES(:position, :temps)";
+		$insert = "INSERT INTO classer VALUES(:position, :temps, :id_epreuve, :id_participant)";
         $insert_prep = self::$db->prepare($insert);
 		$insert_prep->bindParam(':position', $this->position, \PDO::PARAM_INT);
 		$insert_prep->bindParam(':temps', $this->temps, \PDO::PARAM_INT);
+		$insert_prep->bindParam(':id_epreuve', $this->epreuve->id, \PDO::PARAM_INT);
+		$insert_prep->bindParam(':id_participant', $this->participant->id, \PDO::PARAM_INT);
 		if($insert_prep->execute()){
 			return true;
 		}
@@ -48,7 +51,7 @@ class classer extends AbstractModel {
 	
 	public function save()
 	{
-		if(is_null($this->epreuve->id)){
+		if(is_null($this->epreuve)){
 			return $this->insert();
 		}
 		else{
@@ -58,9 +61,10 @@ class classer extends AbstractModel {
 	
 	public function delete()
 	{
-		$delete = "DELETE FROM classer WHERE id = :id";
+		$delete = "DELETE FROM classer WHERE id_epreuve = :id_epreuve AND id_participant";
         $delete_prep = self::$db->prepare($delete);
-		$delete_prep->bindParam(':id', $this->epreuve->id, \PDO::PARAM_INT);
+		$delete_prep->bindParam(':id_epreuve', $this->epreuve->id, \PDO::PARAM_INT);
+		$delete_prep->bindParam(':id_participant', $this->participant->id, \PDO::PARAM_INT);
 		if($delete_prep->execute()){
 			return true;
 		}
@@ -69,12 +73,12 @@ class classer extends AbstractModel {
 		}
 	}
 	
-	public static function findById($leId)
+	public static function findById($leIdEpreuve)
 	{
 		$db = ConnectionFactory::makeConnection();
-        $selectById = "SELECT * FROM classer WHERE id = :id";
+        $selectById = "SELECT * FROM classer WHERE id_epreuve = :id_epreuve";
         $selectById_prep = self::$db->prepare($selectById);
-        $selectById_prep->bindParam(':id', $leId, \PDO::PARAM_INT);
+        $selectById_prep->bindParam(':id_epreuve', $leIdEpreuve, \PDO::PARAM_INT);
         if ($selectById_prep->execute()) {
             return $selectById_prep->fetchObject(__CLASS__);
         }else{
@@ -98,7 +102,7 @@ class classer extends AbstractModel {
 	{
 		$select = "SELECT * FROM epreuve where id = :id";
         $select_prep = self::$db->prepare($select);
-        $select_prep->bindParam(":id", $this->epreuve->id, \PDO::PARAM_INT);
+		$select_prep->bindParam(':id', $this->epreuve->id, \PDO::PARAM_INT);
         if($select_prep->execute()){
             return $select_prep->fetchObject(epreuve::class);
         }else{
@@ -110,7 +114,7 @@ class classer extends AbstractModel {
 	{
 		$select = "SELECT * FROM participant where id = :id";
         $select_prep = self::$db->prepare($select);
-        $select_prep->bindParam(":id", $this->participant->id, \PDO::PARAM_INT);
+		$select_prep->bindParam(':id', $this->participant->id, \PDO::PARAM_INT);
         if($select_prep->execute()){
             return $select_prep->fetchObject(participant::class);
         }else{

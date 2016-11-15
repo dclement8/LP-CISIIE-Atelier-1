@@ -15,7 +15,7 @@ class discipline extends AbstractModel {
 	
 	protected function update()
 	{
-		$update = ("UPDATE discipline SET nom = :nom WHERE id = :id");
+		$update = "UPDATE discipline SET nom = :nom WHERE id = :id";
 		$update_prep = self::$db->prepare($update);
 		$update_prep->bindParam(':nom', $this->nom, \PDO::PARAM_STR);
 		$update_prep->bindParam(':id', $this->id, \PDO::PARAM_INT);
