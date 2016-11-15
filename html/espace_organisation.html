@@ -4,7 +4,7 @@
 		<meta charset="UTF-8">
 		<title>SportNet</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1.0">
-		<link rel="stylesheet" type="text/css" href="/css/style.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/main.css"/>
 	</head>
 	<body>
 		<header class="entete">
@@ -13,7 +13,7 @@
 			</a>
 		</header>
 
-		<section class="menu">
+		<nav class="menu">
 			<ul class="navbar">
 				<!-- Non enregistré -->
 				<li><a href="espace_organisation.html">Espace organisation</a></li>
@@ -22,17 +22,17 @@
 				<!--<li><a href="mes_events.html">Mes événements</a></li>-->
 				<!--<li><a href="logout.html">Déconnexion</a></li>-->
 			</ul>
-		</section>
+		</nav>
 
-		<section>
+		<div>
 			<ul class="breadcrumb">
-				<li>Accueil</li>
+				<li><a href="index.html">Accueil</a></li>
 				<li>Espace organisation</li>
 			</ul>
-		</section>
+		</div>
 
-		<section class="container">
-			<div>
+		<div class="container line">
+			<div class="bloc offset-0 span-6">
 				<form method="post" action="">
 				<h3>Connexion</h3>
 					<p><input type="text" name="login" placeholder="Login" required="required"></p>
@@ -40,8 +40,8 @@
 					<p><input type="submit" value="Connexion"></p>
 				</form>
 			</div>
-			
-			<div>
+
+			<div class="bloc offset-0 span-6">
 				<form method="post" action="">
 				<h3>Inscription</h3>
 					<p><input type="text" name="login" placeholder="Login" required="required"></p>
@@ -51,11 +51,11 @@
 					<p><input type="text" name="prenom" placeholder="Prénom" required="required"></p>
 					<p><input type="text" name="adresse" placeholder="Adresse" required="required"></p>
 					<p><input type="text" name="ville" placeholder="Ville" required="required"></p>
-					<p><input type="number" name="cp" placeholder="Code Postal" min="01000" max="99999" required="required"></p>
+					<p><input type="text" name="cp" placeholder="Code Postal" required="required"></p>
 					<p><input type="tel" name="tel" placeholder="Téléphone" required="required"></p>
 					<p><input type="submit" value="Inscription"></p>
 				</form>
 			</div>
-		</section>
+		</div>
 	</body>
 </html>

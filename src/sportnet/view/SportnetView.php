@@ -36,7 +36,7 @@ class SportnetView extends AbstractView{
 				break;
         }
 
-        $style_file = $this->app_root.'css/style.css';
+        $style_file = $this->app_root.'css/main.css';
         
         $header = $this->renderHeader();
         $menu   = $this->renderMenu();
@@ -64,7 +64,7 @@ class SportnetView extends AbstractView{
         
         <header class="theme-backcolor1"> ${header}  </header>
         
-        <section>
+        <div>
     
             <aside>    
 
@@ -74,7 +74,7 @@ class SportnetView extends AbstractView{
 
             <div id="main">  ${main} </div>
 
-        </section>
+        </div>
 
     </body>
 </html>
