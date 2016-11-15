@@ -1,0 +1,60 @@
+/*$largeurContainer:100%;
+$nombreColonne:8;
+$largeurGoutiere:2%;
+$hauteurLigne:50px;*/
+
+@mixin genererGrille($largeurContainer, $nombreColonne, $largeurGoutiere, $hauteurLigne)
+{
+    $largeurColonne:($largeurContainer - $nombreColonne * $largeurGoutiere) / $nombreColonne;
+
+    .container
+    {
+        width:$largeurContainer;
+        background-color:lightblue;
+        height: auto;
+        padding:15px;
+        box-sizing: border-box;
+
+        .line
+        {
+            min-height:$hauteurLigne;
+            width:100%;
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            margin-top:7.5px;
+            margin-bottom:7.5px;
+            margin-left:auto;
+            margin-right: auto;
+
+            [class*="span-"]
+            {
+                margin-left:$largeurGoutiere / 2;
+                margin-right:$largeurGoutiere / 2;
+                box-sizing: border-box;
+                border-width:1px;
+                border-color:black;
+                border-style: solid;
+                min-height: $hauteurLigne;
+            }
+
+            // Gestion des largeurs de colonnes
+            @for $i from 1 through $nombreColonne
+            {
+                .span-#{$i}
+                {
+                    width:$i * $largeurColonne + ($i - 1) * $largeurGoutiere;
+                }
+            }
+
+            // Gestion des décalages de colonnes
+            @for $i from 1 through ($nombreColonne - 1)
+            {
+                .offset-#{$i}
+                {
+                    margin-left:$i * $largeurColonne + $i * $largeurGoutiere + $largeurGoutiere / 2;
+                }
+            }
+        }
+    }
+}

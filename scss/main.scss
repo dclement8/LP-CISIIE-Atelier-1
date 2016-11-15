@@ -5,4 +5,7 @@
 @import "menu";
 @import "breadcrumb";
 @import "pagination";
-@import "grid";
+@import "grille";
+
+$nbcolonnes: 2;
+@include genererGrille(100%, $nbcolonnes, 0.9%, 20px);

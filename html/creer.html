@@ -4,7 +4,7 @@
 		<meta charset="UTF-8">
 		<title>SportNet</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1.0">
-		<link rel="stylesheet" type="text/css" href="../css/main.css"/>
+		<link rel="stylesheet" type="text/css" href="/css/style.css"/>
 	</head>
 	<body>
 		<header class="entete">
@@ -13,7 +13,7 @@
 			</a>
 		</header>
 
-		<nav class="menu">
+		<section class="menu">
 			<ul class="navbar">
 				<!-- Non enregistré -->
 				<li><a href="espace_organisation.html">Espace organisation</a></li>
@@ -22,18 +22,18 @@
 				<!--<li><a href="mes_events.html">Mes événements</a></li>-->
 				<!--<li><a href="logout.html">Déconnexion</a></li>-->
 			</ul>
-		</nav>
+		</section>
 
-		<div>
+		<section>
 			<ul class="breadcrumb">
-				<li><a href="index.html">Accueil</a></li>
+				<li>Accueil</li>
 				<li>Créer un événement</li>
 			</ul>
-		</div>
+		</section>
 
-		<form method="post" action="">
-			<div class="container line">
-				<div class="event offset-0 span-9">
+		<section class="container">
+			<form method="post" action="">
+				<div>
 					<h3>Evénement</h3>
 					<p><input type="text" name="nom" placeholder="Nom" required="required"></p>
 					<p>
@@ -71,7 +71,7 @@
 					</p>
 				</div>
 
-				<div class="event offset-0 span-3">
+				<div>
 					<h3>Ajouter une épreuve</h3>
 					<p><input type="text" name="nom_epreuve" placeholder="Nom" required="required"></p>
 					<p>
@@ -80,8 +80,9 @@
 					</p>
 					<p><input type="number" name="dist_epreuve" placeholder="Distance (en m)" min="1" max="100000" required="required"></p>
 				</div>
-			</div>
-			<p><input type="submit" value="Créer"></p>
-		</form>
+
+				<p><input type="submit" value="Créer"></p>
+			</form>
+		</section>
 	</body>
 </html>

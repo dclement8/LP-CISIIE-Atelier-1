@@ -4,7 +4,7 @@
 		<meta charset="UTF-8">
 		<title>SportNet</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1.0">
-		<link rel="stylesheet" type="text/css" href="../css/main.css"/>
+		<link rel="stylesheet" type="text/css" href="/css/style.css"/>
 		<script type="text/javascript" src="../js/details.js"></script>
 		<script type="text/javascript" src="../js/spoiler.js"></script>
 	</head>
@@ -15,7 +15,7 @@
 			</a>
 		</header>
 
-		<nav class="menu">
+		<section class="menu">
 			<ul class="navbar">
 				<!-- Non enregistré -->
 				<li><a href="espace_organisation.html">Espace organisation</a></li>
@@ -24,18 +24,18 @@
 				<!--<li><a href="mes_events.html">Mes événements</a></li>-->
 				<!--<li><a href="logout.html">Déconnexion</a></li>-->
 			</ul>
-		</nav>
+		</section>
 
-		<div>
+		<section>
 			<ul class="breadcrumb">
-				<li><a href="index.html">Accueil</a></li>
+				<li>Accueil</li>
 				<li>Evenement</li>
 				<li>Détails</li>
 			</ul>
-		</div>
+		</section>
 
-		<div class="container line">
-			<div class="event large">
+		<section class="container">
+			<div class="event">
 				<h6>Partager : <input type="text" id="partager" size="64"></h6>
 				<p>Début le 01/01/1970 à 00:00</p>
 				<hr>
@@ -43,44 +43,42 @@
 
 				<div class="alert alert-danger">Les inscriptions sont fermées</div>
 
-				<div class="line">
-					<div class="epreuve offset-0 span-3">
-						<h4>Epreuve 1</h4>
-						<ul>
-							<li>Le 01/01/1970 à 00:00</li>
-							<li>100m</li>
-						</ul>
+				<div class="epreuve">
+					<h4>Epreuve 1</h4>
+					<ul>
+						<li>Le 01/01/1970 à 00:00</li>
+						<li>100m</li>
+					</ul>
 
-						<button onclick="spoiler('1')">Classement</button>
+					<button onclick="spoiler('1')">Classement</button>
 
-						<div id="spoiler-1">
-							<!-- Div masquée par défaut -->
-							<ol>
-								<li>toto 10"08</li>
-								<li>bob 19"72</li>
-							</ol>
-						</div>
+					<div id="spoiler-1">
+						<!-- Div masquée par défaut -->
+						<ol>
+							<li>toto 10"08</li>
+							<li>bob 19"72</li>
+						</ol>
 					</div>
+				</div>
 
-					<div class="epreuve offset-0 span-3">
-						<h4>Epreuve 2</h4>
-						<ul>
-							<li>Le 01/01/1970 à 00:00</li>
-							<li>200m</li>
-						</ul>
+				<div class="epreuve">
+					<h4>Epreuve 2</h4>
+					<ul>
+						<li>Le 01/01/1970 à 00:00</li>
+						<li>200m</li>
+					</ul>
 
-						<button onclick="spoiler('2')">Classement</button>
+					<button onclick="spoiler('2')">Classement</button>
 
-						<div id="spoiler-2">
-							<!-- Div masquée par défaut -->
-							<ol>
-								<li>toto 20"04</li>
-								<li>bob 39"72</li>
-							</ol>
-						</div>
+					<div id="spoiler-2">
+						<!-- Div masquée par défaut -->
+						<ol>
+							<li>toto 20"04</li>
+							<li>bob 39"72</li>
+						</ol>
 					</div>
 				</div>
 			</div>
-		</div>
+		</section>
 	</body>
 </html>
