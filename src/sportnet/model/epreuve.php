@@ -93,7 +93,7 @@ class epreuve extends AbstractModel {
 			$obj->id = $ligne['id'];
 			$obj->nom = $ligne['nom'];
 			$obj->distance  = $ligne['distance'];
-			$obj->dateheure = $ligne['dateheure'];
+			$obj->dateheure = date_format(date_create($ligne['dateheure']), 'Y-m-d H:i:s');
 			
 			$obj->evenement = \sportnet\model\evenement::findById($ligne['id_evenement']);
 		}
@@ -112,18 +112,20 @@ class epreuve extends AbstractModel {
         $select = "SELECT * FROM epreuve";
         $select_prep = self::$db->prepare($select);
         $select_prep->execute();
-		$obj = null;
+		$tab = null;
 		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
 			$obj = new Epreuve();
 
 			$obj->id = $ligne['id'];
 			$obj->nom = $ligne['nom'];
 			$obj->distance  = $ligne['distance'];
-			$obj->dateheure = $ligne['dateheure'];
+			$obj->dateheure = date_format(date_create($ligne['dateheure']), 'Y-m-d H:i:s');
 
 			$obj->evenement = \sportnet\model\evenement::findById($ligne['id_evenement']);
+			
+			$tab[] = $obj;
 		}
-		return $obj;
+		return $tab;
 	}
 	
 	public static function findByName($leNom)
@@ -146,7 +148,7 @@ class epreuve extends AbstractModel {
 			$obj->id = $ligne['id'];
 			$obj->nom = $ligne['nom'];
 			$obj->distance  = $ligne['distance'];
-			$obj->dateheure = $ligne['dateheure'];
+			$obj->dateheure = date_format(date_create($ligne['dateheure']), 'Y-m-d H:i:s');
 			
 			$obj->evenement = \sportnet\model\evenement::findById($ligne['id_evenement']);
 		}
@@ -167,7 +169,7 @@ class epreuve extends AbstractModel {
 			$obj->nom = $ligne['nom'];
 			$obj->description  = $ligne['description'];
 			$obj->etat = $ligne['etat'];
-			$obj->dateheureLimiteInscription = $ligne['dateheureLimiteInscription'];
+			$obj->dateheureLimiteInscription = date_format(date_create($ligne['dateheureLimiteInscription']), 'Y-m-d H:i:s');
 			$obj->tarif = $ligne['tarif'];
 			$obj->discipline = \sportnet\model\discipline::findById($ligne['id_discipline']);
 			$obj->organisateur = \sportnet\model\organisateur::findById($ligne['id_organisateur']);
