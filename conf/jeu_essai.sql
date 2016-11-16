@@ -1,5 +1,3 @@
-/* Table organisateur */
-
 INSERT INTO organisateur (login, mdp, nom, prenom, adresse, cp, ville, tel) 
 VALUES ('AD-Bob', '$2y$10$fwYKrAIJuJx8QNVCNWB7NuEZLgwKZfT9ZziFUhrbjUdybBqRgIddW', 'Morris', 'Bob', '15 avenu de la Libération', '54000', 'Nancy', '03040506');
 
@@ -8,8 +6,6 @@ VALUES ('John', '$2y$10$fwYKrAIJuJx8QNVCNWB7NuEZLgwKZfT9ZziFUhrbjUdybBqRgIddW', 
 
 INSERT INTO organisateur (login, mdp, nom, prenom, adresse, cp, ville, tel) 
 VALUES ('M-Fab', '$2y$10$fwYKrAIJuJx8QNVCNWB7NuEZLgwKZfT9ZziFUhrbjUdybBqRgIddW', 'Maurice', 'Fabien', '12 avenu Foch', '54000', 'Maxéville', '03040506');
-
-/* Table participant*/
 
 INSERT INTO participant (nom, prenom, rue, cp, ville, tel)
 VALUES ('Phillippe', 'Michel', '18 rue Robert Ier', '54000', 'Nancy', '03040506');
@@ -46,8 +42,6 @@ VALUES ('Weasley', 'Ron', '56 avenue de Paris', '54000', 'Nancy', '03040506');
 INSERT INTO participant (nom, prenom, rue, cp, ville, tel)
 VALUES ('Wayne', 'Bruce', '42 rue Jean Moulin', '54000', 'Nancy', '03040506');
 
-/* Table discipline */
-
 INSERT INTO discipline (nom)
 VALUES ('Randonnée');
 
@@ -66,8 +60,6 @@ VALUES ('Marathon');
 INSERT INTO discipline (nom)
 VALUES ('Hockey');
 
-/* Table evenement */
-
 INSERT INTO evenement (nom, description, etat, dateheureLimiteInscription, tarif, id_discipline, id_organisateur)
 VALUES ('Course de nuit', 'Course de nuit', 4, '2016-02-02 03:30:0', 06, 2, 1);
 
@@ -77,14 +69,11 @@ VALUES ('Randoné de noël', 'Randonné dans les bois de Velaine-en-hais', 2, '2
 INSERT INTO evenement (nom, description, etat, dateheureLimiteInscription, tarif, id_discipline, id_organisateur)
 VALUES ('Tennis en salle', 'Tennis dans le gymnase Jaques Cartier', 3, '2016-09-25 14:30:00', 20, 3, 3);
 
-
-/* Table épreuve */
-
 INSERT INTO epreuve (nom, distance, dateheure, id_evenement)
 VALUES ('Marathon hivernal', 150, '2016-02-02 12:12:12', 1);
 
 INSERT INTO epreuve (nom, distance, dateheure, id_evenement)
-VALUES ('Tir à l\'arc hivernal', 30, '2016-02-02 12:12:12', 1);
+VALUES ('Tir a l arc hivernal', 30, '2016-02-02 12:12:12', 1);
 
 INSERT INTO epreuve (nom, distance, dateheure, id_evenement)
 VALUES ('Marathon hivernal', 150, '2016-02-02 12:12:12', 2);
@@ -97,8 +86,6 @@ VALUES ('Epreuve de course', 250, '2016-08-02 12:12:12', 3);
 
 INSERT INTO epreuve (nom, distance, dateheure, id_evenement)
 VALUES ('Epreuve de marche nordique', 250, '2016-08-02 12:12:12', 3);
-
-/* Table inscrit */
 
 INSERT INTO inscrit (dossard, id_participant, id_epreuve)
 VALUES (1, 1, 1);
@@ -132,10 +119,6 @@ VALUES (10, 10, 1);
 
 INSERT INTO inscrit (dossard, id_participant, id_epreuve)
 VALUES (11, 11, 1);
-
-
-
-/* Table classer */
 
 INSERT INTO classer (position, temps, id_epreuve, id_participant)
 VALUES (10, 6122800, 1, 1);
