@@ -7,7 +7,7 @@ require_once("conf/autoload.php");
 
 $router = new sportnet\utils\Router();
 
-// Création d'une route
+// Crï¿½ation d'une route
 // $router->addRoute('url', '\sportnet\control\SportnetController', 'nomDuControleur');
 // $router->addRoute('/all/', '\sportnet\control\SportnetController', 'listAll');
 
@@ -26,3 +26,4 @@ $router->addRoute('/inscrireEpreuve/', '\sportnet\control\SportnetController', '
 $http_req = new sportnet\utils\HttpRequest();
 
 sportnet\utils\Router::dispatch($http_req);
+
