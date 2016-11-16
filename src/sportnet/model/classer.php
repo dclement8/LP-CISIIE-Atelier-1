@@ -75,7 +75,13 @@ class classer extends AbstractModel {
 	
 	public static function findById($leIdEpreuve)
 	{
-		$db = ConnectionFactory::makeConnection();
+		if(self::$db == null)
+		{
+			$connect = new \sportnet\utils\ConnectionFactory();
+			$connect->setConfig("conf/config.ini");
+			self::$db = $connect->makeConnection();
+			self::$db->query("SET CHARACTER SET utf8");
+		}
         $selectById = "SELECT * FROM classer WHERE id_epreuve = :id_epreuve";
         $selectById_prep = self::$db->prepare($selectById);
         $selectById_prep->bindParam(':id_epreuve', $leIdEpreuve, \PDO::PARAM_INT);
@@ -88,7 +94,13 @@ class classer extends AbstractModel {
 	
 	public static function findAll()
 	{
-		$db = ConnectionFactory::makeConnection();
+		if(self::$db == null)
+		{
+			$connect = new \sportnet\utils\ConnectionFactory();
+			$connect->setConfig("conf/config.ini");
+			self::$db = $connect->makeConnection();
+			self::$db->query("SET CHARACTER SET utf8");
+		}
         $select = "SELECT * FROM classer";
         $resultat = self::$db->query($select);
         if ($resultat) {

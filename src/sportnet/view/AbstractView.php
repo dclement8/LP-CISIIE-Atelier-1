@@ -107,6 +107,45 @@ abstract class AbstractView {
 		return $html;
 	}
 
+    /*
+     * Retourne différents messages d'erreurs
+     *
+     */
+    protected function renderMessage(){
+        $html = "";
+        if(isset($_SESSION['message']))
+		{
+            switch ($_SESSION['message'][0])
+			{
+				case '0':
+					$html = "<div class='alert'>";
+					break;
+
+				case '1':
+					$html = "<div class='alert alert-success'>";
+					break;
+
+				case '2':
+					$html = "<div class='alert alert-info'>";
+					break;
+
+				case '3':
+					$html = "<div class='alert alert-avert'>";
+					break;
+
+				case '4':
+					$html = "<div class='alert alert-danger'>";
+					break;
+
+				default:
+					$html = "<div class='alert'>";
+					break;
+			}
+			$html .= $_SESSION['message'][1] ."</div>";
+			unset($_SESSION['message']);
+			return $html;
+        }
+    }
 
     /*
      * Affiche une page HTML complète.

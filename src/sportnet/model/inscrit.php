@@ -72,7 +72,13 @@ class inscrit extends AbstractModel {
 	
 	public static function findById($leId)
 	{
-		$db = ConnectionFactory::makeConnection();
+		if(self::$db == null)
+		{
+			$connect = new \sportnet\utils\ConnectionFactory();
+			$connect->setConfig("conf/config.ini");
+			self::$db = $connect->makeConnection();
+			self::$db->query("SET CHARACTER SET utf8");
+		}
         $selectById = "SELECT * FROM inscrit WHERE id_epreuve = :id_epreuve";
         $selectById_prep = self::$db->prepare($selectById);
         $selectById_prep->bindParam(':id_epreuve', $leId, \PDO::PARAM_INT);
@@ -85,7 +91,13 @@ class inscrit extends AbstractModel {
 	
 	public static function findAll()
 	{
-		$db = ConnectionFactory::makeConnection();
+		if(self::$db == null)
+		{
+			$connect = new \sportnet\utils\ConnectionFactory();
+			$connect->setConfig("conf/config.ini");
+			self::$db = $connect->makeConnection();
+			self::$db->query("SET CHARACTER SET utf8");
+		}
         $select = "SELECT * FROM inscrit";
         $resultat = self::$db->query($select);
         if ($resultat) {
@@ -121,6 +133,13 @@ class inscrit extends AbstractModel {
 
 	public static function getMaxDossard($leIdEpreuve)
 	{
+		if(self::$db == null)
+		{
+			$connect = new \sportnet\utils\ConnectionFactory();
+			$connect->setConfig("conf/config.ini");
+			self::$db = $connect->makeConnection();
+			self::$db->query("SET CHARACTER SET utf8");
+		}
 		$select = "SELECT MAX(dossard) as leMax FROM inscrit WHERE id_epreuve = :id_epreuve";
 		$select_prep = self::$db->prepare($select);
 		$select_prep->bindParam(":id_epreuve", $leIdEpreuve, \PDO::PARAM_INT);

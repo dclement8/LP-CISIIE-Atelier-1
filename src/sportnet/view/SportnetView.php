@@ -12,8 +12,9 @@ class SportnetView extends AbstractView{
         parent::__construct($data);
     }
 
-    protected function method(){
-
+    protected function method()
+	{
+		$htmlRender = "";
 
 		return $htmlRender;
 	}
@@ -117,7 +118,7 @@ EOT;
 				break;
         }
 
-        $style_file = $this->app_root.'css/style.css';
+        $style_file = $this->app_root.'css/main.css';
 
         $header 	= $this->renderHeader();
         $menu   	= $this->renderMenu();
