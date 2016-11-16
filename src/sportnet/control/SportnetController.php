@@ -31,14 +31,6 @@ class SportnetController {
 			}
 			else
 			{
-				// $data[0] contient les données de l'événement
-				// $data[1] contient les données des épreuves de l'événement
-				// $data[2] contient les données du classement des épreuves de l'évenement
-				
-				$data[] = $event;
-				$listeEpreuves = $event->getEpreuves();
-				$data[] = $listeEpreuves;
-				
 				// Etats d'un événement :
 				//
 				//	1 ==> événement créé mais invisible pour les participants
@@ -53,28 +45,14 @@ class SportnetController {
 	
 					if($auth->logged_in == true)
 					{
-						$view = new \sportnet\view\SportnetView($data);
+						$view = new \sportnet\view\SportnetView($event);
 						$view->render('detailEvenement');
 					}
 					else
 					{
-						$view = new \sportnet\view\SportnetView($data);
-						$view->render('listEvents');
+						$ctrl = new \sportnet\control\SportnetController($this->request);
+						$ctrl->listEvents();
 					}
-				}
-				else
-				{
-					if($event->etat == 4)
-					{
-						$epreuves = $event->getEpreuves();
-						foreach($epreuves as $uneEpreuve)
-						{
-							$data[][] = \sportnet\model\classer::findById($uneEpreuve->id);
-						}
-					}
-					
-					$view = new \sportnet\view\SportnetView($data);
-					$view->render('detailEvenement');
 				}
 			}
 		}
@@ -106,7 +84,9 @@ class SportnetController {
 				
 				if($evenement == null)
 				{
-					$view = new \sportnet\view\SportnetView(null);
+					$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+			
+					$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
 					$view->render('espaceOrganisateur');
 				}
 				else
@@ -202,7 +182,9 @@ class SportnetController {
 		
 		if($auth->logged_in == true)
 		{
-			$view = new \sportnet\view\SportnetView(null);
+			$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+			
+			$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
 			$view->render('espaceOrganisateur');
 		}
 		else
@@ -233,7 +215,9 @@ class SportnetController {
 				
 				if($epreuve == null)
 				{
-					$view = new \sportnet\view\SportnetView(null);
+					$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+			
+					$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
 					$view->render('espaceOrganisateur');
 				}
 				else
@@ -246,7 +230,9 @@ class SportnetController {
 					
 					if($evenement == null)
 					{
-						$view = new \sportnet\view\SportnetView(null);
+						$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+			
+						$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
 						$view->render('espaceOrganisateur');
 					}
 					else
@@ -269,20 +255,18 @@ class SportnetController {
 							$_SESSION["message"][] = "Erreur lors de l'enregistrement de l'épreuve.";
 						}
 						
-						$view = new \sportnet\view\SportnetView(null);
+						$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+			
+						$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
 						$view->render('espaceOrganisateur');
 					}
 				}
 			}
 			else
 			{
-				$epreuve = null;
-				if(isset($_GET["epreuve"]))
-				{
-					$epreuve = \sportnet\model\epreuve::findById($_GET["epreuve"]);
-				}
-				
-				$view = new \sportnet\view\SportnetView($epreuve);
+				$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+			
+				$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
 				$view->render('espaceOrganisateur');
 			}
 		}
@@ -304,35 +288,37 @@ class SportnetController {
 			if(isset($_GET["event"]))
 			{
 				$evenement = \sportnet\model\evenement::findById($_GET["event"]);
-			}
-			else
-			{
-				$view = new \sportnet\view\SportnetView(null);
-				$view->render('espaceOrganisateur');
-			}
-			
-			if($evenement == null)
-			{
-				$view = new \sportnet\view\SportnetView(null);
-				$view->render('espaceOrganisateur');
-			}
-			else
-			{
-				$retour = $evenement->delete();
 				
-				$_SESSION["message"] = array();
-				if($retour == true)
+				if($evenement == null)
 				{
-					$_SESSION["message"][] = 1;
-					$_SESSION["message"][] = "Evenement supprimé.";
+					$view = new \sportnet\view\SportnetView(null);
+					$view->render('espaceOrganisateur');
 				}
 				else
 				{
-					$_SESSION["message"][] = 4;
-					$_SESSION["message"][] = "Erreur lors de la suppression de l'événement.";
+					$retour = $evenement->delete();
+					
+					$_SESSION["message"] = array();
+					if($retour == true)
+					{
+						$_SESSION["message"][] = 1;
+						$_SESSION["message"][] = "Evenement supprimé.";
+					}
+					else
+					{
+						$_SESSION["message"][] = 4;
+						$_SESSION["message"][] = "Erreur lors de la suppression de l'événement.";
+					}
+					
+					$view = new \sportnet\view\SportnetView(null);
+					$view->render('espaceOrganisateur');
 				}
-				
-				$view = new \sportnet\view\SportnetView(null);
+			}
+			else
+			{
+				$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+			
+				$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
 				$view->render('espaceOrganisateur');
 			}
 		}
@@ -357,13 +343,17 @@ class SportnetController {
 			}
 			else
 			{
-				$view = new \sportnet\view\SportnetView(null);
+				$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+			
+				$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
 				$view->render('espaceOrganisateur');
 			}
 			
 			if($epreuve == null)
 			{
-				$view = new \sportnet\view\SportnetView(null);
+				$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+			
+				$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
 				$view->render('espaceOrganisateur');
 			}
 			else
@@ -382,7 +372,9 @@ class SportnetController {
 					$_SESSION["message"][] = "Erreur lors de la suppression de l'épreuve.";
 				}
 				
-				$view = new \sportnet\view\SportnetView(null);
+				$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+			
+				$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
 				$view->render('espaceOrganisateur');
 			}
 		}
@@ -400,7 +392,9 @@ class SportnetController {
 		
 		if($auth->logged_in == true)
 		{
-			$view = new \sportnet\view\SportnetView(null);
+			$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+			
+			$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
 			$view->render('espaceOrganisateur');
 		}
 		else
@@ -480,7 +474,9 @@ class SportnetController {
 				$auth->login($login, $mdp);
 				if($auth->logged_in == true)
 				{
-					$view = new \sportnet\view\SportnetView(null);
+					$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+			
+					$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
 					$view->render('espaceOrganisateur');
 				}
 				else
@@ -515,7 +511,7 @@ class SportnetController {
 			{
 				$inscrit = new \sportnet\model\inscrit();
 				
-				$inscrit->dossard = $inscrit->getMaxDossard($epreuve);
+				$inscrit->dossard = \sportnet\model\inscrit::getMaxDossard($epreuve);
 				$inscrit->epreuve = $epreuve;
 				$inscrit->participant = $participant;
 				
@@ -579,7 +575,7 @@ class SportnetController {
 				{
 					$inscrit = new \sportnet\model\inscrit();
 				
-					$inscrit->dossard = $inscrit->getMaxDossard($epreuve);
+					$inscrit->dossard = \sportnet\model\inscrit::getMaxDossard($epreuve);
 					$inscrit->epreuve = $epreuve;
 					$inscrit->participant = $participant;
 					
@@ -589,7 +585,7 @@ class SportnetController {
 					if($retour == true)
 					{
 						$_SESSION["message"][] = 1;
-						$_SESSION["message"][] = "Vous êtes à présent inscrit à cette épreuve.";
+						$_SESSION["message"][] = "Vous êtes à présent inscrit à cette épreuve. Notez votre numéro de participant : ".\sportnet\model\participant::findByName($nom)->id;
 					}
 					else
 					{
@@ -614,6 +610,25 @@ class SportnetController {
 		}
 	}
 	
+	// Evénements d'un organisateur (Mes événements)
+	public function evenementsOrganisateur()
+	{
+		$auth = new \sportnet\utils\Authentification();
+		
+		if($auth->logged_in == true)
+		{
+			$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+			
+			$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
+			$view->render('espaceOrganisateur');
+		}
+		else
+		{
+			$view = new \sportnet\view\SportnetView(null);
+			$view->render('authentification');
+		}
+	}
+	
 	// Télécharger la liste des participants à une épreuve
 	public function telechargerListe()
 	{
@@ -621,7 +636,85 @@ class SportnetController {
 		
 		if($auth->logged_in == true)
 		{
+			$epreuve = \sportnet\model\epreuve::findById($_GET["epreuve"]);
 			
+			if($epreuve == null)
+			{
+				$ctrl = new \sportnet\control\SportnetController($this->request);
+				$ctrl->listEvents();
+			}
+			else
+			{
+				$tabInscrits = array();
+				
+				$lesInscrits = \sportnet\model\inscrit::findById($_GET["epreuve"]);
+				
+				if($lesInscrits == null)
+				{
+					$ctrl = new \sportnet\control\SportnetController($this->request);
+					$ctrl->listEvents();
+				}
+				else
+				{
+					$dir = "upload/";
+					$nomFichier = 'listeParticipants_epreuve'.$_GET["epreuve"].'_'.time().'.csv';
+					$csv = new SplFileObject($dir.$nomFichier, 'w');
+					
+					// Entête CSV
+					$infoInscrit = array();
+					$infoInscrit[] = "Numéro dossard";
+					$infoInscrit[] = "Numéro participant";
+					$infoInscrit[] = "Nom";
+					$infoInscrit[] = "Prénom";
+					$infoInscrit[] = "Rue";
+					$infoInscrit[] = "Code Postal";
+					$infoInscrit[] = "Ville";
+					$infoInscrit[] = "Téléphone";
+					$tabInscrits[] = $infoInscrit;
+					
+					foreach($lesInscrits as $unInscrit)
+					{
+						$infoInscrit = array();
+						$infoInscrit[] = $unInscrit->dossard;
+						$infoInscrit[] = $unInscrit->participant->id;
+						$infoInscrit[] = $unInscrit->participant->nom;
+						$infoInscrit[] = $unInscrit->participant->prenom;
+						$infoInscrit[] = $unInscrit->participant->rue;
+						$infoInscrit[] = $unInscrit->participant->cp;
+						$infoInscrit[] = $unInscrit->participant->ville;
+						$infoInscrit[] = $unInscrit->participant->tel;
+						$tabInscrits[] = $infoInscrit;
+					}
+					
+					foreach ($tabInscrits as $unInscrit)
+					{
+						$line = '"';
+						$line .= implode('";"', $unInscrit);
+						$line .= '"';
+						$line .= "\r\n";
+						
+						$csv->fwrite($line);
+					}
+					
+					// désactive la mise en cache
+					header("Cache-Control: no-cache, must-revalidate");
+					header("Cache-Control: post-check=0,pre-check=0");
+					header("Cache-Control: max-age=0");
+					header("Pragma: no-cache");
+					header("Expires: 0");
+					
+					// force le téléchargement du fichier
+					header("Content-Type: application/force-download");
+					header('Content-Disposition: attachment; filename="'.$nomFichier.'"');
+					
+					// indique la taille du fichier à télécharger
+					$size = filesize($dir.$nomFichier);
+					header("Content-Length: ".$size);
+					
+					// envoi le contenu du fichier
+					readfile($dir.$nomFichier);
+				}
+			}
 		}
 		else
 		{
