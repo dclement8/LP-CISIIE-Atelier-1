@@ -94,7 +94,7 @@ class participant extends AbstractModel {
         $selectById_prep->execute();
 		$obj = null;
 		while ($ligne = $selectById_prep->fetch(\PDO::FETCH_ASSOC)) {
-			$obj = new Participant();
+			$obj = new participant();
 
 			$obj->id = $ligne['id'];
 			$obj->nom = $ligne['nom'];
@@ -121,7 +121,7 @@ class participant extends AbstractModel {
 		$select_prep->execute();
         $tab = null;
 		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
-			$obj = new Participant();
+			$obj = new participant();
 
 			$obj->id = $ligne['id'];
 			$obj->nom = $ligne['nom'];
@@ -151,7 +151,7 @@ class participant extends AbstractModel {
         $selectByName_prep->execute();
 		$obj = null;
 		while ($ligne = $selectById_prep->fetch(\PDO::FETCH_ASSOC)) {
-			$obj = new Participant();
+			$obj = new participant();
 
 			$obj->id = $ligne['id'];
 			$obj->nom = $ligne['nom'];
