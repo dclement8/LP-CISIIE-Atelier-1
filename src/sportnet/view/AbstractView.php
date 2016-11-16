@@ -60,7 +60,9 @@ abstract class AbstractView {
      *
      */
     protected function renderHeader(){
-        $html ='<header>Sportnet</header>';
+        $html  = "<header class='entete'>\n";
+		$html .= "\t<a href='/'>SportNet</a>\n";
+		$html .= "</header>\n";
         return $html;
     }
 
@@ -80,53 +82,70 @@ abstract class AbstractView {
 		}
 		else
 		{
-			$html .= "\t<li><a href='".$this->script_name."/creerEvenement/'>Créer un événement</a></li>\n";
-			$html .= "\t<li><a href='".$this->script_name."/espace/'>Mes événements</a></li>\n";
-			$html .= "\t<li><a href='".$this->script_name."/connexion/'>Déconnexion</a></li>\n";
+			$html .= "\t\t<li><a href='".$this->script_name."/creerEvenement/'>Créer un événement</a></li>\n";
+			$html .= "\t\t<li><a href='".$this->script_name."/espace/'>Mes événements</a></li>\n";
+			$html .= "\t\t<li><a href='".$this->script_name."/connexion/'>Déconnexion</a></li>\n";
 		}
 
-        $html .= "</ul>\n";
+        $html .= "\t</ul>\n";
+		$html .= "</nav>\n";
         return $html;
     }
 
+	protected function renderBreadcrumb($breadcrumb = null) {
+		$html  = "<div>\n";
+		$html .= "\t<ul class='breadcrumb'>\n";
+		$html .= "\t\t<li><a href='/'>Accueil</a></li>\n";
+
+		if($breadcrumb !== null) {
+			foreach($breadcrumb as $elem)
+				$html .= "\t\t<li>$elem</li>\n";
+		}
+
+		$html .= "\t</ul>\n";
+		$html .= "</div>\n";
+		return $html;
+	}
+
     /*
-     * Retourne différents messages d'erreurs 
+     * Retourne différents messages d'erreurs
      *
      */
     protected function renderMessage(){
         $html = "";
-        if(isset($_SESSION['message'])){
-            switch ($_SESSION['message'][0]) {
+        if(isset($_SESSION['message']))
+		{
+            switch ($_SESSION['message'][0])
+			{
+				case '0':
+					$html = "<div class='alert'>";
+					break;
 
-            case '0':
-                $html = "<div class='alert'>";
-                break;
+				case '1':
+					$html = "<div class='alert alert-success'>";
+					break;
 
-            case '1':
-                $html = "<div class='alert alert-success'>";
-                break;
-            
-            case '2':
-                $html = "<div class='alert alert-info'>";
-                break;
+				case '2':
+					$html = "<div class='alert alert-info'>";
+					break;
 
-            case '3':
-                $html = "<div class='alert alert-avert'>";
-                break;
+				case '3':
+					$html = "<div class='alert alert-avert'>";
+					break;
 
-            case '4':
-                $html = "<div class='alert alert-danger'>";
-                break;
+				case '4':
+					$html = "<div class='alert alert-danger'>";
+					break;
 
-            default:
-                $html = "<div class='alert'>";
-                break;
-        }
-        $html .= $_SESSION['message'][1] ."</div>";
-        return $html;
+				default:
+					$html = "<div class='alert'>";
+					break;
+			}
+			$html .= $_SESSION['message'][1] ."</div>";
+			unset($_SESSION['message']);
+			return $html;
         }
     }
-
 
     /*
      * Affiche une page HTML complète.
