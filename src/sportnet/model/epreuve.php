@@ -23,7 +23,7 @@ class epreuve extends AbstractModel {
 		$update_prep->bindParam(':id_evenement', $this->evenement->id, \PDO::PARAM_INT);
 		$update_prep->bindParam(':nom', $this->nom, \PDO::PARAM_STR);
         $update_prep->bindParam(':distance', $this->distance, \PDO::PARAM_INT);
-        $update_prep->bindParam(':dateheure', $this->dateheure, \PDO::PARAM_STR);
+        $update_prep->bindParam(':dateheure', date_format(date_create($this->dateheure),"Y-m-d H:i:s"), \PDO::PARAM_STR);
 		$update_prep->bindParam(':id', $this->id, \PDO::PARAM_INT);
 		if($update_prep->execute()){
 			return true;
@@ -40,7 +40,7 @@ class epreuve extends AbstractModel {
 		$insert_prep->bindParam(':id', $this->id, \PDO::PARAM_INT);
 		$insert_prep->bindParam(':nom', $this->nom, \PDO::PARAM_STR);
         $insert_prep->bindParam(':distance', $this->distance, \PDO::PARAM_INT);
-        $insert_prep->bindParam(':dateheure', $this->dateheure, \PDO::PARAM_STR);
+        $insert_prep->bindParam(':dateheure',  date_format(date_create($this->dateheure),"Y-m-d H:i:s"), \PDO::PARAM_STR);
 		$insert_prep->bindParam(':id_evenement', $this->evenement_id, \PDO::PARAM_INT);
 		if($insert_prep->execute()){
 			return true;
@@ -93,7 +93,7 @@ class epreuve extends AbstractModel {
 			$obj->id = $ligne['id'];
 			$obj->nom = $ligne['nom'];
 			$obj->distance  = $ligne['distance'];
-			$obj->dateheure = date_format(date_create($ligne['dateheure']), 'Y-m-d H:i:s');
+			$obj->dateheure = date_create($ligne['dateheure']);
 			
 			$obj->evenement = \sportnet\model\evenement::findById($ligne['id_evenement']);
 		}
@@ -119,7 +119,7 @@ class epreuve extends AbstractModel {
 			$obj->id = $ligne['id'];
 			$obj->nom = $ligne['nom'];
 			$obj->distance  = $ligne['distance'];
-			$obj->dateheure = date_format(date_create($ligne['dateheure']), 'Y-m-d H:i:s');
+			$obj->dateheure = date_create($ligne['dateheure']);
 
 			$obj->evenement = \sportnet\model\evenement::findById($ligne['id_evenement']);
 			
@@ -148,7 +148,7 @@ class epreuve extends AbstractModel {
 			$obj->id = $ligne['id'];
 			$obj->nom = $ligne['nom'];
 			$obj->distance  = $ligne['distance'];
-			$obj->dateheure = date_format(date_create($ligne['dateheure']), 'Y-m-d H:i:s');
+			$obj->dateheure = date_create($ligne['dateheure']);
 			
 			$obj->evenement = \sportnet\model\evenement::findById($ligne['id_evenement']);
 		}
@@ -169,7 +169,7 @@ class epreuve extends AbstractModel {
 			$obj->nom = $ligne['nom'];
 			$obj->description  = $ligne['description'];
 			$obj->etat = $ligne['etat'];
-			$obj->dateheureLimiteInscription = date_format(date_create($ligne['dateheureLimiteInscription']), 'Y-m-d H:i:s');
+			$obj->dateheureLimiteInscription = date_create($ligne['dateheureLimiteInscription']);
 			$obj->tarif = $ligne['tarif'];
 			$obj->discipline = \sportnet\model\discipline::findById($ligne['id_discipline']);
 			$obj->organisateur = \sportnet\model\organisateur::findById($ligne['id_organisateur']);
