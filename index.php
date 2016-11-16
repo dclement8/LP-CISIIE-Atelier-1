@@ -11,6 +11,7 @@ $router = new sportnet\utils\Router();
 // $router->addRoute('url', '\sportnet\control\SportnetController', 'nomDuControleur');
 // $router->addRoute('/all/', '\sportnet\control\SportnetController', 'listAll');
 
+// TOTAL des vues : 6
 
 // Route par défaut : afficher la liste des événements (vue : listEvents)
 $router->addRoute('default', '\sportnet\control\SportnetController', 'listEvents');
@@ -49,7 +50,7 @@ $router->addRoute('/inscrireEpreuve/', '\sportnet\control\SportnetController', '
 $router->addRoute('/telechargerListe/', '\sportnet\control\SportnetController', 'telechargerListe');
 
 // Action d'upload du classement (form) d'une épreuve passée en GET ($_GET["epreuve"])
-$router->addRoute('/telechargerListe/', '\sportnet\control\SportnetController', 'telechargerListe');
+$router->addRoute('/uploadClassement/', '\sportnet\control\SportnetController', 'uploadClassement');
 
 
 $http_req = new sportnet\utils\HttpRequest();

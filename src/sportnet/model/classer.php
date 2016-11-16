@@ -30,6 +30,19 @@ class classer extends AbstractModel {
 		}
     }
 	
+	public function __set($attr_name, $attr_val)
+	{
+        if (property_exists( $this, $attr_name))
+		{
+			$this->$attr_name=$attr_val;
+		} 
+        else
+		{
+            $emess = $this . ": unknown member $attr_name (__set)";
+            throw new \Exception($emess);
+        }
+    }
+	
 	protected function update()
 	{
 		$update = "UPDATE classer SET position = :position, temps = :temps WHERE id_epreuve = :id_epreuve AND id_participant = :id_participant";

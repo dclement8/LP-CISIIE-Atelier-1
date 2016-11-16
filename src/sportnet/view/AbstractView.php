@@ -61,7 +61,7 @@ abstract class AbstractView {
      */
     protected function renderHeader(){
         $html  = "<header class='entete'>\n";
-		$html .= "\t<a href='/'>SportNet</a>\n";
+		$html .= "\t<a href='".$this->script_name."'>SportNet</a>\n";
 		$html .= "</header>\n";
         return $html;
     }
@@ -95,11 +95,11 @@ abstract class AbstractView {
 	protected function renderBreadcrumb($breadcrumb = null) {
 		$html  = "<div>\n";
 		$html .= "\t<ul class='breadcrumb'>\n";
-		$html .= "\t\t<li><a href='/'>Accueil</a></li>\n";
+		$html .= "\t\t<li><a href='".$this->script_name."'>Accueil</a></li>\n";
 
 		if($breadcrumb !== null) {
 			foreach($breadcrumb as $elem)
-				$html .= "\t\t<li>$elem</li>\n";
+				$html .= "\t\t<li><a href='".$this->script_name.$elem[1]."'>".$elem[0]."</a></li>\n";
 		}
 
 		$html .= "\t</ul>\n";

@@ -29,6 +29,19 @@ class epreuve extends AbstractModel {
 		}
     }
 	
+	public function __set($attr_name, $attr_val)
+	{
+        if (property_exists( $this, $attr_name))
+		{
+			$this->$attr_name=$attr_val;
+		} 
+        else
+		{
+            $emess = $this . ": unknown member $attr_name (__set)";
+            throw new \Exception($emess);
+        }
+    }
+	
 	protected function update()
 	{
 		$update = "UPDATE epreuve SET nom = :nom, distance = :distance, dateheure = :dateheure, id_evenement = :id_evenement WHERE id = :id";
@@ -100,7 +113,7 @@ class epreuve extends AbstractModel {
         $selectById_prep->bindParam(':id', $leId, \PDO::PARAM_INT);
         $selectById_prep->execute();
 		$obj = null;
-		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
+		while ($ligne = $selectById_prep->fetch(\PDO::FETCH_ASSOC)) {
 			$obj = new epreuve();
 
 			$obj->id = $ligne['id'];
