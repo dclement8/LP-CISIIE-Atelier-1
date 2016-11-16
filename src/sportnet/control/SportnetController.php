@@ -730,10 +730,109 @@ class SportnetController {
 		
 		if($auth->logged_in == true)
 		{
-			
-		}
-		else
-		{
+
+			$fichier = "NULL";
+			$target_dir = "upload/";
+			$target_file = $target_dir . basename($_FILES["csv"]["name"]);
+			$nomfichier = basename($_FILES["csv"]["name"]);
+			$uploadOk = true;
+			$fileType = pathinfo($target_file,PATHINFO_EXTENSION);
+			$tailleMo = 32;
+
+			if($_FILES["csv"]["tmp_name"] == "")
+			{
+				
+			}
+			else
+			{
+				if($fileType != "csv")
+				{
+					echo "Format de fichier incorrect. Le format CSV est seulement autorisés.";
+					$uploadOk = false;
+				}
+				else
+				{
+					if (move_uploaded_file($_FILES["csv"]["tmp_name"], $target_file))
+					{
+						$uploadOk = true;
+						echo 'upload .';
+					}
+					else
+					{
+						echo "Erreur lors de l'upload du fichier";
+						$uploadOk = false;
+						$fichier = "NULL";
+					}
+				}
+			}	
+
+			if(isset($_GET['epreuve'])) {
+				if(\sportnet\model\epreuve::findById($_GET['epreuve']))
+				{
+					$tabObjClasser = array();
+					$erreur = false;
+					//chemin du fichier
+					$fichier = "upload/$nomfichier";
+					$tab = array();
+					$csv = new SplFileObject($fichier); // On instancie l'objet SplFileObject
+					$csv->setFlags(SplFileObject::READ_CSV); // On indique que le fichier est de type CSV
+					$csv->setCsvControl(';'); // On indique le caractère délimiteur, ici c'est la virgule
+					foreach($csv as $t) {
+						$tab[] = $t;
+					}
+					$tableauInscrit = \sportnet\model\inscrit::findById($_GET['epreuve']);
+					
+					for($i = 0; $i < count($tab); $i++) {
+						foreach($tableauInscrit as $unInscrit)
+						{
+							if($unInscrit->dossard = $tab[$i][1])
+							{
+								$objclasser = new \sportnet\model\classer();
+								$heure = $tab[$i][2];
+								$number = explode(":", $heure);
+								$res = ($number[0]*100*60*60) + ($number[1]*100*60) + ($number[2]*100) + $number[3];
+
+								$objclasser->position = $tab[$i][0];
+								$objclasser->temps = $res;
+								$objclasser->participant = $unInscrit->participant;
+								$objclasser->epreuve = $unInscrit->epreuve;
+								$tabObjClasser[] = $objclasser;
+							}
+							else
+							{
+								$erreur = true;
+							}
+						}
+					}
+
+					if($erreur == false)
+					{
+						foreach($tabObjClasser as $unObjClasser)
+						{
+							$unObjClasser->save();
+						}
+					}
+					else
+					{
+						$_SESSION["message"][] = 3;
+						$_SESSION["message"][] = "Erreur lors de l'importation du csv";
+						$ctrl = new \sportnet\control\SportnetController($this->request);
+						$ctrl->listEvents();
+					}
+
+				} else {
+					$_SESSION["message"][] = 3;
+					$_SESSION["message"][] = "Cette épreuve n'existe pas";
+					$ctrl = new \sportnet\control\SportnetController($this->request);
+					$ctrl->listEvents();
+				}
+				
+			} else {
+				$ctrl = new \sportnet\control\SportnetController($this->request);
+				$ctrl->listEvents();
+			}
+		} else {
+		
 			$ctrl = new \sportnet\control\SportnetController($this->request);
 			$ctrl->listEvents();
 		}

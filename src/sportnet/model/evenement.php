@@ -19,6 +19,19 @@ class evenement extends AbstractModel {
 		self::$db->query("SET CHARACTER SET utf8");
 	}
 	
+	public function __get($attr_name)
+	{
+        if (property_exists( $this, $attr_name))
+		{
+			return $this->$attr_name;
+		}
+		else
+		{
+			$emess = $this . ": unknown member $attr_name (__get)";
+			throw new \Exception($emess);
+		}
+    }
+	
 	protected function update()
 	{
 		$update = "UPDATE evenement SET nom = :nom, description = :description, etat = :etat, dateheureLimiteInscription = :dateheureLimiteInscription,
