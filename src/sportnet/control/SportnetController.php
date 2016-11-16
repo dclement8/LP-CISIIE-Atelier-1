@@ -730,10 +730,69 @@ class SportnetController {
 		
 		if($auth->logged_in == true)
 		{
-			
-		}
-		else
-		{
+			if(isset($_GET['epreuve'])) {
+				if(\sportnet\model\epreuve::findById($_GET['epreuve']))
+				{
+					$tabObjClasser = array();
+					$erreur = false;
+
+					$fichier = 'upload/fichier.csv';
+					$tab = array();
+					$csv = new SplFileObject($fichier); // On instancie l'objet SplFileObject
+					$csv->setFlags(SplFileObject::READ_CSV); // On indique que le fichier est de type CSV
+					$csv->setCsvControl(';'); // On indique le caractère délimiteur, ici c'est la virgule
+					foreach($csv as $t) {
+						$tab[] = $t;
+					}
+					$tableauInscrit = \sportnet\model\inscrit::findById($_GET['epreuve']);
+					
+					for($i = 0; $i < count($tab); $i++) {
+						foreach($tableauInscrit as $unInscrit)
+						{
+							if($unInscrit->dossard = $tab[$i][1])
+							{
+								$objclasser = new \sportnet\model\classer();
+								$heure = $tab[$i][2];
+								$number = explode(":", $heure);
+								$res = ($number[0]*100*60*60) + ($number[1]*100*60) + ($number[2]*100) + $number[3];
+
+								$objclasser->position = $tab[$i][0];
+								$objclasser->temps = $res;
+								$objclasser->participant = $unInscrit->participant;
+								$objclasser->epreuve = $unInscrit->epreuve;
+								$tabObjClasser[] = $objclasser;
+							}
+							else
+							{
+								$erreur = true;
+							}
+						}
+					}
+
+					if($erreur == false)
+					{
+						foreach($tabObjClasser as $unObjClasser)
+						{
+							$unObjClasser->save();
+						}
+					}
+					else
+					{
+						$_SESSION["message"][] = 3;
+						$_SESSION["message"][] = "Erreur lors de l'importation du csv";
+					}
+
+				} else {
+					$_SESSION["message"][] = 3;
+					$_SESSION["message"][] = "Cette épreuve n'existe pas";
+				}
+				
+			} else {
+				$ctrl = new \sportnet\control\SportnetController($this->request);
+				$ctrl->listEvents();
+			}
+		} else {
+		
 			$ctrl = new \sportnet\control\SportnetController($this->request);
 			$ctrl->listEvents();
 		}
