@@ -55,8 +55,8 @@ EOT;
             </p>
         </div>
         <p>
-            <label>Date limite d''inscription :</label>
-            <input type="datetime-local" name="date" required="required">
+            <label>Date limite d''inscription (dd-mm-aaaa hh:mm) :</label>
+            <input type="text" name="date" required="required">
         </p>
         <p>
             <label>Tarif :</label>
@@ -128,7 +128,7 @@ EOT;
 	<h3>{$event->nom}</h3>
 
 	<p>${description}</p>
-	<p>Le {$event->dateheureLimiteInscription}</p>
+	<p>Le {date_format($this->data->dateheureLimiteInscription,"d-m-Y H:i")}</p>
 	<h4><a href="details.html">≡ En savoir plus</a></h4>
 </div>
 EOT;
@@ -142,12 +142,12 @@ EOT;
 		$html = <<<EOT
 <div class="event large">
 	<h6>Partager : <input type="text" id="partager" size="64"></h6>
-	<p>Début le {$this->data->dateheureLimiteInscription}</p>
+	<p>Début le {date_format($this->data->dateheureLimiteInscription,"d-m-Y H:i")}</p>
 	<hr>
 	<p>{$this->data->description}</p>
 EOT;
 
-		if($this->data->etat == 3) { // à ajouter dans le if : vérifier DateTime
+		if($this->data->etat == 3 && time() <= $this->data->dateheureLimiteInscription->getTimestamp()) {
 			$inscriptions_ouvertes = true;
 			$html .= "\t<div class='alert alert-success'>Les inscriptions sont ouvertes</div>\n";
 		}
@@ -162,7 +162,7 @@ EOT;
 <div class="epreuve offset-0 span-3">
 	<h4>{$epreuve->nom}</h4>
 	<ul>
-		<li>{$epreuve->dateheure}</li>
+		<li>{date_format($epreuve->dateheure, "d-m-Y H:i")}</li>
 		<li>{$epreuve->distance}m</li>
 	</ul>
 EOT;
@@ -281,7 +281,7 @@ EOT;
 		</div>
 		<p>
 			<label>Date limite d''inscription :</label>
-			<input type="datetime-local" name="date" value="{$event->dateheureLimiteInscription}" required="required">
+			<input type="text" name="date" value="{date_format($this->data->dateheureLimiteInscription,"d-m-Y H:i")}" required="required">
 		</p>
 		<p>
 			<label>Tarif :</label>
@@ -296,7 +296,7 @@ EOT;
 	</form>
 EOT;
 
-			if($event->etat == 3) { // à ajouter dans le if : vérifier DateTime
+			if($event->etat == 3 && time() <= $this->data->dateheureLimiteInscription->getTimestamp()) {
 				$inscriptions_ouvertes = true;
 			}
 			else
