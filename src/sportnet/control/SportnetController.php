@@ -76,7 +76,7 @@ class SportnetController {
 		
 		if($auth->logged_in == true)
 		{
-			if(isset($_POST["nom"]) && isset($_POST["etat"]) && isset($_POST["date"]) && isset($_POST["description"]) && isset($_POST["tarif"]) && isset($_POST["nom_epreuve"]) && isset($_POST["date_epreuve"]) && isset($_POST["dist_epreuve"]))
+			if(isset($this->request->post["nom"]) && isset($this->request->post["etat"]) && isset($this->request->post["date"]) && isset($this->request->post["description"]) && isset($this->request->post["tarif"]) && isset($this->request->post["nom_epreuve"]) && isset($this->request->post["date_epreuve"]) && isset($this->request->post["dist_epreuve"]))
 			{
 				$evenement = null;
 				if(isset($this->request->get["event"]))
@@ -97,16 +97,16 @@ class SportnetController {
 				}
 				else
 				{
-					$nom = filter_var($_POST["nom"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$etat = filter_var($_POST["etat"], FILTER_SANITIZE_NUMBER_INT);
-					$date = filter_var($_POST["date"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$description = filter_var($_POST["description"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$tarif = filter_var($_POST["tarif"], FILTER_SANITIZE_NUMBER_FLOAT);
-					$discipline = filter_var($_POST["discipline"], FILTER_SANITIZE_NUMBER_INT);
+					$nom = filter_var($this->request->post["nom"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$etat = filter_var($this->request->post["etat"], FILTER_SANITIZE_NUMBER_INT);
+					$date = filter_var($this->request->post["date"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$description = filter_var($this->request->post["description"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$tarif = filter_var($this->request->post["tarif"], FILTER_SANITIZE_NUMBER_FLOAT);
+					$discipline = filter_var($this->request->post["discipline"], FILTER_SANITIZE_NUMBER_INT);
 					
-					$nom_epreuve = filter_var($_POST["nom_epreuve"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$date_epreuve = filter_var($_POST["date_epreuve"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$dist_epreuve = filter_var($_POST["dist_epreuve"], FILTER_SANITIZE_NUMBER_INT);
+					$nom_epreuve = filter_var($this->request->post["nom_epreuve"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$date_epreuve = filter_var($this->request->post["date_epreuve"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$dist_epreuve = filter_var($this->request->post["dist_epreuve"], FILTER_SANITIZE_NUMBER_INT);
 					
 					
 					$evenement->nom = $nom;
@@ -207,7 +207,7 @@ class SportnetController {
 		
 		if($auth->logged_in == true)
 		{
-			if(isset($_POST["nom_epreuve"]) && isset($_POST["date_epreuve"]) && isset($_POST["dist_epreuve"]) && isset($this->request->get["event"]))
+			if(isset($this->request->post["nom_epreuve"]) && isset($this->request->post["date_epreuve"]) && isset($this->request->post["dist_epreuve"]) && isset($this->request->get["event"]))
 			{
 				$epreuve = null;
 				if(isset($this->request->get["epreuve"]))
@@ -228,9 +228,9 @@ class SportnetController {
 				}
 				else
 				{
-					$nom_epreuve = filter_var($_POST["nom_epreuve"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$date_epreuve = filter_var($_POST["date_epreuve"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$dist_epreuve = filter_var($_POST["dist_epreuve"], FILTER_SANITIZE_NUMBER_INT);
+					$nom_epreuve = filter_var($this->request->post["nom_epreuve"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$date_epreuve = filter_var($this->request->post["date_epreuve"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$dist_epreuve = filter_var($this->request->post["dist_epreuve"], FILTER_SANITIZE_NUMBER_INT);
 					
 					$evenement = \sportnet\model\evenement::findById($this->request->get["event"]);
 					
@@ -440,17 +440,17 @@ class SportnetController {
 		}
 		else
 		{
-			if(isset($_POST["login"]) && isset($_POST["mdp"]) && isset($_POST["mdp2"]) && isset($_GET["nom"]) && isset($_GET["prenom"]) && isset($_GET["adresse"]) && isset($_GET["ville"]) && isset($_GET["cp"]) && isset($_GET["tel"]))
+			if(isset($this->request->post["login"]) && isset($this->request->post["mdp"]) && isset($this->request->post["mdp2"]) && isset($_GET["nom"]) && isset($_GET["prenom"]) && isset($_GET["adresse"]) && isset($_GET["ville"]) && isset($_GET["cp"]) && isset($_GET["tel"]))
 			{
-				$login = filter_var($_POST["login"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$mdp = filter_var($_POST["mdp"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$mdp2 = filter_var($_POST["mdp2"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$nom = filter_var($_POST["nom"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$prenom = filter_var($_POST["prenom"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$adresse = filter_var($_POST["adresse"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$ville = filter_var($_POST["ville"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$cp = filter_var($_POST["cp"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$tel = filter_var($_POST["tel"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$login = filter_var($this->request->post["login"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$mdp = filter_var($this->request->post["mdp"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$mdp2 = filter_var($this->request->post["mdp2"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$nom = filter_var($this->request->post["nom"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$prenom = filter_var($this->request->post["prenom"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$adresse = filter_var($this->request->post["adresse"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$ville = filter_var($this->request->post["ville"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$cp = filter_var($this->request->post["cp"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$tel = filter_var($this->request->post["tel"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				
 				if($mdp == $mdp2)
 				{
@@ -508,10 +508,10 @@ class SportnetController {
 		}
 		else
 		{
-			if(isset($_POST["login"]) && isset($_POST["mdp"]))
+			if(isset($this->request->post["login"]) && isset($this->request->post["mdp"]))
 			{
-				$login = filter_var($_POST["login"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$mdp = filter_var($_POST["mdp"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$login = filter_var($this->request->post["login"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$mdp = filter_var($this->request->post["mdp"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				$auth->login($login, $mdp);
 				if($auth->logged_in == true)
 				{
@@ -541,9 +541,9 @@ class SportnetController {
 	// Inscription d'un participant à une épreuve via un numéro de participant
 	public function inscrireEpreuveViaNum()
 	{
-		if(isset($_POST["num"]) && isset($this->request->get["epreuve"]))
+		if(isset($this->request->post["num"]) && isset($this->request->get["epreuve"]))
 		{
-			$num = filter_var($_POST["num"], FILTER_SANITIZE_NUMBER_INT);
+			$num = filter_var($this->request->post["num"], FILTER_SANITIZE_NUMBER_INT);
 			
 			$participant = \sportnet\model\participant::findById($num);
 			$epreuve = \sportnet\model\epreuve::findById($this->request->get["epreuve"]);
@@ -589,14 +589,14 @@ class SportnetController {
 	// Inscription d'un participant à une épreuve sans numéro
 	public function inscrireEpreuve()
 	{
-		if(isset($_POST["nom"]) && isset($_POST["prenom"]) && isset($_POST["adresse"]) && isset($_POST["ville"]) && isset($_POST["cp"]) && isset($_POST["tel"]) && isset($this->request->get["epreuve"]))
+		if(isset($this->request->post["nom"]) && isset($this->request->post["prenom"]) && isset($this->request->post["adresse"]) && isset($this->request->post["ville"]) && isset($this->request->post["cp"]) && isset($this->request->post["tel"]) && isset($this->request->get["epreuve"]))
 		{
-			$nom = filter_var($_POST["nom"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-			$prenom = filter_var($_POST["prenom"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-			$adresse = filter_var($_POST["adresse"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-			$ville = filter_var($_POST["ville"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-			$cp = filter_var($_POST["cp"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-			$tel = filter_var($_POST["tel"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$nom = filter_var($this->request->post["nom"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$prenom = filter_var($this->request->post["prenom"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$adresse = filter_var($this->request->post["adresse"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$ville = filter_var($this->request->post["ville"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$cp = filter_var($this->request->post["cp"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$tel = filter_var($this->request->post["tel"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 			
 			$epreuve = \sportnet\model\epreuve::findById($this->request->get["epreuve"]);
 			
