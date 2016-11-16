@@ -137,7 +137,7 @@ class SportnetController {
 					}
 					else
 					{
-						// Message d'alerte :
+						// Message d'alerte : $_SESSION["message"]
 						//
 						// [0] : Correspond au code de retour (int)
 						//		0 = Message d'alerte normal (class='alert')
