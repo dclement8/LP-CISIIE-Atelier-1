@@ -113,6 +113,27 @@ EOT;
 		return $html;
 	}
 
+	protected function listEvents() {
+		// $data contient tous les événements
+		$html = '';
+
+		foreach($this->data as $event) {
+			$description = $event->description;
+			if(strlen($description) > 1000)
+				$description = substr($description, 0, 1000).' [...]';
+
+			$html .= <<<EOT
+<div class="event offset-0 span-3">
+	<h3>{$event->nom}</h3>
+
+	<p>${description}</p>
+	<p>Le {$event->dateheureLimiteInscription}</p>
+	<h4><a href="details.html">≡ En savoir plus</a></h4>
+</div>
+EOT;
+		}
+	}
+
 
     /*
      * Affiche une page HTML complète.
@@ -146,7 +167,7 @@ EOT;
 			default:
                 // Liste des events
                 $breadcrumb = $this->renderBreadcrumb();
-                //$main = $this->method();
+                $main = $this->listEvents();
 				break;
         }
 
@@ -170,6 +191,7 @@ EOT;
     <head>
         <meta charset="utf-8">
         <title>SportNet</title>
+		<link rel="shortcut icon" href="/favicon.ico">
         <link rel="stylesheet" href="${style_file}">
 		<script type="text/javascript" src="../js/details.js"></script>
 		<script type="text/javascript" src="../js/spoiler.js"></script>
