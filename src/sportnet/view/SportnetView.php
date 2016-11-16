@@ -132,8 +132,94 @@ EOT;
 </div>
 EOT;
 		}
+
+		return $html;
 	}
 
+	protected function detail() {
+		// $data contient un événement et son/ses épreuve(s)
+		$html = <<<EOT
+<div class="event large">
+	<h6>Partager : <input type="text" id="partager" size="64"></h6>
+	<p>Début le {$this->data->dateheureLimiteInscription}</p>
+	<hr>
+	<p>{$this->data->description}</p>
+EOT;
+
+		if($this->data->etat == 3) { // à ajouter dans le if : vérifier DateTime
+			$inscriptions_ouvertes = true;
+			$html .= "\t<div class='alert alert-success'>Les inscriptions sont ouvertes</div>\n";
+		}
+		else {
+			$inscriptions_ouvertes = false;
+			$html .= "\t<div class='alert alert-danger'>Les inscriptions sont fermées</div>\n";
+		}
+
+		// Récupérer épreuves
+		foreach($this->data->getEpreuves() as $epreuve) {
+			$html .= <<<EOT
+<div class="epreuve offset-0 span-3">
+	<h4>{$epreuve->nom}</h4>
+	<ul>
+		<li>{$epreuve->dateheure}</li>
+		<li>{$epreuve->distance}m</li>
+	</ul>
+EOT;
+			// L'affichage est différent si les Inscriptions sont ouvertes ou non
+			if($inscriptions_ouvertes) {
+				$html .= <<<EOT
+	<button onclick="spoiler('{$epreuve->id}')">S''Inscrire</button>
+
+	<div id="spoiler-{$epreuve->id}">
+		<!-- Div masquée par défaut -->
+		<div>
+			<form method="post" action="details.html">
+				Numéro de participant :
+				<input type="number" name="num" required="required">
+				<input type="submit">
+			</form>
+		</div>
+
+		<div>
+			<form method="post" action="details.html">
+				OU
+				<p><input type="text" name="nom" placeholder="Nom" required="required"></p>
+				<p><input type="text" name="prenom" placeholder="Prénom" required="required"></p>
+				<p><input type="text" name="adresse" placeholder="Adresse" required="required"></p>
+				<p><input type="text" name="ville" placeholder="Ville" required="required"></p>
+				<p><input type="text" name="cp" placeholder="Code Postal" required="required"></p>
+				<p><input type="tel" name="tel" placeholder="Téléphone" required="required"></p>
+				<p><input type="submit" value="Inscription"></p>
+			</form>
+		</div>
+	</div>
+EOT;
+			}
+			else {
+				// Inscriptions fermées
+				$classement = \sportnet\model\classer::findById($epreuve->id);
+				if($classement !== null && $classement !== false) {
+					$html .= <<<EOT
+	<button onclick="spoiler('{$epreuve->id}')">Classement</button>
+
+	<div id="spoiler-{$epreuve->id}">
+		<!-- Div masquée par défaut -->
+		<ol>
+EOT;
+
+					foreach($classement as $participant)
+						$html .= "\t\t\t<li>".$participant->participant." - ".$participant->temps."</li>\n";
+
+					$html .= "\t\t</ol>\n";
+					$html .= "\t</div>\n";
+				}
+			}
+
+			$html .= "</div>\n";
+		}
+
+		return $html;
+	}
 
     /*
      * Affiche une page HTML complète.
@@ -150,7 +236,7 @@ EOT;
 
             case 'detailEvenement':
                 $breadcrumb = $this->renderBreadcrumb();
-    			//$main = $this->method();
+    			$main = $this->detail();
     			break;
 
             case 'authentification':
