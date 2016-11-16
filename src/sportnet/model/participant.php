@@ -91,11 +91,20 @@ class participant extends AbstractModel {
         $selectById = "SELECT * FROM participant WHERE id = :id";
         $selectById_prep = self::$db->prepare($selectById);
         $selectById_prep->bindParam(':id', $leId, \PDO::PARAM_INT);
-        if ($selectById_prep->execute()) {
-            return $selectById_prep->fetchObject(__CLASS__);
-        }else{
-            return null;
-        }
+        $selectById_prep->execute();
+		$obj = null;
+		while ($ligne = $selectById_prep->fetch(\PDO::FETCH_ASSOC)) {
+			$obj = new participant();
+
+			$obj->id = $ligne['id'];
+			$obj->nom = $ligne['nom'];
+			$obj->prenom = $ligne['prenom'];
+			$obj->rue = $ligne['rue'];
+			$obj->cp = $ligne['cp'];
+			$obj->ville = $ligne['ville'];
+			$obj->tel = $ligne['tel'];
+		}
+		return $obj;
 	}
 	
 	public static function findAll()
@@ -108,12 +117,23 @@ class participant extends AbstractModel {
 			self::$db->query("SET CHARACTER SET utf8");
 		}
         $select = "SELECT * FROM participant";
-        $resultat = self::$db->query($select);
-        if ($resultat) {
-            return $resultat->fetchAll(\PDO::FETCH_CLASS, __CLASS__);
-        }else{
-            return null;
-        }
+        $select_prep = self::$db->prepare($select);
+		$select_prep->execute();
+        $tab = null;
+		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
+			$obj = new participant();
+
+			$obj->id = $ligne['id'];
+			$obj->nom = $ligne['nom'];
+			$obj->prenom = $ligne['prenom'];
+			$obj->rue = $ligne['rue'];
+			$obj->cp = $ligne['cp'];
+			$obj->ville = $ligne['ville'];
+			$obj->tel = $ligne['tel'];
+
+			$tab[] = $obj;
+		}
+		return $tab;
 	}
 	
 	public static function findByName($leNom)
@@ -128,11 +148,20 @@ class participant extends AbstractModel {
         $selectByName = "SELECT * FROM participant WHERE nom = :nom";
         $selectByName_prep = self::$db->prepare($selectByName);
         $selectByName_prep->bindParam(':nom', $leNom, \PDO::PARAM_STR);
-        if ($selectByName_prep->execute()) {
-            return $selectByName_prep->fetchObject(__CLASS__);
-        }else{
-            return null;
-        }
+        $selectByName_prep->execute();
+		$obj = null;
+		while ($ligne = $selectById_prep->fetch(\PDO::FETCH_ASSOC)) {
+			$obj = new participant();
+
+			$obj->id = $ligne['id'];
+			$obj->nom = $ligne['nom'];
+			$obj->prenom = $ligne['prenom'];
+			$obj->rue = $ligne['rue'];
+			$obj->cp = $ligne['cp'];
+			$obj->ville = $ligne['ville'];
+			$obj->tel = $ligne['tel'];
+		}
+		return $obj;
 	}
 }
 ?>

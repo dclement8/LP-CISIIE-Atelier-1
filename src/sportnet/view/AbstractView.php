@@ -117,23 +117,23 @@ abstract class AbstractView {
 		{
             switch ($_SESSION['message'][0])
 			{
-				case '0':
+				case 0:
 					$html = "<div class='alert'>";
 					break;
 
-				case '1':
+				case 1:
 					$html = "<div class='alert alert-success'>";
 					break;
 
-				case '2':
+				case 2:
 					$html = "<div class='alert alert-info'>";
 					break;
 
-				case '3':
+				case 3:
 					$html = "<div class='alert alert-avert'>";
 					break;
 
-				case '4':
+				case 4:
 					$html = "<div class='alert alert-danger'>";
 					break;
 

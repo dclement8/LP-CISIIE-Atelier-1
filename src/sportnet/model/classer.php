@@ -85,11 +85,20 @@ class classer extends AbstractModel {
         $selectById = "SELECT * FROM classer WHERE id_epreuve = :id_epreuve";
         $selectById_prep = self::$db->prepare($selectById);
         $selectById_prep->bindParam(':id_epreuve', $leIdEpreuve, \PDO::PARAM_INT);
-        if ($selectById_prep->execute()) {
-            return $selectById_prep->fetchObject(__CLASS__);
-        }else{
-            return null;
-        }
+        $selectById_prep->execute();
+		$tab = null;
+		while ($ligne = $selectById_prep->fetch(\PDO::FETCH_ASSOC)) {
+			$obj = new classer();
+
+			$obj->position = $ligne['position'];
+			$obj->temps = $ligne['temps'];
+
+			$obj->epreuve = \sportnet\model\epreuve::findById($ligne['id_epreuve']);
+			$obj->participant = \sportnet\model\participant::findById($ligne['id_participant']);
+
+			$tab[] = $obj;
+		}
+		return $tab;
 	}
 	
 	public static function findAll()
@@ -102,12 +111,21 @@ class classer extends AbstractModel {
 			self::$db->query("SET CHARACTER SET utf8");
 		}
         $select = "SELECT * FROM classer";
-        $resultat = self::$db->query($select);
-        if ($resultat) {
-            return $resultat->fetchAll(\PDO::FETCH_CLASS, __CLASS__);
-        }else{
-            return null;
-        }
+        $select_prep = self::$db->prepare($select);
+        $selectById_prep->execute();
+		$tab = null;
+		while ($ligne = $selectById_prep->fetch(\PDO::FETCH_ASSOC)) {
+			$obj = new classer();
+
+			$obj->position = $ligne['position'];
+			$obj->temps = $ligne['temps'];
+
+			$obj->epreuve = \sportnet\model\epreuve::findById($ligne['id_epreuve']);
+			$obj->participant = \sportnet\model\participant::findById($ligne['id_participant']);
+
+			$tab[] = $obj;
+		}
+		return $tab;
 	}
 	
 	public function getEpreuve()
@@ -115,11 +133,19 @@ class classer extends AbstractModel {
 		$select = "SELECT * FROM epreuve where id = :id";
         $select_prep = self::$db->prepare($select);
 		$select_prep->bindParam(':id', $this->epreuve->id, \PDO::PARAM_INT);
-        if($select_prep->execute()){
-            return $select_prep->fetchObject(epreuve::class);
-        }else{
-            return null;
-        }
+        $select_prep->execute();
+		$obj = null;
+		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
+			$obj = new epreuve();
+
+			$obj->id = $ligne['id'];
+			$obj->nom = $ligne['nom'];
+			$obj->distance  = $ligne['distance'];
+			$obj->dateheure = date_create($ligne['dateheure']);
+
+			$obj->epreuve = \sportnet\model\epreuve::findById($ligne['id_epreuve']);
+		}
+		return $obj;
 	}
 	
 	public function getParticipant()
@@ -127,11 +153,20 @@ class classer extends AbstractModel {
 		$select = "SELECT * FROM participant where id = :id";
         $select_prep = self::$db->prepare($select);
 		$select_prep->bindParam(':id', $this->participant->id, \PDO::PARAM_INT);
-        if($select_prep->execute()){
-            return $select_prep->fetchObject(participant::class);
-        }else{
-            return null;
-        }
+        $select_prep->execute();
+		$obj = null;
+		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
+			$obj = new participant();
+
+			$obj->id = $ligne['id'];
+			$obj->nom = $ligne['nom'];
+			$obj->prenom = $ligne['prenom'];
+			$obj->rue = $ligne['rue'];
+			$obj->cp = $ligne['cp'];
+			$obj->ville = $ligne['ville'];
+			$obj->tel = $ligne['tel'];
+		}
+		return $obj;
 	}
 }
 ?>

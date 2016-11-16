@@ -27,7 +27,7 @@ class evenement extends AbstractModel {
 		$update_prep->bindParam(':nom', $this->nom, \PDO::PARAM_STR);
         $update_prep->bindParam(':description', $this->description, \PDO::PARAM_STR);
         $update_prep->bindParam(':etat', $this->etat, \PDO::PARAM_INT);
-        $update_prep->bindParam(':dateheureLimiteInscription', $this->dateheureLimiteInscription, \PDO::PARAM_STR);
+        $update_prep->bindParam(':dateheureLimiteInscription', date_format(date_create($this->dateheureLimiteInscription),"Y-m-d H:i:s"), \PDO::PARAM_STR);
 		$update_prep->bindParam(':tarif', $this->ville, \PDO::PARAM_STR);
 		$update_prep->bindParam(':id_discipline', $this->discipline->id, \PDO::PARAM_INT);
 		$update_prep->bindParam(':id_organisateur', $this->organisateur->id, \PDO::PARAM_INT);
@@ -47,7 +47,7 @@ class evenement extends AbstractModel {
 		$insert_prep->bindParam(':nom', $this->nom, \PDO::PARAM_STR);
         $insert_prep->bindParam(':description', $this->description, \PDO::PARAM_STR);
         $insert_prep->bindParam(':etat', $this->etat, \PDO::PARAM_INT);
-        $insert_prep->bindParam(':dateheureLimiteInscription', $this->dateheureLimiteInscription, \PDO::PARAM_STR);
+        $insert_prep->bindParam(':dateheureLimiteInscription', date_format(date_create($this->dateheureLimiteInscription),"Y-m-d H:i:s"), \PDO::PARAM_STR);
 		$insert_prep->bindParam(':tarif', $this->ville, \PDO::PARAM_STR);
 		$insert_prep->bindParam(':id_discipline', $this->discipline->id, \PDO::PARAM_INT);
 		$insert_prep->bindParam(':id_organisateur', $this->organisateur->id, \PDO::PARAM_INT);
@@ -95,11 +95,20 @@ class evenement extends AbstractModel {
         $selectById = "SELECT * FROM evenement WHERE id = :id";
         $selectById_prep = self::$db->prepare($selectById);
         $selectById_prep->bindParam(':id', $leId, \PDO::PARAM_INT);
-        if ($selectById_prep->execute()) {
-            return $selectById_prep->fetchObject(__CLASS__);
-        }else{
-            return null;
-        }
+        $obj = null;
+		while ($ligne = $selectById_prep->fetch(\PDO::FETCH_ASSOC)) {
+			$obj = new evenement();
+
+			$obj->id = $ligne['id'];
+			$obj->nom = $ligne['nom'];
+			$obj->description  = $ligne['description'];
+			$obj->etat = $ligne['etat'];
+			$obj->dateheureLimiteInscription = date_create($ligne['dateheureLimiteInscription']);
+			$obj->tarif = $ligne['tarif'];
+			$obj->discipline = \sportnet\model\discipline::findById($ligne['id_discipline']);
+			$obj->organisateur = \sportnet\model\organisateur::findById($ligne['id_organisateur']);
+		}
+		return $obj;
 	}
 	
 	public static function findAll()
@@ -112,12 +121,24 @@ class evenement extends AbstractModel {
 			self::$db->query("SET CHARACTER SET utf8");
 		}
         $select = "SELECT * FROM evenement";
-        $resultat = self::$db->query($select);
-        if ($resultat) {
-            return $resultat->fetchAll(\PDO::FETCH_CLASS, __CLASS__);
-        }else{
-            return null;
-        }
+        $select_prep = self::$db->prepare($select);
+        $select_prep->execute();
+		$tab = null;
+		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
+			$obj = new evenement();
+
+			$obj->id = $ligne['id'];
+			$obj->nom = $ligne['nom'];
+			$obj->description  = $ligne['description'];
+			$obj->etat = $ligne['etat'];
+			$obj->dateheureLimiteInscription = date_create($ligne['dateheureLimiteInscription']);
+			$obj->tarif = $ligne['tarif'];
+			$obj->discipline = \sportnet\model\discipline::findById($ligne['id_discipline']);
+			$obj->organisateur = \sportnet\model\organisateur::findById($ligne['id_organisateur']);
+			
+			$tab[] = $obj;
+		}
+		return $tab;
 	}
 	
 	public static function findByName($leNom)
@@ -132,23 +153,41 @@ class evenement extends AbstractModel {
         $selectByName = "SELECT * FROM evenement WHERE nom = :nom";
         $selectByName_prep = self::$db->prepare($selectById);
         $selectByName_prep->bindParam(':nom', $leNom, \PDO::PARAM_STR);
-        if ($selectByName_prep->execute()) {
-            return $selectByName_prep->fetchObject(__CLASS__);
-        }else{
-            return null;
-        }
+        $obj = null;
+		while ($ligne = $selectByName_prep->fetch(\PDO::FETCH_ASSOC)) {
+			$obj = new evenement();
+
+			$obj->id = $ligne['id'];
+			$obj->nom = $ligne['nom'];
+			$obj->description  = $ligne['description'];
+			$obj->etat = $ligne['etat'];
+			$obj->dateheureLimiteInscription = date_create($ligne['dateheureLimiteInscription']);
+			$obj->tarif = $ligne['tarif'];
+			$obj->discipline = \sportnet\model\discipline::findById($ligne['id_discipline']);
+			$obj->organisateur = \sportnet\model\organisateur::findById($ligne['id_organisateur']);
+		}
+		return $obj;
 	}
 	
 	public function getEpreuves()
 	{
-		$select = "SELECT * FROM epreuve where id = :id";
+		$select = "SELECT * FROM epreuve WHERE id_evenement = :id_evenement";
         $select_prep = self::$db->prepare($select);
-        $select_prep->bindParam(":id", $this->id, \PDO::PARAM_INT);
-        if($select_prep->execute()){
-            return $select_prep->fetchObject(epreuve::class);
-        }else{
-            return null;
-        }
+        $select_prep->bindParam(":id_evenement", $this->id, \PDO::PARAM_INT);
+        $tab = null;
+		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
+			$obj = new epreuve();
+
+			$obj->id = $ligne['id'];
+			$obj->nom = $ligne['nom'];
+			$obj->distance  = $ligne['distance'];
+			$obj->dateheure = date_create($ligne['dateheure']);
+			
+			$obj->evenement = \sportnet\model\evenement::findById($ligne['id_evenement']);
+
+			$tab[] = $obj;
+		}
+		return $tab;
 	}
 	
 	public function getOrganisateur()
@@ -156,11 +195,21 @@ class evenement extends AbstractModel {
 		$select = "SELECT * FROM organisateur where id = :id";
         $select_prep = self::$db->prepare($select);
         $select_prep->bindParam(":id", $this->id, \PDO::PARAM_INT);
-        if($select_prep->execute()){
-            return $select_prep->fetchObject(organisateur::class);
-        }else{
-            return null;
-        }
+        $obj = null;
+		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
+			$obj = new organisateur();
+
+			$obj->id = $ligne['id'];
+			$obj->login = $ligne['login'];
+			$obj->mdp  = $ligne['mdp'];
+			$obj->nom = $ligne['nom'];
+			$obj->prenom = $ligne['prenom'];
+			$obj->adresse = $ligne['adresse'];
+			$obj->cp = $ligne['cp'];
+			$obj->ville = $ligne['ville'];
+			$obj->tel = $ligne['tel'];
+		}
+		return $obj;
 	}
 	
 	public function getDiscipline()
@@ -168,11 +217,14 @@ class evenement extends AbstractModel {
 		$select = "SELECT * FROM discipline where id = :id";
         $select_prep = self::$db->prepare($select);
         $select_prep->bindParam(":id", $this->id, \PDO::PARAM_INT);
-        if($select_prep->execute()){
-            return $select_prep->fetchObject(discipline::class);
-        }else{
-            return null;
-        }
+        $obj = null;
+		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
+			$obj = new discipline();
+
+			$obj->id = $ligne['id'];
+			$obj->nom = $ligne['nom'];
+		}
+		return $obj;
 	}
 }
 ?>
