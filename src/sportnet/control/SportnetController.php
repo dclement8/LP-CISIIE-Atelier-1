@@ -656,8 +656,9 @@ class SportnetController {
 				}
 				else
 				{
-					$nomFichier = 'upload/listeParticipants_epreuve'.$_GET["epreuve"].'_'.time().'.csv';
-					$csv = new SplFileObject($nomFichier, 'w');
+					$dir = "upload/";
+					$nomFichier = 'listeParticipants_epreuve'.$_GET["epreuve"].'_'.time().'.csv';
+					$csv = new SplFileObject($dir.$nomFichier, 'w');
 					
 					// Entête CSV
 					$infoInscrit = array();
@@ -691,12 +692,27 @@ class SportnetController {
 						$line .= implode('";"', $unInscrit);
 						$line .= '"';
 						$line .= "\r\n";
-					 
-						 $csv->fwrite($line);
+						
+						$csv->fwrite($line);
 					}
 					
-					header("Location: ".$nomFichier);
-					exit;
+					// désactive la mise en cache
+					header("Cache-Control: no-cache, must-revalidate");
+					header("Cache-Control: post-check=0,pre-check=0");
+					header("Cache-Control: max-age=0");
+					header("Pragma: no-cache");
+					header("Expires: 0");
+					
+					// force le téléchargement du fichier
+					header("Content-Type: application/force-download");
+					header('Content-Disposition: attachment; filename="'.$nomFichier.'"');
+					
+					// indique la taille du fichier à télécharger
+					$size = filesize($dir.$nomFichier);
+					header("Content-Length: ".$size);
+					
+					// envoi le contenu du fichier
+					readfile($dir.$nomFichier);
 				}
 			}
 		}
