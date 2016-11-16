@@ -20,8 +20,7 @@ class SportnetView extends AbstractView{
 	}
 
     protected function creer() {
-        $html  = "<div class='event offset-0 span-9'>\n";
-        $html .= "<h3>Evénement</h3>\n";
+		// $data contient les disciplines
         $html = <<<EOT
 <form method="post" action="creer.html">
     <div class="event offset-0 span-9">
@@ -30,7 +29,13 @@ class SportnetView extends AbstractView{
         <p>
             <label>Discipline :</label>
             <select name="discipline">
-                <option value="1">1</option>
+EOT;
+
+		foreach($this->data as $discipline) {
+			$html .= "\t\t\t\t<option value='".$discipline->id."'>".$discipline->nom."</option>\n";
+		}
+
+		$html .= <<<EOT
             </select>
         </p>
         <div>
@@ -77,6 +82,37 @@ EOT;
         return $html;
     }
 
+	protected function authentification() {
+		$html = <<<EOT
+<div class="bloc offset-0 span-6">
+	<form method="post" action="espace_organisation.html">
+		<h3>Connexion</h3>
+			<p><input type="text" name="login" placeholder="Login" required="required"></p>
+			<p><input type="password" name="mdp" placeholder="Mot de passe" required="required"></p>
+			<p><input type="submit" value="Connexion"></p>
+	</form>
+</div>
+
+<div class="bloc offset-0 span-6">
+	<form method="post" action="espace_organisation.html">
+		<h3>Inscription</h3>
+
+		<p><input type="text" name="login" placeholder="Login" required="required"></p>
+		<p><input type="password" name="mdp" placeholder="Mot de passe" required="required"></p>
+		<p><input type="password" name="mdp2" placeholder="Confirmation" required="required"></p>
+		<p><input type="text" name="nom" placeholder="Nom" required="required"></p>
+		<p><input type="text" name="prenom" placeholder="Prénom" required="required"></p>
+		<p><input type="text" name="adresse" placeholder="Adresse" required="required"></p>
+		<p><input type="text" name="ville" placeholder="Ville" required="required"></p>
+		<p><input type="text" name="cp" placeholder="Code Postal" required="required"></p>
+		<p><input type="tel" name="tel" placeholder="Téléphone" required="required"></p>
+		<p><input type="submit" value="Inscription"></p>
+	</form>
+</div>
+EOT;
+		return $html;
+	}
+
 
     /*
      * Affiche une page HTML complète.
@@ -86,31 +122,27 @@ EOT;
      */
     public function render($selector){
         switch($selector){
-			case 'creer':
+			case 'creerEvenement':
                 $breadcrumb = $this->renderBreadcrumb(array('Créer un événement'));
 				$main = $this->creer();
 				break;
 
-            case 'details_ouvert':
+            case 'detailEvenement':
                 $breadcrumb = $this->renderBreadcrumb();
-    			$main = $this->method();
+    			//$main = $this->method();
     			break;
 
-            case 'details_ferme':
-        		$main = $this->method();
+            case 'authentification':
                 $breadcrumb = $this->renderBreadcrumb();
-        		break;
-
-            case 'espace':
-                $breadcrumb = $this->renderBreadcrumb();
-                //$main = $this->espace();
+                $main = $this->authentification();
                 break;
 
-            case 'mes_events':
+            case 'espaceOrganisateur':
                 $breadcrumb = $this->renderBreadcrumb();
                 //$main = $this->method();
         		break;
 
+			case 'listEvents':
 			default:
                 // Liste des events
                 $breadcrumb = $this->renderBreadcrumb();
