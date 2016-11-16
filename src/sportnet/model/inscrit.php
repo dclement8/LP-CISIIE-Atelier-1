@@ -83,7 +83,7 @@ class inscrit extends AbstractModel {
         $selectById_prep = self::$db->prepare($selectById);
         $selectById_prep->bindParam(':id_epreuve', $leId, \PDO::PARAM_INT);
         $selectById_prep->execute();
-		$obj = null;
+		$tab = null;
 		while ($ligne = $selectById_prep->fetch(\PDO::FETCH_ASSOC)) {
 			$obj = new Discipline();
 
@@ -91,8 +91,10 @@ class inscrit extends AbstractModel {
 			
 			$obj->participant = \sportnet\model\participant::findById($ligne['id_participant']);
 			$obj->epreuve = \sportnet\model\epreuve::findById($ligne['id_epreuve']);
+
+			$tab[] = $obj;
 		}
-		return $obj;
+		return $tab;
 	}
 	
 	public static function findAll()
@@ -146,11 +148,20 @@ class inscrit extends AbstractModel {
 		$select = "SELECT * FROM participant where id = :id";
         $select_prep = self::$db->prepare($select);
         $select_prep->bindParam(":id", $this->participant->id, \PDO::PARAM_INT);
-        if($select_prep->execute()){
-            return $select_prep->fetchObject(participant::class);
-        }else{
-            return null;
-        }
+        $select_prep->execute();
+		$obj = null;
+		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
+			$obj = new Participant();
+
+			$obj->id = $ligne['id'];
+			$obj->nom = $ligne['nom'];
+			$obj->prenom = $ligne['prenom'];
+			$obj->rue = $ligne['rue'];
+			$obj->cp = $ligne['cp'];
+			$obj->ville = $ligne['ville'];
+			$obj->tel = $ligne['tel'];
+		}
+		return $obj;
 	}
 
 	public static function getMaxDossard($leIdEpreuve)
@@ -165,11 +176,17 @@ class inscrit extends AbstractModel {
 		$select = "SELECT MAX(dossard) as leMax FROM inscrit WHERE id_epreuve = :id_epreuve";
 		$select_prep = self::$db->prepare($select);
 		$select_prep->bindParam(":id_epreuve", $leIdEpreuve, \PDO::PARAM_INT);
-		if($select_prep->execute()) {
-            return $resultat->fetchAll(\PDO::FETCH_CLASS, __CLASS__);
-        }else{
-            return null;
-        }
+		$select_prep->execute();
+		$obj = null;
+		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
+			$obj = new Inscrit();
+
+			$obj->dossard = $ligne['dossard'];
+			
+			$obj->participant = \sportnet\model\participant::findById($ligne['id_participant']);
+			$obj->epreuve = \sportnet\model\epreuve::findById($ligne['id_epreuve']);
+		}
+		return $obj;
 	}
 }
 ?>
