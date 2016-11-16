@@ -192,6 +192,7 @@ class organisateur extends AbstractModel {
 			$obj->etat = $ligne['etat'];
 			$obj->dateheureLimiteInscription = date_create($ligne['dateheureLimiteInscription']);
 			$obj->tarif = $ligne['tarif'];
+			
 			$obj->discipline = \sportnet\model\discipline::findById($ligne['id_discipline']);
 			$obj->organisateur = \sportnet\model\organisateur::findById($ligne['id_organisateur']);
 
