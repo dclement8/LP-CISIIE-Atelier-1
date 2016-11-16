@@ -489,6 +489,11 @@ class SportnetController {
 					$view->render('authentification');
 				}
 			}
+			else
+			{
+				$view = new \sportnet\view\SportnetView(null);
+				$view->render('authentification');
+			}
 		}
 	}
 	
