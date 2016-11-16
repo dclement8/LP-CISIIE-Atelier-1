@@ -207,7 +207,7 @@ class evenement extends AbstractModel {
 	{
 		$select = "SELECT * FROM organisateur where id = :id";
         $select_prep = self::$db->prepare($select);
-        $select_prep->bindParam(":id", $this->id, \PDO::PARAM_INT);
+        $select_prep->bindParam(":id", $this->organisateur->id, \PDO::PARAM_INT);
         $obj = null;
 		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
 			$obj = new organisateur();
@@ -229,7 +229,7 @@ class evenement extends AbstractModel {
 	{
 		$select = "SELECT * FROM discipline where id = :id";
         $select_prep = self::$db->prepare($select);
-        $select_prep->bindParam(":id", $this->id, \PDO::PARAM_INT);
+        $select_prep->bindParam(":id", $this->discipline->id, \PDO::PARAM_INT);
         $obj = null;
 		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
 			$obj = new discipline();

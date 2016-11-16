@@ -149,7 +149,7 @@ class discipline extends AbstractModel {
 	
 	public function getEvenements()
 	{
-		$select = "SELECT * FROM evenement where id = :id";
+		$select = "SELECT * FROM evenement where id_discipline = :id";
         $select_prep = self::$db->prepare($select);
         $select_prep->bindParam(":id", $this->id, \PDO::PARAM_INT);
         $select_prep->execute();
