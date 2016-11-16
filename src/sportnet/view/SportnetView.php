@@ -117,18 +117,20 @@ EOT;
 	protected function listEvents() {
 		// $data contient tous les événements
 		$html = '';
-
+		
 		foreach($this->data as $event) {
+			//var_dump($event);
 			$description = $event->description;
 			if(strlen($description) > 1000)
 				$description = substr($description, 0, 1000).' [...]';
+				$date = date_format($event->dateheureLimiteInscription,"d-m-Y H:i");
 
 			$html .= <<<EOT
 <div class="event offset-0 span-3">
 	<h3>{$event->nom}</h3>
 
 	<p>${description}</p>
-	<p>Le {date_format($this->data->dateheureLimiteInscription,"d-m-Y H:i")}</p>
+	<p>Le {$date}</p>
 	<h4><a href="details.html">≡ En savoir plus</a></h4>
 </div>
 EOT;
