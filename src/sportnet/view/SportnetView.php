@@ -21,6 +21,7 @@ class SportnetView extends AbstractView{
 
     protected function creer() {
 		// $data contient les disciplines
+		// ou avoir avec findAll ?
         $html = <<<EOT
 <form method="post" action="creer.html">
     <div class="event offset-0 span-9">
@@ -221,6 +222,152 @@ EOT;
 		return $html;
 	}
 
+	protected function mesEvents() {
+		// $data contient un ou des événement(s) avec son/ses épreuve(s)
+		$html = '';
+		foreach($this->data as $event) {
+			$html .= <<<EOT
+<div class="event offset-0 span-4">
+	<h3>Event 1</h3>
+
+	<form method="post" action="mes_events.html">
+		<p><input type="text" name="nom" placeholder="Nom" value="{$event->nom}" required="required"></p>
+		<p>
+			<label>Discipline :</label>
+			<select name="discipline">
+EOT;
+
+			$event_discipline = $event->getDiscipline()->id; // Id de la discipline de l'événement actuel
+			$disciplines = \sportnet\model\discipline::findAll();
+			foreach($disciplines as $discipline) {
+				$html .= "\t\t\t\t<option value='".$discipline->id."'";
+				if($discipline->id == $event_discipline)
+					$html .= " selected='selected'";
+				$html .= ">".$discipline->nom."</option>\n";
+			}
+
+			$html .= <<<EOT
+			</select>
+		</p>
+		<div>
+			Etat :
+			<p>
+				<label>Invisible :</label>
+				<input type="radio" name="etat" value="1"
+EOT;
+			if($event->etat == 1)
+				$html .= ' checked';
+			$html .= <<<EOT
+				>
+			</p>
+			<p>
+				<label>Visible (Inscription fermées) :</label>
+				<input type="radio" name="etat" value="2"
+EOT;
+			if($event->etat == 2)
+				$html .= ' checked';
+			$html .= <<<EOT
+				>
+			</p>
+			<p>
+				<label>Visible (Inscription ouvertes) :</label>
+				<input type="radio" name="etat" value="3"
+EOT;
+			if($event->etat == 3)
+				$html .= ' checked';
+			$html .= <<<EOT
+				>
+			</p>
+		</div>
+		<p>
+			<label>Date limite d''inscription :</label>
+			<input type="datetime-local" name="date" value="{$event->dateheureLimiteInscription}" required="required">
+		</p>
+		<p>
+			<label>Tarif :</label>
+			<input type="number" name="tarif" min="0" value="{$event->tarif}" required="required"> €
+		</p>
+		<p>
+			<label>Description :</label>
+			<textarea name="description" required="required">{$event->description}</textarea>
+		</p>
+
+		<p><input type="submit" value="Modifier"></p>
+	</form>
+EOT;
+
+			if($event->etat == 3) { // à ajouter dans le if : vérifier DateTime
+				$inscriptions_ouvertes = true;
+			}
+			else
+				$inscriptions_ouvertes = false;
+
+			if($inscriptions_ouvertes) {
+				$html .= <<<EOT
+	<h4><a href="#" onclick="spoiler('{$event->id}-1')">≡ Ajouter une épreuve</a></h4>
+
+	<div id="spoiler-{$event->id}-1">
+		<!-- Div masquée par défaut -->
+		<!-- Ajout d''une épreuve -->
+		<form method="post" action="mes_events.html">
+			<p><input type="text" name="nom_epreuve" placeholder="Nom" required="required"></p>
+			<p>
+				<label>Date :</label>
+				<input type="date" name="date_epreuve" required="required">
+			</p>
+			<p><input type="number" name="dist_epreuve" placeholder="Distance (en m)" min="1" max="100000" required="required"></p>
+			<p><input type="submit"></p>
+		</form>
+	</div>
+EOT;
+			}
+
+			$html .= <<<EOT
+	<h4><a href="#" onclick="spoiler('{$event->id}-2')">≡ Voir les épreuves</a></h4>
+
+	<div id="spoiler-{$event->id}-2">
+		<!-- Div masquée par défaut -->
+		<!-- Voir/modifier une épreuve -->
+EOT;
+			foreach($event->getEpreuves() as $epreuve) {
+				$html .= <<<EOT
+		<h4>{$epreuve->nom}</h4>
+		<form method="post" action="mes_events.html">
+			<p><input type="text" name="nom_epreuve" placeholder="Nom" value="{$epreuve->nom}" required="required"></p>
+			<p>
+				<label>Date :</label>
+				<input type="date" name="date_epreuve" value="{$epreuve->dateheure}" required="required">
+			</p>
+			<p><input type="number" name="dist_epreuve" placeholder="Distance (en m)" value="{$epreuve->distance}" min="1" max="100000" required="required"></p>
+			<p><input type="submit"></p>
+		</form>
+EOT;
+				if(!$inscriptions_ouvertes) {
+					$html .= <<<EOT
+		<form method="post" action="mes_events.html">
+			<button id="liste-{$epreuve->id}">Télécharger liste d''engagement</button>
+			Upload classement : <input type="file" name="csv"> <input type="submit" value="Upload">
+		</form>
+EOT;
+				}
+
+				$html .= "\t\tParticipants :\n";
+				$html .= "\t\t<ul>\n";
+
+				$participants = \sportnet\model\inscrit::findById($epreuve->id);
+				if($participants !== null && $participants !== false) {
+					foreach($participants as $participant) {
+						$html .= "\t\t\t<li>".$participant->participant." - dossard ".$participant->dossard."</li>\n";
+					}
+				}
+
+				$html .= "\t\t</ul>\n";
+			}
+	</div>
+EOT;
+		}
+	}
+
     /*
      * Affiche une page HTML complète.
      *
@@ -246,7 +393,7 @@ EOT;
 
             case 'espaceOrganisateur':
                 $breadcrumb = $this->renderBreadcrumb();
-                //$main = $this->method();
+                $main = $this->mesEvents();
         		break;
 
 			case 'listEvents':
