@@ -74,7 +74,7 @@ class classer extends AbstractModel {
 	
 	public function delete()
 	{
-		$delete = "DELETE FROM classer WHERE id_epreuve = :id_epreuve AND id_participant";
+		$delete = "DELETE FROM classer WHERE id_epreuve = :id_epreuve AND id_participant = :id_participant";
         $delete_prep = self::$db->prepare($delete);
 		$delete_prep->bindParam(':id_epreuve', $this->epreuve->id, \PDO::PARAM_INT);
 		$delete_prep->bindParam(':id_participant', $this->participant->id, \PDO::PARAM_INT);

@@ -172,7 +172,7 @@ class epreuve extends AbstractModel {
 	{
 		$select = "SELECT * FROM evenement where id = :id";
         $select_prep = self::$db->prepare($select);
-        $select_prep->bindParam(":id", $this->id, \PDO::PARAM_INT);
+        $select_prep->bindParam(":id", $this->evenement->id, \PDO::PARAM_INT);
         $select_prep->execute();
 		$obj = null;
 		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {

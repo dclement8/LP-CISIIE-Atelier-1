@@ -192,12 +192,7 @@ class inscrit extends AbstractModel {
 		$select_prep->execute();
 		$obj = null;
 		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
-			$obj = new inscrit();
-
-			$obj->dossard = $ligne['dossard'];
-			
-			$obj->participant = \sportnet\model\participant::findById($ligne['id_participant']);
-			$obj->epreuve = \sportnet\model\epreuve::findById($ligne['id_epreuve']);
+			$obj = $ligne['leMax'];
 		}
 		return $obj;
 	}

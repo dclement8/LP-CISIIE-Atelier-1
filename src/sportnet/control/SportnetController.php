@@ -291,26 +291,48 @@ class SportnetController {
 				
 				if($evenement == null)
 				{
-					$view = new \sportnet\view\SportnetView(null);
+					$view = new \sportnet\view\SportnetView(\sportnet\model\organisateur::findByLogin($auth->user_login)->getEvenements());
 					$view->render('espaceOrganisateur');
 				}
 				else
 				{
-					$retour = $evenement->delete();
-					
-					$_SESSION["message"] = array();
-					if($retour == true)
+					if($evenement->organisateur->login == $auth->user_login)
 					{
-						$_SESSION["message"][] = 1;
-						$_SESSION["message"][] = "Evenement supprimé.";
-					}
-					else
-					{
-						$_SESSION["message"][] = 4;
-						$_SESSION["message"][] = "Erreur lors de la suppression de l'événement.";
+						$epreuves = $evenement->getEpreuves();
+						
+						foreach ($epreuves as $uneEpreuve)
+						{
+							$classementEpreuve = \sportnet\model\classer::findById($uneEpreuve->id);
+							foreach ($classementEpreuve as $unClassement)
+							{
+								$unClassement->delete();
+							}
+							
+							$inscritsEpreuve = \sportnet\model\inscrit::findById($uneEpreuve->id);
+							foreach ($inscritsEpreuve as $unInscrit)
+							{
+								$unInscrit->delete();
+							}
+							
+							$uneEpreuve->delete();
+						}
+						
+						$retour = $evenement->delete();
+					
+						$_SESSION["message"] = array();
+						if($retour == true)
+						{
+							$_SESSION["message"][] = 1;
+							$_SESSION["message"][] = "Evenement supprimé.";
+						}
+						else
+						{
+							$_SESSION["message"][] = 4;
+							$_SESSION["message"][] = "Erreur lors de la suppression de l'événement.";
+						}
 					}
 					
-					$view = new \sportnet\view\SportnetView(null);
+					$view = new \sportnet\view\SportnetView(\sportnet\model\organisateur::findByLogin($auth->user_login)->getEvenements());
 					$view->render('espaceOrganisateur');
 				}
 			}
@@ -358,23 +380,36 @@ class SportnetController {
 			}
 			else
 			{
-				$retour = $epreuve->delete();
-				
-				$_SESSION["message"] = array();
-				if($retour == true)
+				if($epreuve->getEvenement()->organisateur->login == $auth->user_login)
 				{
-					$_SESSION["message"][] = 1;
-					$_SESSION["message"][] = "Epreuve supprimée.";
-				}
-				else
-				{
-					$_SESSION["message"][] = 4;
-					$_SESSION["message"][] = "Erreur lors de la suppression de l'épreuve.";
+					$classementEpreuve = \sportnet\model\classer::findById($epreuve->id);
+					foreach ($classementEpreuve as $unClassement)
+					{
+						$unClassement->delete();
+					}
+					
+					$inscritsEpreuve = \sportnet\model\inscrit::findById($epreuve->id);
+					foreach ($inscritsEpreuve as $unInscrit)
+					{
+						$unInscrit->delete();
+					}
+					
+					$retour = $epreuve->delete();
+					
+					$_SESSION["message"] = array();
+					if($retour == true)
+					{
+						$_SESSION["message"][] = 1;
+						$_SESSION["message"][] = "Epreuve supprimée.";
+					}
+					else
+					{
+						$_SESSION["message"][] = 4;
+						$_SESSION["message"][] = "Erreur lors de la suppression de l'épreuve.";
+					}
 				}
 				
-				$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
-			
-				$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
+				$view = new \sportnet\view\SportnetView(\sportnet\model\organisateur::findByLogin($auth->user_login)->getEvenements());
 				$view->render('espaceOrganisateur');
 			}
 		}
@@ -516,7 +551,7 @@ class SportnetController {
 			{
 				$inscrit = new \sportnet\model\inscrit();
 				
-				$inscrit->dossard = \sportnet\model\inscrit::getMaxDossard($epreuve);
+				$inscrit->dossard = \sportnet\model\inscrit::getMaxDossard($epreuve) + 1;
 				$inscrit->epreuve = $epreuve;
 				$inscrit->participant = $participant;
 				
