@@ -428,8 +428,8 @@ EOT;
         <title>SportNet</title>
 		<link rel="shortcut icon" href="/favicon.ico">
         <link rel="stylesheet" href="${style_file}">
-		<script type="text/javascript" src="../js/details.js"></script>
-		<script type="text/javascript" src="../js/spoiler.js"></script>
+		<script type="text/javascript" src="js/details.js"></script>
+		<script type="text/javascript" src="js/spoiler.js"></script>
     </head>
 
     <body>
