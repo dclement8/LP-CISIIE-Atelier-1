@@ -6,7 +6,7 @@
     list-style-type: none;
     padding:0px;
 
-    li
+    li a
     {
         background-color:#666;
         font-size:1rem;
@@ -17,9 +17,10 @@
         color:white;
         line-height:50px;
         text-align: center;
+        text-decoration: none;
     }
 
-    li:hover:not(.active):not(.disabled)
+    li a:hover:not(.active):not(.disabled)
     {
         background-color:#BBB;
         color:black;
@@ -28,7 +29,7 @@
 
     .active
     {
-        color:gold;
+        color:red;
     }
     
     .disabled

@@ -3,7 +3,7 @@
 	font-family: "Arial","Helvetica Neue","Helvetica","sans-serif";
 	font-size:1em;
 	margin:0;
-	background-color:lightblue;
+	background-color:#E8E8E8;
 }
 h1, h2, h3, h4, h5, h6
 {
@@ -237,17 +237,17 @@ header
 {
 	padding-top:15px;
 	padding-bottom:15px;
-	background-color:green;
-	color:white;
+	background-color:black;
+	color:red;
 	text-align:center;
-}
 
-header a
-{
-	text-decoration: none;
-	font-weight: bold;
-	color:white;
-	font-size: 1.25em;
+	a
+	{
+		text-decoration: none;
+		font-weight: bold;
+		color:red;
+		font-size: 1.25em;
+	}
 }
 
 input[type="text"], select
@@ -266,7 +266,7 @@ input[type="text"], select
 .event, .bloc {
 	background-color: white;
 	h4 {
-		background-color: purple;
+		background-color: red;
 		a {
 			color: white;
 		}

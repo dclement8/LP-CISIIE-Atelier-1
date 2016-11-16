@@ -5,7 +5,7 @@
     min-height:25px;
     list-style-type: none;
     padding:0px;
-    li
+    li a
     {
         font-size:1rem;
         padding-left:15px;
@@ -16,20 +16,20 @@
         line-height:25px;
         text-align: center;
     }
-    li:not(:last-child)::after
+    li a:not(:last-child)::after
     {
         content:" >";
-        color:orangered;
+        color:red;
     }
-    li:not(:last-child):hover
+    li a:not(:last-child):hover
     {
         color:black;
         text-decoration:underline;
         cursor:pointer;
     }
-    li:last-child
+    li a:last-child
     {
-        color:black;
+        color:red;
         font-weight: bold;
     }
 }
