@@ -97,7 +97,7 @@ class evenement extends AbstractModel {
         $selectById_prep->bindParam(':id', $leId, \PDO::PARAM_INT);
         $obj = null;
 		while ($ligne = $selectById_prep->fetch(\PDO::FETCH_ASSOC)) {
-			$obj = new Evenement();
+			$obj = new evenement();
 
 			$obj->id = $ligne['id'];
 			$obj->nom = $ligne['nom'];
@@ -125,7 +125,7 @@ class evenement extends AbstractModel {
         $select_prep->execute();
 		$tab = null;
 		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
-			$obj = new Evenement();
+			$obj = new evenement();
 
 			$obj->id = $ligne['id'];
 			$obj->nom = $ligne['nom'];
@@ -155,7 +155,7 @@ class evenement extends AbstractModel {
         $selectByName_prep->bindParam(':nom', $leNom, \PDO::PARAM_STR);
         $obj = null;
 		while ($ligne = $selectByName_prep->fetch(\PDO::FETCH_ASSOC)) {
-			$obj = new Evenement();
+			$obj = new evenement();
 
 			$obj->id = $ligne['id'];
 			$obj->nom = $ligne['nom'];
@@ -176,7 +176,7 @@ class evenement extends AbstractModel {
         $select_prep->bindParam(":id_evenement", $this->id, \PDO::PARAM_INT);
         $tab = null;
 		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
-			$obj = new Epreuve();
+			$obj = new epreuve();
 
 			$obj->id = $ligne['id'];
 			$obj->nom = $ligne['nom'];
@@ -197,7 +197,7 @@ class evenement extends AbstractModel {
         $select_prep->bindParam(":id", $this->id, \PDO::PARAM_INT);
         $obj = null;
 		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
-			$obj = new Organisateur();
+			$obj = new organisateur();
 
 			$obj->id = $ligne['id'];
 			$obj->login = $ligne['login'];
@@ -219,7 +219,7 @@ class evenement extends AbstractModel {
         $select_prep->bindParam(":id", $this->id, \PDO::PARAM_INT);
         $obj = null;
 		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
-			$obj = new Discipline();
+			$obj = new discipline();
 
 			$obj->id = $ligne['id'];
 			$obj->nom = $ligne['nom'];

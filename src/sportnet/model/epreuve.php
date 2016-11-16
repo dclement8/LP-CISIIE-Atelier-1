@@ -88,7 +88,7 @@ class epreuve extends AbstractModel {
         $selectById_prep->execute();
 		$obj = null;
 		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
-			$obj = new Epreuve();
+			$obj = new epreuve();
 
 			$obj->id = $ligne['id'];
 			$obj->nom = $ligne['nom'];
@@ -114,7 +114,7 @@ class epreuve extends AbstractModel {
         $select_prep->execute();
 		$tab = null;
 		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
-			$obj = new Epreuve();
+			$obj = new epreuve();
 
 			$obj->id = $ligne['id'];
 			$obj->nom = $ligne['nom'];
@@ -143,7 +143,7 @@ class epreuve extends AbstractModel {
         $selectByName_prep->execute();
 		$obj = null;
 		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
-			$obj = new Epreuve();
+			$obj = new epreuve();
 
 			$obj->id = $ligne['id'];
 			$obj->nom = $ligne['nom'];
@@ -163,7 +163,7 @@ class epreuve extends AbstractModel {
         $select_prep->execute();
 		$obj = null;
 		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
-			$obj = new Evenement();
+			$obj = new evenement();
 
 			$obj->id = $ligne['id'];
 			$obj->nom = $ligne['nom'];

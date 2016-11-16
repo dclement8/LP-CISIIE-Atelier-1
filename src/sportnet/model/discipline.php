@@ -79,7 +79,7 @@ class discipline extends AbstractModel {
         $selectById_prep->execute();
 		$obj = null;
 		while ($ligne = $selectById_prep->fetch(\PDO::FETCH_ASSOC)) {
-			$obj = new Discipline();
+			$obj = new discipline();
 
 			$obj->id = $ligne['id'];
 			$obj->nom = $ligne['nom'];
@@ -101,7 +101,7 @@ class discipline extends AbstractModel {
         $select_prep->execute();
 		$tab = null;
 		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
-			$obj = new Discipline();
+			$obj = new discipline();
 
 			$obj->id = $ligne['id'];
 			$obj->nom = $ligne['nom'];
@@ -126,7 +126,7 @@ class discipline extends AbstractModel {
         $selectByName_prep->execute();
 		$obj = null;
 		while ($ligne = $selectByName->fetch(\PDO::FETCH_ASSOC)) {
-			$obj = new Discipline();
+			$obj = new discipline();
 
 			$obj->id = $ligne['id'];
 			$obj->nom = $ligne['nom'];
@@ -142,7 +142,7 @@ class discipline extends AbstractModel {
         $select_prep->execute();
 		$tab = null;
 		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
-			$obj = new Evenement();
+			$obj = new evenement();
 
 			$obj->id = $ligne['id'];
 			$obj->nom = $ligne['nom'];
