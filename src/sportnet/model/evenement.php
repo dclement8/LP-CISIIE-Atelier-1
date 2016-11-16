@@ -95,11 +95,21 @@ class evenement extends AbstractModel {
         $selectById = "SELECT * FROM evenement WHERE id = :id";
         $selectById_prep = self::$db->prepare($selectById);
         $selectById_prep->bindParam(':id', $leId, \PDO::PARAM_INT);
-        if ($selectById_prep->execute()) {
-            return $selectById_prep->fetchObject(__CLASS__);
-        }else{
-            return null;
-        }
+        $selectById_prep->execute();
+		$obj = null;
+		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
+			$obj = new Evenement();
+
+			$obj->id = $ligne['id'];
+			$obj->nom = $ligne['nom'];
+			$obj->description  = $ligne['description'];
+			$obj->etat = $ligne['etat'];
+			$obj->dateheureLimiteInscription = $ligne['dateheureLimiteInscription'];
+			$obj->tarif = $ligne['tarif'];
+			$obj->discipline = \sportnet\model\discipline::findById($ligne['id_discipline']);
+			$obj->organisateur = \sportnet\model\organisateur::findById($ligne['id_organisateur']);
+		}
+		return $obj;
 	}
 	
 	public static function findAll()
@@ -142,6 +152,7 @@ class evenement extends AbstractModel {
         $selectByName = "SELECT * FROM evenement WHERE nom = :nom";
         $selectByName_prep = self::$db->prepare($selectById);
         $selectByName_prep->bindParam(':nom', $leNom, \PDO::PARAM_STR);
+		$selectByName_prep->execute();
         $obj = null;
 		while ($ligne = $selectByName_prep->fetch(\PDO::FETCH_ASSOC)) {
 			$obj = new Evenement();
@@ -163,6 +174,7 @@ class evenement extends AbstractModel {
 		$select = "SELECT * FROM epreuve WHERE id_evenement = :id_evenement";
         $select_prep = self::$db->prepare($select);
         $select_prep->bindParam(":id_evenement", $this->id, \PDO::PARAM_INT);
+		$select_prep->execute();
         $tab = null;
 		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
 			$obj = new Epreuve();
@@ -184,6 +196,7 @@ class evenement extends AbstractModel {
 		$select = "SELECT * FROM organisateur where id = :id";
         $select_prep = self::$db->prepare($select);
         $select_prep->bindParam(":id", $this->id, \PDO::PARAM_INT);
+		$select_prep->execute();
         $obj = null;
 		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
 			$obj = new Organisateur();
@@ -206,6 +219,7 @@ class evenement extends AbstractModel {
 		$select = "SELECT * FROM discipline where id = :id";
         $select_prep = self::$db->prepare($select);
         $select_prep->bindParam(":id", $this->id, \PDO::PARAM_INT);
+		$select_prep->execute();
         $obj = null;
 		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
 			$obj = new Discipline();
