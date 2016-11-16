@@ -76,11 +76,15 @@ class discipline extends AbstractModel {
         $selectById = "SELECT * FROM discipline WHERE id = :id";
         $selectById_prep = self::$db->prepare($selectById);
         $selectById_prep->bindParam(':id', $leId, \PDO::PARAM_INT);
-        if ($selectById_prep->execute()) {
-            return $selectById_prep->fetchObject(__CLASS__);
-        }else{
-            return null;
-        }
+        $selectById_prep->execute();
+		$obj = null;
+		while ($ligne = $selectById_prep->fetch(\PDO::FETCH_ASSOC)) {
+			$obj = new Discipline();
+
+			$obj->id = $ligne['id'];
+			$obj->nom = $ligne['nom'];
+		}
+		return $obj;
 	}
 	
 	public static function findAll()
@@ -93,12 +97,18 @@ class discipline extends AbstractModel {
 			self::$db->query("SET CHARACTER SET utf8");
 		}
         $select = "SELECT * FROM discipline";
-        $resultat = self::$db->query($select);
-        if ($resultat) {
-            return $resultat->fetchAll(\PDO::FETCH_CLASS, __CLASS__);
-        }else{
-            return null;
-        }
+        $select_prep = self::$db->prepare($select);
+        $select_prep->execute();
+		$tab = null;
+		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
+			$obj = new Discipline();
+
+			$obj->id = $ligne['id'];
+			$obj->nom = $ligne['nom'];
+
+			$tab[] = $obj;
+		}
+		return $tab;
 	}
 	
 	public static function findByName($leNom)
@@ -113,11 +123,15 @@ class discipline extends AbstractModel {
         $selectByName = "SELECT * FROM discipline WHERE nom = :nom";
         $selectByName_prep = self::$db->prepare($selectById);
         $selectByName_prep->bindParam(':nom', $leNom, \PDO::PARAM_STR);
-        if ($selectByName_prep->execute()) {
-            return $selectByName_prep->fetchObject(__CLASS__);
-        }else{
-            return null;
-        }
+        $selectByName_prep->execute();
+		$obj = null;
+		while ($ligne = $selectByName->fetch(\PDO::FETCH_ASSOC)) {
+			$obj = new Discipline();
+
+			$obj->id = $ligne['id'];
+			$obj->nom = $ligne['nom'];
+		}
+		return $obj;
 	}
 	
 	public function getEvenements()
@@ -125,11 +139,23 @@ class discipline extends AbstractModel {
 		$select = "SELECT * FROM evenement where id = :id";
         $select_prep = self::$db->prepare($select);
         $select_prep->bindParam(":id", $this->id, \PDO::PARAM_INT);
-        if($select_prep->execute()){
-            return $select_prep->fetchObject(evenement::class);
-        }else{
-            return null;
-        }
+        $select_prep->execute();
+		$tab = null;
+		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
+			$obj = new Evenement();
+
+			$obj->id = $ligne['id'];
+			$obj->nom = $ligne['nom'];
+			$obj->description  = $ligne['description'];
+			$obj->etat = $ligne['etat'];
+			$obj->dateheureLimiteInscription = $ligne['dateheureLimiteInscription'];
+			$obj->tarif = $ligne['tarif'];
+			$obj->discipline = \sportnet\model\discipline::findById($ligne['id_discipline']);
+			$obj->organisateur = \sportnet\model\organisateur::findById($ligne['id_organisateur']);
+
+			$tab[] = $obj;
+		}
+		return $tab;
 	}
 }
 ?>
