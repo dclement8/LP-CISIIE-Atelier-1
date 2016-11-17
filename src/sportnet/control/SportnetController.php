@@ -26,9 +26,8 @@ class SportnetController {
 			$event = \sportnet\model\evenement::findById($this->request->get["event"]);
 			if($event == null)
 			{
-				echo "bien";
-				//$ctrl = new \sportnet\control\SportnetController($this->request);
-				//$ctrl->listEvents();
+				$ctrl = new \sportnet\control\SportnetController($this->request);
+				$ctrl->listEvents();
 			}
 			else
 			{
