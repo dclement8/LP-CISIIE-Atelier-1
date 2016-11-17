@@ -332,11 +332,14 @@ EOT;
 			<textarea name="description" cols="50" rows="7" required="required">{$event->description}</textarea>
 		</p>
 
-		<p><input type="submit" value="Modifier"></p>
+		<p>
+			<input type="submit" value="Modifier">
+			<button class="delete" id="{$this->script_name}/supprimerEvenement/?event={$event->id}">Supprimer</button>
+		</p>
 	</form>
 EOT;
 
-			
+
 			if($event->etat == 3 && time() <= $event->dateheureLimiteInscription->getTimestamp()) {
 				$inscriptions_ouvertes = true;
 			}
@@ -357,7 +360,7 @@ EOT;
 				<input type="date" name="date_epreuve" required="required">
 			</p>
 			<p><input type="number" name="dist_epreuve" placeholder="Distance (en m)" min="1" max="100000" required="required"></p>
-			<p><input type="submit"></p>
+			<p><input type="submit" value="Ajouter"></p>
 		</form>
 	</div>
 EOT;
@@ -381,7 +384,10 @@ EOT;
 				<input type="text" name="date_epreuve" value="{$laDate}" required="required">
 			</p>
 			<p><input type="number" name="dist_epreuve" placeholder="Distance (en m)" value="{$epreuve->distance}" min="1" max="100000" required="required"></p>
-			<p><input type="submit"></p>
+			<p>
+				<input type="submit" value="Modifier">
+				<button class="delete" id="{$this->script_name}/supprimerEpreuve/?epreuve={$epreuve->id}">Supprimer</button>
+			</p>
 		</form>
 EOT;
 				if(!$inscriptions_ouvertes) {
