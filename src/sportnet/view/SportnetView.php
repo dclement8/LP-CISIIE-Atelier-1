@@ -45,8 +45,8 @@ class SportnetView extends AbstractView{
 		// $data contient les disciplines
 		// ou avoir avec findAll ?
         $html = <<<EOT
-<form method="post" action="{$this->script_name}/creerEvenement/">
-    <div class="event offset-0 span-9">
+<div class="event offset-0 span-4">
+	<form method="post" action="{$this->script_name}/creerEvenement/">
         <h3>Evénement</h3>
         <p><input type="text" name="nom" placeholder="Nom" required="required"></p>
         <p>
@@ -88,9 +88,7 @@ EOT;
             <label>Description :</label><br />
             <textarea name="description" cols="50" rows="7" required="required"></textarea>
         </p>
-    </div>
 
-    <div class="event offset-0 span-3">
         <h3>Ajouter une épreuve</h3>
         <p><input type="text" name="nom_epreuve" placeholder="Nom" required="required"></p>
         <p>
@@ -99,8 +97,8 @@ EOT;
         </p>
         <p><input type="number" name="dist_epreuve" placeholder="Distance (en m)" min="1" max="100000" required="required"></p>
         <p><input type="submit" value="Créer"></p>
-    </div>
-</form>
+	</form>
+</div>
 EOT;
         return $html;
     }
