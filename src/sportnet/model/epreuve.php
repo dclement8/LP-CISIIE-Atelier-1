@@ -16,6 +16,32 @@ class epreuve extends AbstractModel {
 		self::$db->query("SET CHARACTER SET utf8");
 	}
 	
+	public function __get($attr_name)
+	{
+        if (property_exists( $this, $attr_name))
+		{
+			return $this->$attr_name;
+		}
+		else
+		{
+			$emess = $this . ": unknown member $attr_name (__get)";
+			throw new \Exception($emess);
+		}
+    }
+	
+	public function __set($attr_name, $attr_val)
+	{
+        if (property_exists( $this, $attr_name))
+		{
+			$this->$attr_name=$attr_val;
+		} 
+        else
+		{
+            $emess = $this . ": unknown member $attr_name (__set)";
+            throw new \Exception($emess);
+        }
+    }
+	
 	protected function update()
 	{
 		$update = "UPDATE epreuve SET nom = :nom, distance = :distance, dateheure = :dateheure, id_evenement = :id_evenement WHERE id = :id";
@@ -87,7 +113,7 @@ class epreuve extends AbstractModel {
         $selectById_prep->bindParam(':id', $leId, \PDO::PARAM_INT);
         $selectById_prep->execute();
 		$obj = null;
-		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
+		while ($ligne = $selectById_prep->fetch(\PDO::FETCH_ASSOC)) {
 			$obj = new epreuve();
 
 			$obj->id = $ligne['id'];
@@ -159,7 +185,7 @@ class epreuve extends AbstractModel {
 	{
 		$select = "SELECT * FROM evenement where id = :id";
         $select_prep = self::$db->prepare($select);
-        $select_prep->bindParam(":id", $this->id, \PDO::PARAM_INT);
+        $select_prep->bindParam(":id", $this->evenement->id, \PDO::PARAM_INT);
         $select_prep->execute();
 		$obj = null;
 		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {

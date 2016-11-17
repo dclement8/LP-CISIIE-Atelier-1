@@ -21,13 +21,14 @@ class SportnetController {
 	// Détailler l'événement
 	public function detailEvenement()
 	{
-		if(isset($_GET["event"]))
+		if(isset($this->request->get["event"]))
 		{
-			$event = \sportnet\model\evenement::findById($_GET["event"]);
+			$event = \sportnet\model\evenement::findById($this->request->get["event"]);
 			if($event == null)
 			{
-				$ctrl = new \sportnet\control\SportnetController($this->request);
-				$ctrl->listEvents();
+				echo "bien";
+				//$ctrl = new \sportnet\control\SportnetController($this->request);
+				//$ctrl->listEvents();
 			}
 			else
 			{
@@ -41,7 +42,7 @@ class SportnetController {
 				if($event->etat == 1)
 				{
 					// événement créé mais invisible pour les participants
-					$auth = new \wikiapp\utils\Authentification();
+					$auth = new \sportnet\utils\Authentification();
 	
 					if($auth->logged_in == true)
 					{
@@ -53,6 +54,11 @@ class SportnetController {
 						$ctrl = new \sportnet\control\SportnetController($this->request);
 						$ctrl->listEvents();
 					}
+				}
+				else
+				{
+					$view = new \sportnet\view\SportnetView($event);
+					$view->render('detailEvenement');
 				}
 			}
 		}
@@ -70,12 +76,12 @@ class SportnetController {
 		
 		if($auth->logged_in == true)
 		{
-			if(isset($_POST["nom"]) && isset($_POST["etat"]) && isset($_POST["date"]) && isset($_POST["description"]) && isset($_POST["tarif"]) && isset($_POST["nom_epreuve"]) && isset($_POST["date_epreuve"]) && isset($_POST["dist_epreuve"]))
+			if(isset($this->request->post["nom"]) && isset($this->request->post["etat"]) && isset($this->request->post["date"]) && isset($this->request->post["description"]) && isset($this->request->post["tarif"]) && isset($this->request->post["nom_epreuve"]) && isset($this->request->post["date_epreuve"]) && isset($this->request->post["dist_epreuve"]))
 			{
 				$evenement = null;
-				if(isset($_GET["event"]))
+				if(isset($this->request->get["event"]))
 				{
-					$evenement = \sportnet\model\evenement::findById($_GET["event"]);
+					$evenement = \sportnet\model\evenement::findById($this->request->get["event"]);
 				}
 				else
 				{
@@ -91,16 +97,16 @@ class SportnetController {
 				}
 				else
 				{
-					$nom = filter_var($_POST["nom"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$etat = filter_var($_POST["etat"], FILTER_SANITIZE_NUMBER_INT);
-					$date = filter_var($_POST["date"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$description = filter_var($_POST["description"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$tarif = filter_var($_POST["tarif"], FILTER_SANITIZE_NUMBER_FLOAT);
-					$discipline = filter_var($_POST["discipline"], FILTER_SANITIZE_NUMBER_INT);
+					$nom = filter_var($this->request->post["nom"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$etat = filter_var($this->request->post["etat"], FILTER_SANITIZE_NUMBER_INT);
+					$date = filter_var($this->request->post["date"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$description = filter_var($this->request->post["description"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$tarif = filter_var($this->request->post["tarif"], FILTER_SANITIZE_NUMBER_FLOAT);
+					$discipline = filter_var($this->request->post["discipline"], FILTER_SANITIZE_NUMBER_INT);
 					
-					$nom_epreuve = filter_var($_POST["nom_epreuve"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$date_epreuve = filter_var($_POST["date_epreuve"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$dist_epreuve = filter_var($_POST["dist_epreuve"], FILTER_SANITIZE_NUMBER_INT);
+					$nom_epreuve = filter_var($this->request->post["nom_epreuve"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$date_epreuve = filter_var($this->request->post["date_epreuve"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$dist_epreuve = filter_var($this->request->post["dist_epreuve"], FILTER_SANITIZE_NUMBER_INT);
 					
 					
 					$evenement->nom = $nom;
@@ -152,19 +158,21 @@ class SportnetController {
 						$_SESSION["message"][] = "Erreur lors de l'enregistrement de l'événement.";
 					}
 					
-					$view = new \sportnet\view\SportnetView(null);
+					$view = new \sportnet\view\SportnetView(\sportnet\model\discipline::findAll());
 					$view->render('creerEvenement');
 				}
 			}
 			else
 			{
-				$evenement = null;
-				if(isset($_GET["event"]))
+				/*$evenement = null;*/
+				/*if(isset($this->request->get["event"]))
 				{
-					$evenement = \sportnet\model\evenement::findById($_GET["event"]);
-				}
+					$evenement = \sportnet\model\evenement::findById($this->request->get["event"]);
+				}*/
 				
-				$view = new \sportnet\view\SportnetView($evenement);
+				$discipline = \sportnet\model\discipline::findAll();
+				
+				$view = new \sportnet\view\SportnetView($discipline);
 				$view->render('creerEvenement');
 			}
 		}
@@ -201,12 +209,12 @@ class SportnetController {
 		
 		if($auth->logged_in == true)
 		{
-			if(isset($_POST["nom_epreuve"]) && isset($_POST["date_epreuve"]) && isset($_POST["dist_epreuve"]) && isset($_GET["event"]))
+			if(isset($this->request->post["nom_epreuve"]) && isset($this->request->post["date_epreuve"]) && isset($this->request->post["dist_epreuve"]) && isset($this->request->get["event"]))
 			{
 				$epreuve = null;
-				if(isset($_GET["epreuve"]))
+				if(isset($this->request->get["epreuve"]))
 				{
-					$epreuve = \sportnet\model\epreuve::findById($_GET["epreuve"]);
+					$epreuve = \sportnet\model\epreuve::findById($this->request->get["epreuve"]);
 				}
 				else
 				{
@@ -222,11 +230,11 @@ class SportnetController {
 				}
 				else
 				{
-					$nom_epreuve = filter_var($_POST["nom_epreuve"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$date_epreuve = filter_var($_POST["date_epreuve"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$dist_epreuve = filter_var($_POST["dist_epreuve"], FILTER_SANITIZE_NUMBER_INT);
+					$nom_epreuve = filter_var($this->request->post["nom_epreuve"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$date_epreuve = filter_var($this->request->post["date_epreuve"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+					$dist_epreuve = filter_var($this->request->post["dist_epreuve"], FILTER_SANITIZE_NUMBER_INT);
 					
-					$evenement = \sportnet\model\evenement::findById($_GET["event"]);
+					$evenement = \sportnet\model\evenement::findById($this->request->get["event"]);
 					
 					if($evenement == null)
 					{
@@ -285,32 +293,54 @@ class SportnetController {
 		if($auth->logged_in == true)
 		{
 			$evenement = null;
-			if(isset($_GET["event"]))
+			if(isset($this->request->get["event"]))
 			{
-				$evenement = \sportnet\model\evenement::findById($_GET["event"]);
+				$evenement = \sportnet\model\evenement::findById($this->request->get["event"]);
 				
 				if($evenement == null)
 				{
-					$view = new \sportnet\view\SportnetView(null);
+					$view = new \sportnet\view\SportnetView(\sportnet\model\organisateur::findByLogin($auth->user_login)->getEvenements());
 					$view->render('espaceOrganisateur');
 				}
 				else
 				{
-					$retour = $evenement->delete();
-					
-					$_SESSION["message"] = array();
-					if($retour == true)
+					if($evenement->organisateur->login == $auth->user_login)
 					{
-						$_SESSION["message"][] = 1;
-						$_SESSION["message"][] = "Evenement supprimé.";
-					}
-					else
-					{
-						$_SESSION["message"][] = 4;
-						$_SESSION["message"][] = "Erreur lors de la suppression de l'événement.";
+						$epreuves = $evenement->getEpreuves();
+						
+						foreach ($epreuves as $uneEpreuve)
+						{
+							$classementEpreuve = \sportnet\model\classer::findById($uneEpreuve->id);
+							foreach ($classementEpreuve as $unClassement)
+							{
+								$unClassement->delete();
+							}
+							
+							$inscritsEpreuve = \sportnet\model\inscrit::findById($uneEpreuve->id);
+							foreach ($inscritsEpreuve as $unInscrit)
+							{
+								$unInscrit->delete();
+							}
+							
+							$uneEpreuve->delete();
+						}
+						
+						$retour = $evenement->delete();
+					
+						$_SESSION["message"] = array();
+						if($retour == true)
+						{
+							$_SESSION["message"][] = 1;
+							$_SESSION["message"][] = "Evenement supprimé.";
+						}
+						else
+						{
+							$_SESSION["message"][] = 4;
+							$_SESSION["message"][] = "Erreur lors de la suppression de l'événement.";
+						}
 					}
 					
-					$view = new \sportnet\view\SportnetView(null);
+					$view = new \sportnet\view\SportnetView(\sportnet\model\organisateur::findByLogin($auth->user_login)->getEvenements());
 					$view->render('espaceOrganisateur');
 				}
 			}
@@ -337,9 +367,9 @@ class SportnetController {
 		if($auth->logged_in == true)
 		{
 			$epreuve = null;
-			if(isset($_GET["epreuve"]))
+			if(isset($this->request->get["epreuve"]))
 			{
-				$epreuve = \sportnet\model\evenement::findById($_GET["epreuve"]);
+				$epreuve = \sportnet\model\evenement::findById($this->request->get["epreuve"]);
 			}
 			else
 			{
@@ -358,23 +388,36 @@ class SportnetController {
 			}
 			else
 			{
-				$retour = $epreuve->delete();
-				
-				$_SESSION["message"] = array();
-				if($retour == true)
+				if($epreuve->getEvenement()->organisateur->login == $auth->user_login)
 				{
-					$_SESSION["message"][] = 1;
-					$_SESSION["message"][] = "Epreuve supprimée.";
-				}
-				else
-				{
-					$_SESSION["message"][] = 4;
-					$_SESSION["message"][] = "Erreur lors de la suppression de l'épreuve.";
+					$classementEpreuve = \sportnet\model\classer::findById($epreuve->id);
+					foreach ($classementEpreuve as $unClassement)
+					{
+						$unClassement->delete();
+					}
+					
+					$inscritsEpreuve = \sportnet\model\inscrit::findById($epreuve->id);
+					foreach ($inscritsEpreuve as $unInscrit)
+					{
+						$unInscrit->delete();
+					}
+					
+					$retour = $epreuve->delete();
+					
+					$_SESSION["message"] = array();
+					if($retour == true)
+					{
+						$_SESSION["message"][] = 1;
+						$_SESSION["message"][] = "Epreuve supprimée.";
+					}
+					else
+					{
+						$_SESSION["message"][] = 4;
+						$_SESSION["message"][] = "Erreur lors de la suppression de l'épreuve.";
+					}
 				}
 				
-				$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
-			
-				$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
+				$view = new \sportnet\view\SportnetView(\sportnet\model\organisateur::findByLogin($auth->user_login)->getEvenements());
 				$view->render('espaceOrganisateur');
 			}
 		}
@@ -399,17 +442,17 @@ class SportnetController {
 		}
 		else
 		{
-			if(isset($_POST["login"]) && isset($_POST["mdp"]) && isset($_POST["mdp2"]) && isset($_GET["nom"]) && isset($_GET["prenom"]) && isset($_GET["adresse"]) && isset($_GET["ville"]) && isset($_GET["cp"]) && isset($_GET["tel"]))
+			if(isset($this->request->post["login"]) && isset($this->request->post["mdp"]) && isset($this->request->post["mdp2"]) && isset($_GET["nom"]) && isset($_GET["prenom"]) && isset($_GET["adresse"]) && isset($_GET["ville"]) && isset($_GET["cp"]) && isset($_GET["tel"]))
 			{
-				$login = filter_var($_POST["login"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$mdp = filter_var($_POST["mdp"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$mdp2 = filter_var($_POST["mdp2"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$nom = filter_var($_POST["nom"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$prenom = filter_var($_POST["prenom"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$adresse = filter_var($_POST["adresse"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$ville = filter_var($_POST["ville"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$cp = filter_var($_POST["cp"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$tel = filter_var($_POST["tel"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$login = filter_var($this->request->post["login"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$mdp = filter_var($this->request->post["mdp"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$mdp2 = filter_var($this->request->post["mdp2"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$nom = filter_var($this->request->post["nom"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$prenom = filter_var($this->request->post["prenom"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$adresse = filter_var($this->request->post["adresse"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$ville = filter_var($this->request->post["ville"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$cp = filter_var($this->request->post["cp"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$tel = filter_var($this->request->post["tel"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				
 				if($mdp == $mdp2)
 				{
@@ -467,10 +510,10 @@ class SportnetController {
 		}
 		else
 		{
-			if(isset($_POST["login"]) && isset($_POST["mdp"]))
+			if(isset($this->request->post["login"]) && isset($this->request->post["mdp"]))
 			{
-				$login = filter_var($_POST["login"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-				$mdp = filter_var($_POST["mdp"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$login = filter_var($this->request->post["login"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$mdp = filter_var($this->request->post["mdp"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				$auth->login($login, $mdp);
 				if($auth->logged_in == true)
 				{
@@ -489,18 +532,23 @@ class SportnetController {
 					$view->render('authentification');
 				}
 			}
+			else
+			{
+				$view = new \sportnet\view\SportnetView(null);
+				$view->render('authentification');
+			}
 		}
 	}
 	
 	// Inscription d'un participant à une épreuve via un numéro de participant
 	public function inscrireEpreuveViaNum()
 	{
-		if(isset($_POST["num"]) && isset($_GET["epreuve"]))
+		if(isset($this->request->post["num"]) && isset($this->request->get["epreuve"]))
 		{
-			$num = filter_var($_POST["num"], FILTER_SANITIZE_NUMBER_INT);
+			$num = filter_var($this->request->post["num"], FILTER_SANITIZE_NUMBER_INT);
 			
 			$participant = \sportnet\model\participant::findById($num);
-			$epreuve = \sportnet\model\epreuve::findById($_GET["epreuve"]);
+			$epreuve = \sportnet\model\epreuve::findById($this->request->get["epreuve"]);
 			
 			if(($participant == null) || ($epreuve == null))
 			{
@@ -511,7 +559,7 @@ class SportnetController {
 			{
 				$inscrit = new \sportnet\model\inscrit();
 				
-				$inscrit->dossard = \sportnet\model\inscrit::getMaxDossard($epreuve);
+				$inscrit->dossard = \sportnet\model\inscrit::getMaxDossard($epreuve) + 1;
 				$inscrit->epreuve = $epreuve;
 				$inscrit->participant = $participant;
 				
@@ -543,16 +591,16 @@ class SportnetController {
 	// Inscription d'un participant à une épreuve sans numéro
 	public function inscrireEpreuve()
 	{
-		if(isset($_POST["nom"]) && isset($_POST["prenom"]) && isset($_POST["adresse"]) && isset($_POST["ville"]) && isset($_POST["cp"]) && isset($_POST["tel"]) && isset($_GET["epreuve"]))
+		if(isset($this->request->post["nom"]) && isset($this->request->post["prenom"]) && isset($this->request->post["adresse"]) && isset($this->request->post["ville"]) && isset($this->request->post["cp"]) && isset($this->request->post["tel"]) && isset($this->request->get["epreuve"]))
 		{
-			$nom = filter_var($_POST["nom"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-			$prenom = filter_var($_POST["prenom"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-			$adresse = filter_var($_POST["adresse"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-			$ville = filter_var($_POST["ville"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-			$cp = filter_var($_POST["cp"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-			$tel = filter_var($_POST["tel"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$nom = filter_var($this->request->post["nom"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$prenom = filter_var($this->request->post["prenom"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$adresse = filter_var($this->request->post["adresse"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$ville = filter_var($this->request->post["ville"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$cp = filter_var($this->request->post["cp"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$tel = filter_var($this->request->post["tel"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 			
-			$epreuve = \sportnet\model\epreuve::findById($_GET["epreuve"]);
+			$epreuve = \sportnet\model\epreuve::findById($this->request->get["epreuve"]);
 			
 			if($epreuve == null)
 			{
@@ -636,7 +684,7 @@ class SportnetController {
 		
 		if($auth->logged_in == true)
 		{
-			$epreuve = \sportnet\model\epreuve::findById($_GET["epreuve"]);
+			$epreuve = \sportnet\model\epreuve::findById($this->request->get["epreuve"]);
 			
 			if($epreuve == null)
 			{
@@ -647,7 +695,7 @@ class SportnetController {
 			{
 				$tabInscrits = array();
 				
-				$lesInscrits = \sportnet\model\inscrit::findById($_GET["epreuve"]);
+				$lesInscrits = \sportnet\model\inscrit::findById($this->request->get["epreuve"]);
 				
 				if($lesInscrits == null)
 				{
@@ -657,7 +705,7 @@ class SportnetController {
 				else
 				{
 					$dir = "upload/";
-					$nomFichier = 'listeParticipants_epreuve'.$_GET["epreuve"].'_'.time().'.csv';
+					$nomFichier = 'listeParticipants_epreuve'.$this->request->get["epreuve"].'_'.time().'.csv';
 					$csv = new SplFileObject($dir.$nomFichier, 'w');
 					
 					// Entête CSV
@@ -747,7 +795,8 @@ class SportnetController {
 			{
 				if($fileType != "csv")
 				{
-					echo "Format de fichier incorrect. Le format CSV est seulement autorisés.";
+					$_SESSION["message"][] = 3;
+					$_SESSION["message"][] = "Format de fichier incorrect. Le format CSV est seulement autorisés.";
 					$uploadOk = false;
 				}
 				else
@@ -755,84 +804,98 @@ class SportnetController {
 					if (move_uploaded_file($_FILES["csv"]["tmp_name"], $target_file))
 					{
 						$uploadOk = true;
-						echo 'upload .';
 					}
 					else
 					{
-						echo "Erreur lors de l'upload du fichier";
+						$_SESSION["message"][] = 3;
+						$_SESSION["message"][] = "Erreur lors de l'upload du fichier.";
 						$uploadOk = false;
 						$fichier = "NULL";
 					}
 				}
 			}	
 
-			if(isset($_GET['epreuve'])) {
-				if(\sportnet\model\epreuve::findById($_GET['epreuve']))
+			if($uploadOk == true)
+			{
+				if(isset($_GET['epreuve']))
 				{
-					$tabObjClasser = array();
-					$erreur = false;
-					//chemin du fichier
-					$fichier = "upload/$nomfichier";
-					$tab = array();
-					$csv = new SplFileObject($fichier); // On instancie l'objet SplFileObject
-					$csv->setFlags(SplFileObject::READ_CSV); // On indique que le fichier est de type CSV
-					$csv->setCsvControl(';'); // On indique le caractère délimiteur, ici c'est la virgule
-					foreach($csv as $t) {
-						$tab[] = $t;
-					}
-					$tableauInscrit = \sportnet\model\inscrit::findById($_GET['epreuve']);
-					
-					for($i = 0; $i < count($tab); $i++) {
-						foreach($tableauInscrit as $unInscrit)
-						{
-							if($unInscrit->dossard = $tab[$i][1])
-							{
-								$objclasser = new \sportnet\model\classer();
-								$heure = $tab[$i][2];
-								$number = explode(":", $heure);
-								$res = ($number[0]*100*60*60) + ($number[1]*100*60) + ($number[2]*100) + $number[3];
-
-								$objclasser->position = $tab[$i][0];
-								$objclasser->temps = $res;
-								$objclasser->participant = $unInscrit->participant;
-								$objclasser->epreuve = $unInscrit->epreuve;
-								$tabObjClasser[] = $objclasser;
-							}
-							else
-							{
-								$erreur = true;
-							}
-						}
-					}
-
-					if($erreur == false)
+					if(\sportnet\model\epreuve::findById($_GET['epreuve']))
 					{
-						foreach($tabObjClasser as $unObjClasser)
-						{
-							$unObjClasser->save();
+						$tabObjClasser = array();
+						$erreur = false;
+						//chemin du fichier
+						$fichier = "upload/$nomfichier";
+						$tab = array();
+						$csv = new SplFileObject($fichier); // On instancie l'objet SplFileObject
+						$csv->setFlags(SplFileObject::READ_CSV); // On indique que le fichier est de type CSV
+						$csv->setCsvControl(';'); // On indique le caractère délimiteur, ici c'est la virgule
+						foreach($csv as $t) {
+							$tab[] = $t;
 						}
-					}
+						$tableauInscrit = \sportnet\model\inscrit::findById($_GET['epreuve']);
+						
+						for($i = 0; $i < count($tab); $i++) {
+							foreach($tableauInscrit as $unInscrit)
+							{
+								if($unInscrit->dossard = $tab[$i][1])
+								{
+									$objclasser = new \sportnet\model\classer();
+									$heure = $tab[$i][2];
+									$number = explode(":", $heure);
+									$res = ($number[0]*100*60*60) + ($number[1]*100*60) + ($number[2]*100) + $number[3];
+
+									$objclasser->position = $tab[$i][0];
+									$objclasser->temps = $res;
+									$objclasser->participant = $unInscrit->participant;
+									$objclasser->epreuve = $unInscrit->epreuve;
+									$tabObjClasser[] = $objclasser;
+								}
+								else
+								{
+									$erreur = true;
+								}
+							}
+						}
+
+						if($erreur == false)
+						{
+							foreach($tabObjClasser as $unObjClasser)
+							{
+								$unObjClasser->save();
+							}
+							$_SESSION["message"][] = 1;
+							$_SESSION["message"][] = "Classement importé !";
+						}
+						else
+						{
+							$_SESSION["message"][] = 3;
+							$_SESSION["message"][] = "Erreur de la structure du fichier csv";
+						}
+
+					} 
 					else
 					{
 						$_SESSION["message"][] = 3;
-						$_SESSION["message"][] = "Erreur lors de l'importation du csv";
-						$ctrl = new \sportnet\control\SportnetController($this->request);
-						$ctrl->listEvents();
+						$_SESSION["message"][] = "Cette épreuve n'existe pas";
+						
 					}
-
-				} else {
-					$_SESSION["message"][] = 3;
-					$_SESSION["message"][] = "Cette épreuve n'existe pas";
-					$ctrl = new \sportnet\control\SportnetController($this->request);
-					$ctrl->listEvents();
+					
 				}
 				
-			} else {
+				// Suppression du fichier CSV des fichiers uploadés.
+				unlink("upload/".$nomfichier);
+				
 				$ctrl = new \sportnet\control\SportnetController($this->request);
 				$ctrl->listEvents();
 			}
-		} else {
-		
+			else
+			{
+				$ctrl = new \sportnet\control\SportnetController($this->request);
+				$ctrl->listEvents();
+			}
+		}
+		else
+		{
 			$ctrl = new \sportnet\control\SportnetController($this->request);
 			$ctrl->listEvents();
 		}

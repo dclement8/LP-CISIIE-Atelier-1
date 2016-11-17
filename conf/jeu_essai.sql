@@ -1,11 +1,11 @@
 INSERT INTO organisateur (login, mdp, nom, prenom, adresse, cp, ville, tel) 
-VALUES ('AD-Bob', '$2y$10$fwYKrAIJuJx8QNVCNWB7NuEZLgwKZfT9ZziFUhrbjUdybBqRgIddW', 'Morris', 'Bob', '15 avenu de la Libération', '54000', 'Nancy', '03040506');
+VALUES ('AD-Bob', '$2y$10$fwYKrAIJuJx8QNVCNWB7NuEZLgwKZfT9ZziFUhrbjUdybBqRgIddW', 'Morris', 'Bob', '15 avenue de la Libération', '54000', 'Nancy', '03040506');
 
 INSERT INTO organisateur (login, mdp, nom, prenom, adresse, cp, ville, tel) 
 VALUES ('John', '$2y$10$fwYKrAIJuJx8QNVCNWB7NuEZLgwKZfT9ZziFUhrbjUdybBqRgIddW', 'Dupuis', 'John', '17 rue Paster', '54000', 'Nancy', '03040506');
 
 INSERT INTO organisateur (login, mdp, nom, prenom, adresse, cp, ville, tel) 
-VALUES ('M-Fab', '$2y$10$fwYKrAIJuJx8QNVCNWB7NuEZLgwKZfT9ZziFUhrbjUdybBqRgIddW', 'Maurice', 'Fabien', '12 avenu Foch', '54000', 'Maxéville', '03040506');
+VALUES ('M-Fab', '$2y$10$fwYKrAIJuJx8QNVCNWB7NuEZLgwKZfT9ZziFUhrbjUdybBqRgIddW', 'Maurice', 'Fabien', '12 avenue Foch', '54000', 'Maxéville', '03040506');
 
 INSERT INTO participant (nom, prenom, rue, cp, ville, tel)
 VALUES ('Phillippe', 'Michel', '18 rue Robert Ier', '54000', 'Nancy', '03040506');
@@ -16,7 +16,7 @@ VALUES ('George', 'Denis', '19 rue Richert', '54000', 'Nancy', '03040506');
 
 
 INSERT INTO participant (nom, prenom, rue, cp, ville, tel)
-VALUES ('Weasley', 'Bob', '14 avenu Foch', '54000', 'Nancy', '03040506');
+VALUES ('Weasley', 'Bob', '14 avenue Foch', '54000', 'Nancy', '03040506');
 
 INSERT INTO participant (nom, prenom, rue, cp, ville, tel)
 VALUES ('Pascal', 'Dylan', '2 impasse du théatre', '54000', 'Nancy', '03040506');
@@ -64,7 +64,7 @@ INSERT INTO evenement (nom, description, etat, dateheureLimiteInscription, tarif
 VALUES ('Course de nuit', 'Course de nuit', 4, '2016-02-02 03:30:0', 06, 2, 1);
 
 INSERT INTO evenement (nom, description, etat, dateheureLimiteInscription, tarif, id_discipline, id_organisateur)
-VALUES ('Randoné de noël', 'Randonné dans les bois de Velaine-en-hais', 2, '2016-12-24 11:00:00', 14, 1, 2);
+VALUES ('Randonnée de noël', 'Randonnée dans les bois de Velaine-en-hais', 2, '2016-12-24 11:00:00', 14, 1, 2);
 
 INSERT INTO evenement (nom, description, etat, dateheureLimiteInscription, tarif, id_discipline, id_organisateur)
 VALUES ('Tennis en salle', 'Tennis dans le gymnase Jaques Cartier', 3, '2016-09-25 14:30:00', 20, 3, 3);

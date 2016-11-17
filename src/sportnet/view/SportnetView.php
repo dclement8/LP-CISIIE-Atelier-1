@@ -23,7 +23,7 @@ class SportnetView extends AbstractView{
 		// $data contient les disciplines
 		// ou avoir avec findAll ?
         $html = <<<EOT
-<form method="post" action="creer.html">
+<form method="post" action="{$this->script_name}/creerEvenement/">
     <div class="event offset-0 span-9">
         <h3>Evénement</h3>
         <p><input type="text" name="nom" placeholder="Nom" required="required"></p>
@@ -86,7 +86,7 @@ EOT;
 	protected function authentification() {
 		$html = <<<EOT
 <div class="bloc offset-0 span-6">
-	<form method="post" action="espace_organisation.html">
+	<form method="post" action="{$this->script_name}/connexion/">
 		<h3>Connexion</h3>
 			<p><input type="text" name="login" placeholder="Login" required="required"></p>
 			<p><input type="password" name="mdp" placeholder="Mot de passe" required="required"></p>
@@ -95,7 +95,7 @@ EOT;
 </div>
 
 <div class="bloc offset-0 span-6">
-	<form method="post" action="espace_organisation.html">
+	<form method="post" action="{$this->script_name}/inscrireOrganisateur/">
 		<h3>Inscription</h3>
 
 		<p><input type="text" name="login" placeholder="Login" required="required"></p>
@@ -117,21 +117,26 @@ EOT;
 	protected function listEvents() {
 		// $data contient tous les événements
 		$html = '';
-
+		
 		foreach($this->data as $event) {
-			$description = $event->description;
-			if(strlen($description) > 1000)
-				$description = substr($description, 0, 1000).' [...]';
+			//var_dump($event);
+			if($event->etat != 1)
+			{
+				$description = $event->description;
+				if(strlen($description) > 1000)
+					$description = substr($description, 0, 1000).' [...]';
+					$date = date_format($event->dateheureLimiteInscription,"d-m-Y H:i");
 
-			$html .= <<<EOT
+				$html .= <<<EOT
 <div class="event offset-0 span-3">
 	<h3>{$event->nom}</h3>
 
 	<p>${description}</p>
-	<p>Le {date_format($this->data->dateheureLimiteInscription,"d-m-Y H:i")}</p>
-	<h4><a href="details.html">≡ En savoir plus</a></h4>
+	<p>Le {$date}</p>
+	<h4><a href="{$this->script_name}/evenement/?event={$event->id}">≡ En savoir plus</a></h4>
 </div>
 EOT;
+			}
 		}
 
 		return $html;
@@ -139,30 +144,35 @@ EOT;
 
 	protected function detail() {
 		// $data contient un événement et son/ses épreuve(s)
+		
+		$laDate = date_format($this->data->dateheureLimiteInscription,"d-m-Y H:i");
+		
 		$html = <<<EOT
 <div class="event large">
 	<h6>Partager : <input type="text" id="partager" size="64"></h6>
-	<p>Début le {date_format($this->data->dateheureLimiteInscription,"d-m-Y H:i")}</p>
+	<p>Début le {$laDate}</p>
 	<hr>
 	<p>{$this->data->description}</p>
 EOT;
 
 		if($this->data->etat == 3 && time() <= $this->data->dateheureLimiteInscription->getTimestamp()) {
 			$inscriptions_ouvertes = true;
-			$html .= "\t<div class='alert alert-success'>Les inscriptions sont ouvertes</div>\n";
+			$html .= "\t<div class='alert alert-info'>Les inscriptions sont ouvertes</div>\n";
 		}
 		else {
 			$inscriptions_ouvertes = false;
-			$html .= "\t<div class='alert alert-danger'>Les inscriptions sont fermées</div>\n";
+			$html .= "\t<div class='alert alert-avert'>Les inscriptions sont fermées</div>\n";
 		}
 
 		// Récupérer épreuves
-		foreach($this->data->getEpreuves() as $epreuve) {
+		$lesEpreuves = $this->data->getEpreuves();
+		foreach($lesEpreuves as $epreuve) {
+			$laDate = date_format($epreuve->dateheure,"d-m-Y H:i");
 			$html .= <<<EOT
 <div class="epreuve offset-0 span-3">
 	<h4>{$epreuve->nom}</h4>
 	<ul>
-		<li>{date_format($epreuve->dateheure, "d-m-Y H:i")}</li>
+		<li>{$laDate}</li>
 		<li>{$epreuve->distance}m</li>
 	</ul>
 EOT;
@@ -174,15 +184,15 @@ EOT;
 	<div id="spoiler-{$epreuve->id}">
 		<!-- Div masquée par défaut -->
 		<div>
-			<form method="post" action="details.html">
+			<form method="post" action="{$this->script_name}/inscrireEpreuveViaNum/">
 				Numéro de participant :
 				<input type="number" name="num" required="required">
-				<input type="submit">
+				<input type="submit" value="Valider l'inscription">
 			</form>
 		</div>
 
 		<div>
-			<form method="post" action="details.html">
+			<form method="post" action="{$this->script_name}/inscrireEpreuve/">
 				OU
 				<p><input type="text" name="nom" placeholder="Nom" required="required"></p>
 				<p><input type="text" name="prenom" placeholder="Prénom" required="required"></p>
@@ -228,16 +238,17 @@ EOT;
 		foreach($this->data as $event) {
 			$html .= <<<EOT
 <div class="event offset-0 span-4">
-	<h3>Event 1</h3>
+	<h3>{$event->nom}</h3>
 
-	<form method="post" action="mes_events.html">
+	<form method="post" action="{$this->script_name}/creerEvenement/">
 		<p><input type="text" name="nom" placeholder="Nom" value="{$event->nom}" required="required"></p>
 		<p>
 			<label>Discipline :</label>
 			<select name="discipline">
 EOT;
 
-			$event_discipline = $event->getDiscipline()->id; // Id de la discipline de l'événement actuel
+			//var_dump($event);
+			$event_discipline = $event->discipline->id; // Id de la discipline de l'événement actuel
 			$disciplines = \sportnet\model\discipline::findAll();
 			foreach($disciplines as $discipline) {
 				$html .= "\t\t\t\t<option value='".$discipline->id."'";
@@ -275,13 +286,16 @@ EOT;
 EOT;
 			if($event->etat == 3)
 				$html .= ' checked';
+			
+			$laDate = date_format($event->dateheureLimiteInscription,"d-m-Y H:i");
+			
 			$html .= <<<EOT
 				>
 			</p>
 		</div>
 		<p>
 			<label>Date limite d''inscription :</label>
-			<input type="text" name="date" value="{date_format($this->data->dateheureLimiteInscription,"d-m-Y H:i")}" required="required">
+			<input type="text" name="date" value="{$laDate}" required="required">
 		</p>
 		<p>
 			<label>Tarif :</label>
@@ -309,7 +323,7 @@ EOT;
 	<div id="spoiler-{$event->id}-1">
 		<!-- Div masquée par défaut -->
 		<!-- Ajout d''une épreuve -->
-		<form method="post" action="mes_events.html">
+		<form method="post" action="{$this->script_name}/creerEpreuve/?event={$event->id}">
 			<p><input type="text" name="nom_epreuve" placeholder="Nom" required="required"></p>
 			<p>
 				<label>Date :</label>
@@ -330,13 +344,14 @@ EOT;
 		<!-- Voir/modifier une épreuve -->
 EOT;
 			foreach($event->getEpreuves() as $epreuve) {
+				$laDate = date_format($epreuve->dateheure,"d-m-Y H:i");
 				$html .= <<<EOT
 		<h4>{$epreuve->nom}</h4>
-		<form method="post" action="mes_events.html">
+		<form method="post" action="{$this->script_name}/creerEpreuve/?event={$event->id}&epreuve={$epreuve->id}">
 			<p><input type="text" name="nom_epreuve" placeholder="Nom" value="{$epreuve->nom}" required="required"></p>
 			<p>
 				<label>Date :</label>
-				<input type="date" name="date_epreuve" value="{$epreuve->dateheure}" required="required">
+				<input type="date" name="date_epreuve" value="{$laDate}" required="required">
 			</p>
 			<p><input type="number" name="dist_epreuve" placeholder="Distance (en m)" value="{$epreuve->distance}" min="1" max="100000" required="required"></p>
 			<p><input type="submit"></p>
@@ -344,9 +359,9 @@ EOT;
 EOT;
 				if(!$inscriptions_ouvertes) {
 					$html .= <<<EOT
-		<form method="post" action="mes_events.html">
-			<button id="liste-{$epreuve->id}">Télécharger liste d''engagement</button>
-			Upload classement : <input type="file" name="csv"> <input type="submit" value="Upload">
+		<form method="post" enctype="multipart/form-data" action="{$this->script_name}/uploadClassement/?epreuve={$epreuve->id}">
+			<a href="{$this->script_name}/telechargerListe/?epreuve={$epreuve->id}" id="liste-{$epreuve->id}">Télécharger liste d''engagement</a><br/>
+			Upload classement : <input type="file" name="csv"> <input type="submit" value="Uploader le classement">
 		</form>
 EOT;
 				}
@@ -377,26 +392,30 @@ EOT;
     public function render($selector){
         switch($selector){
 			case 'creerEvenement':
-                $breadcrumb = $this->renderBreadcrumb(array('Créer un événement'));
+                $breadcrumb = $this->renderBreadcrumb(array(array('Créer un événement', '/creerEvenement/')));
 				$main = $this->creer();
 				break;
 
             case 'detailEvenement':
-                $breadcrumb = $this->renderBreadcrumb();
+                $breadcrumb = $this->renderBreadcrumb(array(array('Détail d\'événement', '/evenement/')));
     			$main = $this->detail();
     			break;
 
             case 'authentification':
-                $breadcrumb = $this->renderBreadcrumb();
+                $breadcrumb = $this->renderBreadcrumb(array(array('Authntification', '/connexion/')));
                 $main = $this->authentification();
                 break;
 
             case 'espaceOrganisateur':
-                $breadcrumb = $this->renderBreadcrumb();
+                $breadcrumb = $this->renderBreadcrumb(array(array('Espace organisateur', '/espace/')));
                 $main = $this->mesEvents();
         		break;
 
 			case 'listEvents':
+				$breadcrumb = $this->renderBreadcrumb();
+                $main = $this->listEvents();
+				break;
+			
 			default:
                 // Liste des events
                 $breadcrumb = $this->renderBreadcrumb();
@@ -408,6 +427,7 @@ EOT;
 
         $header 	= $this->renderHeader();
         $menu   	= $this->renderMenu();
+		$messages	= $this->renderMessage();
 
 /*
  * Utilisation de la syntaxe HEREDOC pour écrire la chaine de caractère de
@@ -424,16 +444,17 @@ EOT;
     <head>
         <meta charset="utf-8">
         <title>SportNet</title>
-		<link rel="shortcut icon" href="/favicon.ico">
+		<link rel="shortcut icon" href="favicon.ico">
         <link rel="stylesheet" href="${style_file}">
-		<script type="text/javascript" src="../js/details.js"></script>
-		<script type="text/javascript" src="../js/spoiler.js"></script>
+		<script type="text/javascript" src="./js/details.js"></script>
+		<script type="text/javascript" src="./js/spoiler.js"></script>
     </head>
 
     <body>
         ${header}
         ${menu}
 		${breadcrumb}
+		${messages}
 
 		<div class="container line">
 			${main}
