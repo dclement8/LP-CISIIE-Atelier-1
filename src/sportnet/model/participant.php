@@ -65,9 +65,8 @@ class participant extends AbstractModel {
 	
 	protected function insert()
 	{
-		$insert = "INSERT INTO participant VALUES(:id, :nom, :prenom, :rue, :cp, :ville, :tel)";
+		$insert = "INSERT INTO participant VALUES(NULL, :nom, :prenom, :rue, :cp, :ville, :tel)";
         $insert_prep = self::$db->prepare($insert);
-		$insert_prep->bindParam(':id', $this->id, \PDO::PARAM_INT);
 		$insert_prep->bindParam(':nom', $this->nom, \PDO::PARAM_STR);
         $insert_prep->bindParam(':prenom', $this->prenom, \PDO::PARAM_STR);
         $insert_prep->bindParam(':rue', $this->rue, \PDO::PARAM_STR);

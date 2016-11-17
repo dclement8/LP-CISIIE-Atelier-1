@@ -312,7 +312,8 @@ EOT;
 	</form>
 EOT;
 
-			if($event->etat == 3 && time() <= $this->data->dateheureLimiteInscription->getTimestamp()) {
+			
+			if($event->etat == 3 && time() <= $event->dateheureLimiteInscription->getTimestamp()) {
 				$inscriptions_ouvertes = true;
 			}
 			else

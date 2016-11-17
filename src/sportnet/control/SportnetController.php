@@ -112,6 +112,9 @@ class SportnetController {
 						$evenement->dateheureLimiteInscription = $date;
 						$evenement->tarif = $tarif;
 						$evenement->discipline = \sportnet\model\discipline::findById($discipline);
+						$evenement->organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+						
+						//var_dump($evenement->discipline);
 						
 						$retour = $evenement->save();
 						
@@ -123,7 +126,8 @@ class SportnetController {
 							$epreuve->nom = $nom_epreuve;
 							$epreuve->distance = $dist_epreuve;
 							$epreuve->dateheure = $date_epreuve;
-							$epreuve->evenement = $evenement;
+							
+							$epreuve->evenement = \sportnet\model\evenement::getLastEvenement();
 							
 							
 							$retour = $epreuve->save();
@@ -152,7 +156,7 @@ class SportnetController {
 						else
 						{
 							$_SESSION["message"][] = 4;
-							$_SESSION["message"][] = "Erreur lors de l'enregistrement de l'événement de l'événement.";
+							$_SESSION["message"][] = "Erreur lors de l'enregistrement de l'événement";
 							
 							$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
 				
@@ -187,6 +191,7 @@ class SportnetController {
 						$evenement->dateheureLimiteInscription = $date;
 						$evenement->tarif = $tarif;
 						$evenement->discipline = \sportnet\model\discipline::findById($discipline);
+						$evenement->organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
 						
 						$retour = $evenement->save();
 						
@@ -200,7 +205,7 @@ class SportnetController {
 						else
 						{
 							$_SESSION["message"][] = 4;
-							$_SESSION["message"][] = "Erreur lors de l'enregistrement de l'événement de l'événement.";
+							$_SESSION["message"][] = "Erreur lors de l'enregistrement de l'événement";
 						}
 						
 						$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
