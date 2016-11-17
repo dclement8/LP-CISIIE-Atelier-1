@@ -25,4 +25,15 @@ window.onload = function() {
 			document.execCommand("copy");
 		};
 	}
+
+	// Boutons pour Supprimer events ou épreuves
+	var btn = document.querySelectorAll(".delete");
+	for(var i=0; i < btn.length; i++) {
+		btn[i].onclick = function(e) {
+			if(confirm("Voulez-vous vraiment supprimer ?")) {
+				document.location.href=this.id;
+			}
+			e.preventDefault();
+		}
+	}
 }
