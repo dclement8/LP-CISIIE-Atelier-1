@@ -3,6 +3,8 @@ session_start();
 
 date_default_timezone_set("Europe/Paris");
 
+require_once("lib/password.php");
+
 require_once("conf/autoload.php");
 
 $router = new sportnet\utils\Router();
