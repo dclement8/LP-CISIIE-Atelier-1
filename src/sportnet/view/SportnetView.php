@@ -120,12 +120,14 @@ EOT;
 		
 		foreach($this->data as $event) {
 			//var_dump($event);
-			$description = $event->description;
-			if(strlen($description) > 1000)
-				$description = substr($description, 0, 1000).' [...]';
-				$date = date_format($event->dateheureLimiteInscription,"d-m-Y H:i");
+			if($event->etat != 1)
+			{
+				$description = $event->description;
+				if(strlen($description) > 1000)
+					$description = substr($description, 0, 1000).' [...]';
+					$date = date_format($event->dateheureLimiteInscription,"d-m-Y H:i");
 
-			$html .= <<<EOT
+				$html .= <<<EOT
 <div class="event offset-0 span-3">
 	<h3>{$event->nom}</h3>
 
@@ -134,6 +136,7 @@ EOT;
 	<h4><a href="{$this->script_name}/evenement/?event={$event->id}">≡ En savoir plus</a></h4>
 </div>
 EOT;
+			}
 		}
 
 		return $html;
