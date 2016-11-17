@@ -12,11 +12,33 @@ class SportnetView extends AbstractView{
         parent::__construct($data);
     }
 
-    protected function method()
+	// Prend en paramètre un temps t (en centième de s)
+	// Retourne un string sous la forme nb heures:nb minutes:nb secondes:nb centièmes"
+    protected function afficherTemps($t)
 	{
-		$htmlRender = "";
+		// 1s  = 100 c
+		// 1mn = 6 000 c
+		// 1h  = 360 000 c
+		$r = array();
 
-		return $htmlRender;
+		$r['h'] = floor($t/360000);	// Nombre d'heures
+		$t -= $r['h'] * 360000;
+
+		$r['m'] = floor($t/6000);	// Nombre de minutes
+		$t -= $r['m'] * 6000;
+
+		$r['s'] = floor($t/100);	// Nombre de secondes
+		$t -= $r['s'] * 100;
+
+		$r['c'] = $t;
+
+		// Ajout de '0' devant nombres à 1 chiffre
+		foreach($r as $key => $i) {
+			if($i < 10)
+				$r[$key] = '0'.$i;
+		}
+
+		return $r['h'].':'.$r['m'].':'.$r['s'].':'.$r['c'].'"';
 	}
 
     protected function creer() {
@@ -215,13 +237,15 @@ EOT;
 
 	<div id="spoiler-{$epreuve->id}">
 		<!-- Div masquée par défaut -->
-		<ol>
+		<table>
 EOT;
+					$i = 1;
+					foreach($classement as $participant) {
+						$html .= "\t\t\t<tr><td>".$i."</td><td>".$participant->participant->nom." ".$participant->participant->prenom."</td><td>".$this->afficherTemps($participant->temps)."</td></tr>\n";
+						$i++;
+					}
 
-					foreach($classement as $participant)
-						$html .= "\t\t\t<li>".$participant->participant." - ".$participant->temps."</li>\n";
-
-					$html .= "\t\t</ol>\n";
+					$html .= "\t\t</table>\n";
 					$html .= "\t</div>\n";
 				}
 			}
@@ -369,16 +393,16 @@ EOT;
 				}
 
 				$html .= "\t\tParticipants :\n";
-				$html .= "\t\t<ul>\n";
+				$html .= "\t\t<table>\n";
 
 				$participants = \sportnet\model\inscrit::findById($epreuve->id);
 				if($participants !== null && $participants !== false) {
 					foreach($participants as $participant) {
-						$html .= "\t\t\t<li>".$participant->participant." - dossard ".$participant->dossard."</li>\n";
+						$html .= "\t\t\t<tr><td>".$participant->participant->nom." ".$participant->participant->prenom."</td><td>dossard ".$participant->dossard."</td></tr>\n";
 					}
 				}
 
-				$html .= "\t\t</ul>\n";
+				$html .= "\t\t</table>\n";
 			}
 
 			$html .= "\t</div>\n";
