@@ -235,7 +235,11 @@ EOT;
 	protected function mesEvents() {
 		// $data contient un ou des événement(s) avec son/ses épreuve(s)
 		$html = '';
-		foreach($this->data as $event) {
+		//var_dump($this->data);
+		if($this->data != null)
+		{
+		foreach($this->data as $event)
+		{
 			$html .= <<<EOT
 <div class="event offset-0 span-4">
 	<h3>{$event->nom}</h3>
@@ -246,8 +250,6 @@ EOT;
 			<label>Discipline :</label>
 			<select name="discipline">
 EOT;
-
-			//var_dump($event);
 			$event_discipline = $event->discipline->id; // Id de la discipline de l'événement actuel
 			$disciplines = \sportnet\model\discipline::findAll();
 			foreach($disciplines as $discipline) {
@@ -381,6 +383,8 @@ EOT;
 
 			$html .= "\t</div>\n";
 		}
+		}
+		return $html;
 	}
 
     /*
