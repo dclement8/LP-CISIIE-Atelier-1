@@ -63,8 +63,8 @@ EOT;
             <input type="number" name="tarif" min="0" required="required"> €
         </p>
         <p>
-            <label>Description :</label>
-            <textarea name="description" required="required"></textarea>
+            <label>Description :</label><br />
+            <textarea name="description" cols="50" rows="7" required="required"></textarea>
         </p>
     </div>
 
@@ -304,8 +304,8 @@ EOT;
 			<input type="number" name="tarif" min="0" value="{$event->tarif}" required="required"> €
 		</p>
 		<p>
-			<label>Description :</label>
-			<textarea name="description" required="required">{$event->description}</textarea>
+			<label>Description :</label><br />
+			<textarea name="description" cols="50" rows="7" required="required">{$event->description}</textarea>
 		</p>
 
 		<p><input type="submit" value="Modifier"></p>
@@ -320,9 +320,9 @@ EOT;
 
 			if($inscriptions_ouvertes) {
 				$html .= <<<EOT
-	<h4><a href="#" onclick="spoiler('{$event->id}-1')">≡ Ajouter une épreuve</a></h4>
+	<h4><a href="#" id="btn-spoiler-{$event->id}_1">≡ Ajouter une épreuve</a></h4>
 
-	<div id="spoiler-{$event->id}-1">
+	<div id="spoiler-{$event->id}_1">
 		<!-- Div masquée par défaut -->
 		<!-- Ajout d&#39;une épreuve -->
 		<form method="post" action="{$this->script_name}/creerEpreuve/?event={$event->id}">
@@ -339,9 +339,9 @@ EOT;
 			}
 
 			$html .= <<<EOT
-	<h4><a href="#" onclick="spoiler('{$event->id}-2')">≡ Voir les épreuves</a></h4>
+	<h4><a href="#" id="btn-spoiler-{$event->id}_2">≡ Voir les épreuves</a></h4>
 
-	<div id="spoiler-{$event->id}-2">
+	<div id="spoiler-{$event->id}_2">
 		<!-- Div masquée par défaut -->
 		<!-- Voir/modifier une épreuve -->
 EOT;
@@ -353,7 +353,7 @@ EOT;
 			<p><input type="text" name="nom_epreuve" placeholder="Nom" value="{$epreuve->nom}" required="required"></p>
 			<p>
 				<label>Date :</label>
-				<input type="date" name="date_epreuve" value="{$laDate}" required="required">
+				<input type="text" name="date_epreuve" value="{$laDate}" required="required">
 			</p>
 			<p><input type="number" name="dist_epreuve" placeholder="Distance (en m)" value="{$epreuve->distance}" min="1" max="100000" required="required"></p>
 			<p><input type="submit"></p>
