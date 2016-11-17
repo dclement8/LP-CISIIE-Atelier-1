@@ -15,9 +15,6 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small, h1.soustitre, h2.sou
   color: grey;
   font-size: 18px; }
 
-p {
-  margin-bottom: 12px; }
-
 mark {
   background: none;
   text-decoration: underline;
@@ -152,6 +149,14 @@ ul li {
     padding: 7px;
     font-size: 14px; }
 
+form {
+  text-align: left; }
+
+label {
+  float: left;
+  width: 7.8rem;
+  font-size: .8rem; }
+
 section, form {
   padding: 10px;
   font-size: 100%;
@@ -196,20 +201,54 @@ header {
     color: white;
     font-size: 1.5em; }
 
-input[type="text"], input[type="password"], input[type="number"], input[type="tel"], select {
+input:not([type="submit"]):not([type="button"]), select, textarea {
   min-height: 20px;
   box-sizing: border-box;
   border-radius: 3px;
   border-color: black;
   border-width: 2px;
   border-style: solid;
-  margin-bottom: 10px; }
+  margin-bottom: 10px;
+  padding: .2rem; }
+
+textarea {
+  resize: none;
+  max-width: 100%; }
+
+#partager {
+  font-family: monospace;
+  width: 100%; }
+
+hr {
+  border: 1px solid #333333;
+  width: 100%; }
+
+.bottom_plus {
+  margin: 0;
+  padding: 0; }
+
+.epreuve {
+  margin-top: 1rem;
+  border: 1px solid #D2D2D2; }
+  .epreuve h4 {
+    margin: 0;
+    padding: 0; }
+  .epreuve li {
+    list-style-type: none;
+    text-align: left; }
+
+.description {
+  background-color: #F4F4F4;
+  padding: 1rem;
+  font-size: .8rem; }
 
 .event, .bloc {
-  background-color: white; }
-  .event h4, .bloc h4 {
-    background-color: red; }
-    .event h4 a, .bloc h4 a {
+  background-color: white;
+  padding: .4rem; }
+  .event h3, .event h4, .bloc h3, .bloc h4 {
+    background-color: red;
+    color: white; }
+    .event h3 a, .event h4 a, .bloc h3 a, .bloc h4 a {
       color: white; }
 
 [id^="spoiler-"] {
