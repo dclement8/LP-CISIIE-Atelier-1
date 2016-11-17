@@ -77,12 +77,7 @@ class classer extends AbstractModel {
 	
 	public function save()
 	{
-		if(is_null($this->epreuve)){
-			return $this->insert();
-		}
-		else{
-			return $this->update();
-		}
+		return $this->insert();
 	}
 	
 	public function delete()
