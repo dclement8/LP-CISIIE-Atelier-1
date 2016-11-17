@@ -474,8 +474,7 @@ EOT;
         <title>SportNet</title>
 		<link rel="shortcut icon" href="{$this->app_root}/favicon.ico">
         <link rel="stylesheet" href="${style_file}">
-		<script type="text/javascript" src="{$this->app_root}/js/details.js"></script>
-		<script type="text/javascript" src="{$this->app_root}/js/spoiler.js"></script>
+		<script type="text/javascript" src="{$this->app_root}/js/sportnet.js"></script>
     </head>
 
     <body>
