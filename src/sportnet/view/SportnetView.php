@@ -171,6 +171,7 @@ EOT;
 
 		$html = <<<EOT
 <div class="event large">
+	<h5 class="centre">{$this->data->nom}</h5>
 	<h6>Partager : <input type="text" id="partager" size="64"></h6>
 	<p>Début le {$laDate}</p>
 	<hr>
