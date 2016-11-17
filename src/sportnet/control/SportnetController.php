@@ -158,19 +158,21 @@ class SportnetController {
 						$_SESSION["message"][] = "Erreur lors de l'enregistrement de l'événement.";
 					}
 					
-					$view = new \sportnet\view\SportnetView(null);
+					$view = new \sportnet\view\SportnetView(\sportnet\model\discipline::findAll());
 					$view->render('creerEvenement');
 				}
 			}
 			else
 			{
-				$evenement = null;
-				if(isset($this->request->get["event"]))
+				/*$evenement = null;*/
+				/*if(isset($this->request->get["event"]))
 				{
 					$evenement = \sportnet\model\evenement::findById($this->request->get["event"]);
-				}
+				}*/
 				
-				$view = new \sportnet\view\SportnetView($evenement);
+				$discipline = \sportnet\model\discipline::findAll();
+				
+				$view = new \sportnet\view\SportnetView($discipline);
 				$view->render('creerEvenement');
 			}
 		}

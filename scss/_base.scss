@@ -250,7 +250,7 @@ header
 	}
 }
 
-input[type="text"], select
+input[type="text"], input[type="password"], input[type="number"], input[type="tel"], select
 {
 	min-height:20px;
 	//font-size: 1.18em;

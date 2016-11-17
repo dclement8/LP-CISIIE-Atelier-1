@@ -5,31 +5,44 @@
     min-height:25px;
     list-style-type: none;
     padding:0px;
-    li a
+    a
     {
         font-size:1rem;
         padding-left:15px;
         padding-right:15px;
         display: inline-block;
         height:25px;
-        color:#222;
         line-height:25px;
         text-align: center;
+        text-decoration: none;
+
+        li
+        {
+            color:#222;
+            list-style-type: none;
+            display: inline-block;
+        }
     }
-    li a:not(:last-child)::after
+    a:not(:last-child)::after
     {
-        content:" >";
+        content:" > ";
         color:red;
     }
-    li a:not(:last-child):hover
+    a:not(:last-child):hover
     {
-        color:black;
-        text-decoration:underline;
-        cursor:pointer;
+        li
+        {
+            color:black;
+            text-decoration:underline;
+            cursor:pointer;
+        }
     }
-    li a:last-child
+    a:last-child
     {
-        color:red;
-        font-weight: bold;
+        li
+        {
+            color:red;
+            font-weight: bold;
+        }
     }
 }

@@ -191,7 +191,7 @@ header {
     color: red;
     font-size: 1.25em; }
 
-input[type="text"], select {
+input[type="text"], input[type="password"], input[type="number"], input[type="tel"], select {
   min-height: 20px;
   box-sizing: border-box;
   border-radius: 3px;
@@ -348,21 +348,24 @@ input[type="text"], select {
   min-height: 50px;
   list-style-type: none;
   padding: 0px; }
-  .navbar li a {
+  .navbar a {
     background-color: #666;
     font-size: 1rem;
     padding-left: 15px;
     padding-right: 15px;
     display: inline-block;
     height: 50px;
-    color: white;
     line-height: 50px;
     text-align: center;
     text-decoration: none; }
-  .navbar li a:hover:not(.active):not(.disabled) {
-    background-color: #BBB;
-    color: black;
-    cursor: pointer; }
+    .navbar a li {
+      color: white;
+      list-style-type: none; }
+  .navbar a:hover:not(.active):not(.disabled) {
+    background-color: #BBB; }
+    .navbar a:hover:not(.active):not(.disabled) li {
+      color: black;
+      cursor: pointer; }
   .navbar .active {
     color: red; }
   .navbar .disabled {
@@ -375,23 +378,27 @@ input[type="text"], select {
   min-height: 25px;
   list-style-type: none;
   padding: 0px; }
-  .breadcrumb li a {
+  .breadcrumb a {
     font-size: 1rem;
     padding-left: 15px;
     padding-right: 15px;
     display: inline-block;
     height: 25px;
-    color: #222;
     line-height: 25px;
-    text-align: center; }
-  .breadcrumb li a:not(:last-child)::after {
-    content: " >";
+    text-align: center;
+    text-decoration: none; }
+    .breadcrumb a li {
+      color: #222;
+      list-style-type: none;
+      display: inline-block; }
+  .breadcrumb a:not(:last-child)::after {
+    content: " > ";
     color: red; }
-  .breadcrumb li a:not(:last-child):hover {
+  .breadcrumb a:not(:last-child):hover li {
     color: black;
     text-decoration: underline;
     cursor: pointer; }
-  .breadcrumb li a:last-child {
+  .breadcrumb a:last-child li {
     color: red;
     font-weight: bold; }
 
