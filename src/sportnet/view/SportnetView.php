@@ -244,7 +244,7 @@ EOT;
 <div class="event offset-0 span-4">
 	<h3>{$event->nom}</h3>
 
-	<form method="post" action="{$this->script_name}/creerEvenement/">
+	<form method="post" action="{$this->script_name}/creerEvenement/?event={$event->id}">
 		<p><input type="text" name="nom" placeholder="Nom" value="{$event->nom}" required="required"></p>
 		<p>
 			<label>Discipline :</label>
@@ -296,7 +296,7 @@ EOT;
 			</p>
 		</div>
 		<p>
-			<label>Date limite d''inscription :</label>
+			<label>Date limite d''inscription (dd-mm-aaaa hh:mm) :</label>
 			<input type="text" name="date" value="{$laDate}" required="required">
 		</p>
 		<p>
