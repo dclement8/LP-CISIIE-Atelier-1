@@ -184,7 +184,7 @@ EOT;
 	<div id="spoiler-{$epreuve->id}">
 		<!-- Div masquée par défaut -->
 		<div>
-			<form method="post" action="{$this->script_name}/inscrireEpreuveViaNum/">
+			<form method="post" action="{$this->script_name}/inscrireEpreuveViaNum/?epreuve={$epreuve->id}">
 				Numéro de participant :
 				<input type="number" name="num" required="required">
 				<input type="submit" value="Valider l'inscription">
@@ -192,7 +192,7 @@ EOT;
 		</div>
 
 		<div>
-			<form method="post" action="{$this->script_name}/inscrireEpreuve/">
+			<form method="post" action="{$this->script_name}/inscrireEpreuve/?epreuve={$epreuve->id}">
 				OU
 				<p><input type="text" name="nom" placeholder="Nom" required="required"></p>
 				<p><input type="text" name="prenom" placeholder="Prénom" required="required"></p>

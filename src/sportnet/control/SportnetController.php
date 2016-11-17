@@ -688,9 +688,9 @@ class SportnetController {
 				{
 					$inscrit = new \sportnet\model\inscrit();
 				
-					$inscrit->dossard = \sportnet\model\inscrit::getMaxDossard($epreuve);
+					$inscrit->dossard = \sportnet\model\inscrit::getMaxDossard($epreuve) + 1;
 					$inscrit->epreuve = $epreuve;
-					$inscrit->participant = $participant;
+					$inscrit->participant = \sportnet\model\participant::getLastParticipant();
 					
 					$retour = $inscrit->save();
 					
@@ -698,7 +698,7 @@ class SportnetController {
 					if($retour == true)
 					{
 						$_SESSION["message"][] = 1;
-						$_SESSION["message"][] = "Vous êtes à présent inscrit à cette épreuve. Notez votre numéro de participant : ".\sportnet\model\participant::findByName($nom)->id;
+						$_SESSION["message"][] = "Vous êtes à présent inscrit à cette épreuve. Notez votre numéro de participant : ".\sportnet\model\participant::getLastParticipant()->id;
 					}
 					else
 					{

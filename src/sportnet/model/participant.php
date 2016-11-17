@@ -175,7 +175,27 @@ class participant extends AbstractModel {
         $selectByName_prep->bindParam(':nom', $leNom, \PDO::PARAM_STR);
         $selectByName_prep->execute();
 		$obj = null;
-		while ($ligne = $selectById_prep->fetch(\PDO::FETCH_ASSOC)) {
+		while ($ligne = $selectByName_prep->fetch(\PDO::FETCH_ASSOC)) {
+			$obj = new participant();
+
+			$obj->id = $ligne['id'];
+			$obj->nom = $ligne['nom'];
+			$obj->prenom = $ligne['prenom'];
+			$obj->rue = $ligne['rue'];
+			$obj->cp = $ligne['cp'];
+			$obj->ville = $ligne['ville'];
+			$obj->tel = $ligne['tel'];
+		}
+		return $obj;
+	}
+	
+	public static function getLastParticipant()
+	{
+		$select = "SELECT * FROM participant ORDER BY id DESC LIMIT 0, 1";
+        $select_prep = self::$db->prepare($select);
+		$select_prep->execute();
+        $obj = null;
+		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
 			$obj = new participant();
 
 			$obj->id = $ligne['id'];
