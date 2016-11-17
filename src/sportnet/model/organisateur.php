@@ -29,9 +29,9 @@ class organisateur extends AbstractModel {
 		$update_prep->bindParam(':nom', $this->nom, \PDO::PARAM_STR);
         $update_prep->bindParam(':prenom', $this->prenom, \PDO::PARAM_STR);
         $update_prep->bindParam(':adresse', $this->adresse, \PDO::PARAM_STR);
-        $update_prep->bindParam(':cp', $this->cp, \PDO::PARAM_INT);
+        $update_prep->bindParam(':cp', $this->cp, \PDO::PARAM_STR);
 		$update_prep->bindParam(':ville', $this->ville, \PDO::PARAM_STR);
-		$update_prep->bindParam(':tel', $this->tel, \PDO::PARAM_INT);
+		$update_prep->bindParam(':tel', $this->tel, \PDO::PARAM_STR);
 		$update_prep->bindParam(':id', $this->id, \PDO::PARAM_INT);
 		if($update_prep->execute()){
 			return true;
@@ -50,9 +50,9 @@ class organisateur extends AbstractModel {
 		$insert_prep->bindParam(':nom', $this->nom, \PDO::PARAM_STR);
         $insert_prep->bindParam(':prenom', $this->prenom, \PDO::PARAM_STR);
         $insert_prep->bindParam(':adresse', $this->adresse, \PDO::PARAM_STR);
-        $insert_prep->bindParam(':cp', $this->cp, \PDO::PARAM_INT);
+        $insert_prep->bindParam(':cp', $this->cp, \PDO::PARAM_STR);
 		$insert_prep->bindParam(':ville', $this->ville, \PDO::PARAM_STR);
-		$insert_prep->bindParam(':tel', $this->tel, \PDO::PARAM_INT);
+		$insert_prep->bindParam(':tel', $this->tel, \PDO::PARAM_STR);
 		if($insert_prep->execute()){
 			return true;
 		}

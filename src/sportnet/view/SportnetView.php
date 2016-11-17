@@ -396,7 +396,16 @@ EOT;
 				if(!$inscriptions_ouvertes) {
 					$html .= <<<EOT
 		<form method="post" enctype="multipart/form-data" action="{$this->script_name}/uploadClassement/?epreuve={$epreuve->id}">
+EOT;
+					
+					if(\sportnet\model\inscrit::findById($epreuve->id) != null)
+					{
+						$html .= <<<EOT
 			<p><a href="{$this->script_name}/telechargerListe/?epreuve={$epreuve->id}" id="liste-{$epreuve->id}">Télécharger liste d&#39;engagement</a></p>
+EOT;
+					}
+			
+					$html .= <<<EOT
 			<p>
 				Upload classement : <input type="file" name="csv"> <input type="submit" class="btn" name="uploader" value="Uploader le classement">
 			</p>

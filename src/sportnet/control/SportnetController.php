@@ -393,7 +393,7 @@ class SportnetController {
 						foreach ($epreuves as $uneEpreuve)
 						{
 							$classementEpreuve = \sportnet\model\classer::findById($uneEpreuve->id);
-							if($classementEpreuve == null)
+							if($classementEpreuve != null)
 							{
 								foreach ($classementEpreuve as $unClassement)
 								{
@@ -402,7 +402,7 @@ class SportnetController {
 							}
 							
 							$inscritsEpreuve = \sportnet\model\inscrit::findById($uneEpreuve->id);
-							if($inscritsEpreuve == null)
+							if($inscritsEpreuve != null)
 							{
 								foreach ($inscritsEpreuve as $unInscrit)
 								{
@@ -479,15 +479,21 @@ class SportnetController {
 				if($epreuve->getEvenement()->organisateur->login == $auth->user_login)
 				{
 					$classementEpreuve = \sportnet\model\classer::findById($epreuve->id);
-					foreach ($classementEpreuve as $unClassement)
+					if($classementEpreuve != null)
 					{
-						$unClassement->delete();
+						foreach ($classementEpreuve as $unClassement)
+						{
+							$unClassement->delete();
+						}
 					}
 					
 					$inscritsEpreuve = \sportnet\model\inscrit::findById($epreuve->id);
-					foreach ($inscritsEpreuve as $unInscrit)
+					if($inscritsEpreuve != null)
 					{
-						$unInscrit->delete();
+						foreach ($inscritsEpreuve as $unInscrit)
+						{
+							$unInscrit->delete();
+						}
 					}
 					
 					$retour = $epreuve->delete();
@@ -878,128 +884,154 @@ class SportnetController {
 		
 		if($auth->logged_in == true)
 		{
-			if(isset($_FILES["csv"]))
+			if((isset($_FILES["csv"])) && (isset($this->request->get['epreuve'])))
 			{
-				$fichier = "NULL";
-				$target_dir = "upload/";
-				$target_file = $target_dir . basename($_FILES["csv"]["name"]);
-				$nomfichier = basename($_FILES["csv"]["name"]);
-				$uploadOk = true;
-				$fileType = pathinfo($target_file,PATHINFO_EXTENSION);
-				$tailleMo = 32;
-
-				if($_FILES["csv"]["tmp_name"] == "")
+				// Vérifier si l'épreuve existe
+				$epreuve = \sportnet\model\epreuve::findById($this->request->get["epreuve"]);
+			
+				if($epreuve == null)
 				{
-					$_SESSION["message"][] = 3;
-					$_SESSION["message"][] = "Aucun fichier reçu.";
-					$uploadOk = false;
+					$view = new \sportnet\view\SportnetView(\sportnet\model\organisateur::findByLogin($auth->user_login)->getEvenements());
+					$view->render('espaceOrganisateur');
 				}
 				else
 				{
-					if($fileType != "csv")
+					// On supprime d'abord le classement existant pour l'épreuve
+					$classementEpreuve = \sportnet\model\classer::findById($this->request->get['epreuve']);
+					if($classementEpreuve != null)
+					{
+						foreach ($classementEpreuve as $unClassement)
+						{
+							$unClassement->delete();
+						}
+					}
+					
+					$fichier = "NULL";
+					$target_dir = "upload/";
+					$target_file = $target_dir . basename($_FILES["csv"]["name"]);
+					$nomfichier = basename($_FILES["csv"]["name"]);
+					$uploadOk = true;
+					$fileType = pathinfo($target_file,PATHINFO_EXTENSION);
+					$tailleMo = 32;
+
+					if($_FILES["csv"]["tmp_name"] == "")
 					{
 						$_SESSION["message"][] = 3;
-						$_SESSION["message"][] = "Format de fichier incorrect. Le format CSV est seulement autorisés.";
+						$_SESSION["message"][] = "Aucun fichier reçu.";
 						$uploadOk = false;
 					}
 					else
 					{
-						if (move_uploaded_file($_FILES["csv"]["tmp_name"], $target_file))
+						if($fileType != "csv")
 						{
-							$uploadOk = true;
+							$_SESSION["message"][] = 3;
+							$_SESSION["message"][] = "Format de fichier incorrect. Le format CSV est seulement autorisés.";
+							$uploadOk = false;
 						}
 						else
 						{
-							$_SESSION["message"][] = 3;
-							$_SESSION["message"][] = "Erreur lors de l'upload du fichier.";
-							$uploadOk = false;
-							$fichier = "NULL";
-						}
-					}
-				}	
-
-				if($uploadOk == true)
-				{
-					if(isset($this->request->get['epreuve']))
-					{
-						if(\sportnet\model\epreuve::findById($this->request->get['epreuve']))
-						{
-							$tabObjClasser = array();
-							$erreur = false;
-							//chemin du fichier
-							$fichier = "upload/$nomfichier";
-							$tab = array();
-							$csv = new \SplFileObject($fichier); // On instancie l'objet SplFileObject
-							$csv->setFlags(\SplFileObject::READ_CSV); // On indique que le fichier est de type CSV
-							$csv->setCsvControl(';'); // On indique le caractère délimiteur, ici c'est la virgule
-							foreach($csv as $t) {
-								$tab[] = $t;
-							}
-							$tableauInscrit = \sportnet\model\inscrit::findById($this->request->get['epreuve']);
-							
-							for($i = 0; $i < count($tab); $i++)
+							if (move_uploaded_file($_FILES["csv"]["tmp_name"], $target_file))
 							{
-								$trouverInscrit = false;
-								for($j = 0; $j < count($tableauInscrit); $j++)
-								{
-									$unInscrit = $tableauInscrit[$j];
-									
-									if($unInscrit->dossard == $tab[$i][1])
-									{
-										$trouverInscrit == true;
-										$objclasser = new \sportnet\model\classer();
-										$heure = $tab[$i][2];
-										$number = explode(":", $heure);
-										$res = ($number[0]*100*60*60) + ($number[1]*100*60) + ($number[2]*100) + $number[3];
-
-										$objclasser->position = $tab[$i][0];
-										$objclasser->temps = $res;
-										$objclasser->participant = $unInscrit->participant;
-										$objclasser->epreuve = $unInscrit->epreuve;
-										
-										
-										
-										$tabObjClasser[] = $objclasser;
-									}
-								}
-							}
-
-							if($erreur == false)
-							{
-								foreach($tabObjClasser as $unObjClasser)
-								{
-									$unObjClasser->save();
-								}
-								$_SESSION["message"][] = 1;
-								$_SESSION["message"][] = "Classement importé !";
+								$uploadOk = true;
 							}
 							else
 							{
 								$_SESSION["message"][] = 3;
-								$_SESSION["message"][] = "Erreur de la structure du fichier csv";
+								$_SESSION["message"][] = "Erreur lors de l'upload du fichier.";
+								$uploadOk = false;
+								$fichier = "NULL";
 							}
+						}
+					}	
 
-						} 
-						else
+					if($uploadOk == true)
+					{
+						if(isset($this->request->get['epreuve']))
 						{
-							$_SESSION["message"][] = 3;
-							$_SESSION["message"][] = "Cette épreuve n'existe pas";
+							if(\sportnet\model\epreuve::findById($this->request->get['epreuve']))
+							{
+								$tabObjClasser = array();
+								$erreur = false;
+								//chemin du fichier
+								$fichier = "upload/$nomfichier";
+								$tab = array();
+								$csv = new \SplFileObject($fichier); // On instancie l'objet SplFileObject
+								$csv->setFlags(\SplFileObject::READ_CSV); // On indique que le fichier est de type CSV
+								$csv->setCsvControl(';'); // On indique le caractère délimiteur, ici c'est la virgule
+								foreach($csv as $t) {
+									$tab[] = $t;
+								}
+								
+								$tableauInscrit = \sportnet\model\inscrit::findById($this->request->get['epreuve']);
+								
+								for($i = 0; $i < count($tab); $i++)
+								{
+									$trouverInscrit = false;
+									for($j = 0; $j < count($tableauInscrit); $j++)
+									{
+										$unInscrit = $tableauInscrit[$j];
+										
+										// Le cas des cases vides
+										if((isset($tab[$i][1])) && (isset($tab[$i][2])))
+										{
+											if($unInscrit->dossard == $tab[$i][1])
+											{
+												$trouverInscrit == true;
+												$objclasser = new \sportnet\model\classer();
+												$heure = $tab[$i][2];
+												$number = explode(":", $heure);
+												$res = ($number[0]*100*60*60) + ($number[1]*100*60) + ($number[2]*100) + $number[3];
+
+												$objclasser->position = $tab[$i][0];
+												$objclasser->temps = $res;
+												$objclasser->participant = $unInscrit->participant;
+												$objclasser->epreuve = $unInscrit->epreuve;
+												
+												
+												
+												$tabObjClasser[] = $objclasser;
+											}
+										}
+									}
+								}
+
+								if($erreur == false)
+								{
+									foreach($tabObjClasser as $unObjClasser)
+									{
+										$unObjClasser->save();
+									}
+									$_SESSION["message"][] = 1;
+									$_SESSION["message"][] = "Classement importé !";
+								}
+								else
+								{
+									$_SESSION["message"][] = 3;
+									$_SESSION["message"][] = "Erreur de la structure du fichier csv";
+								}
+
+							} 
+							else
+							{
+								$_SESSION["message"][] = 3;
+								$_SESSION["message"][] = "Cette épreuve n'existe pas";
+								
+							}
 							
 						}
 						
+						// Suppression du fichier CSV des fichiers uploadés.
+						chmod("upload/".$nomfichier, 0777);
+						@unlink("upload/".$nomfichier);
+						
+						$view = new \sportnet\view\SportnetView(\sportnet\model\organisateur::findByLogin($auth->user_login)->getEvenements());
+						$view->render('espaceOrganisateur');
 					}
-					
-					// Suppression du fichier CSV des fichiers uploadés.
-					chmod("upload/".$nomfichier, 0777);
-					@unlink("upload/".$nomfichier);
-					
-					$view = new \sportnet\view\SportnetView(\sportnet\model\organisateur::findByLogin($auth->user_login)->getEvenements());
-					$view->render('espaceOrganisateur');
-				}
-				else
-				{
-					$view = new \sportnet\view\SportnetView(\sportnet\model\organisateur::findByLogin($auth->user_login)->getEvenements());
-					$view->render('espaceOrganisateur');
+					else
+					{
+						$view = new \sportnet\view\SportnetView(\sportnet\model\organisateur::findByLogin($auth->user_login)->getEvenements());
+						$view->render('espaceOrganisateur');
+					}
 				}
 			}
 			else
