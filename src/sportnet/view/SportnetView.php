@@ -174,7 +174,9 @@ EOT;
 	<p><b>Date limite des inscriptions : </b>{$laDate}</p><br/>
 	<p><b>Discipline : </b>{$this->data->discipline->nom}</p><br/>
 	<p><b>Tarif : </b>{$this->data->tarif} €</p><br/>
-	<p><b>Organisé par : </b>{$this->data->organisateur->prenom} {$this->data->organisateur->nom}</p><br/>
+	<p><b>Organisé par : </b>{$this->data->organisateur->prenom} {$this->data->organisateur->nom}<br/>
+	{$this->data->organisateur->adresse} {$this->data->organisateur->cp} {$this->data->organisateur->ville} ; Téléphone : {$this->data->organisateur->tel}
+	</p><br/>
 	<p><b>Partager l'événement : </b>(cliquez sur le lien pour le copier dans votre presse-papier)<input type="text" id="partager" size="64"></p>
 	<hr>
 	<p class="description">{$this->data->description}</p>
