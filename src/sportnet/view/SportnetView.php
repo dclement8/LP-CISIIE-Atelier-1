@@ -109,6 +109,7 @@ EOT;
 <div class="bloc offset-0 span-6">
 	<form method="post" action="{$this->script_name}/connexion/">
 		<h3>Connexion</h3>
+			<p>En tant qu'organisateur, connectez-vous pour accéder à la gestion de vos événements.</p>
 			<p><input type="text" name="login" placeholder="Login" required="required"></p>
 			<p><input type="password" name="mdp" placeholder="Mot de passe" required="required"></p>
 			<p><input type="submit" class="btn" value="Connexion"></p>
@@ -118,7 +119,7 @@ EOT;
 <div class="bloc offset-0 span-6">
 	<form method="post" action="{$this->script_name}/inscrireOrganisateur/">
 		<h3>Inscription</h3>
-
+		<p>Vous êtes organisateur ? Vous n'êtes pas encore inscrit ? Remplissez ce formulaire d'inscription pour gérer vos événements sur la plateforme en ligne SportNet.</p>
 		<p><input type="text" name="login" placeholder="Login" required="required"></p>
 		<p><input type="password" name="mdp" placeholder="Mot de passe" required="required"></p>
 		<p><input type="password" name="mdp2" placeholder="Confirmation" required="required"></p>
