@@ -15,6 +15,23 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small, h1.soustitre, h2.sou
   color: grey;
   font-size: 18px; }
 
+table {
+  margin: auto; }
+
+td {
+  border: 1px solid #D2D2D2;
+  border-collapse: collapse;
+  padding: .4rem;
+  text-align: left;
+  color: black; }
+
+th {
+  background-color: grey;
+  padding: .4rem; }
+
+tr:nth-child(odd) {
+  background-color: #D2D2D2; }
+
 mark {
   background: none;
   text-decoration: underline;
@@ -608,7 +625,7 @@ hr {
   margin-right: 1%;
   width: 98%; }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 800px) {
   [class*="span-"] {
     width: 100%; }
 
@@ -618,7 +635,7 @@ hr {
 
   .content {
     order: -1; } }
-@media screen and (min-width: 700px) {
+@media screen and (min-width: 800px) {
   .line, .line-margin, .line-margin-1, .line-margin-2, .line-margin-3, .line-margin-4 {
     flex-direction: row; } }
 

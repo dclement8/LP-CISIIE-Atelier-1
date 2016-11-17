@@ -68,19 +68,20 @@ EOT;
                 <input type="radio" name="etat" value="1" checked>
             </p>
             <p>
-                <label>Visible (Inscription fermées) :</label>
+                <label>Visible<br />(Inscription fermées)</label>
                 <input type="radio" name="etat" value="2">
             </p>
             <p>
-                <label>Visible (Inscription ouvertes) :</label>
+                <label>Visible<br />(Inscription ouvertes)</label>
                 <input type="radio" name="etat" value="3">
             </p>
         </div>
         <p>
-            <label>Date limite d&#39;inscription (dd-mm-aaaa hh:mm) :</label>
+            <label>Date limite d&#39;inscription<br />(dd-mm-aaaa hh:mm)</label>
             <input type="text" name="date" required="required">
         </p>
         <p>
+			<br />
             <label>Tarif :</label>
             <input type="number" name="tarif" min="0" required="required"> €
         </p>
@@ -171,7 +172,7 @@ EOT;
 <div class="event large">
 	<h3 class="centre">{$this->data->nom}</h3>
 	Début le {$laDate}
-	<p>Partager : <input type="text" id="partager" size="64"></p>
+	<p>Partager : (cliquez sur le lien pour le copier dans votre presse-papier)<input type="text" id="partager" size="64"></p>
 	<hr>
 	<p class="description">{$this->data->description}</p>
 EOT;
@@ -349,7 +350,7 @@ EOT;
 
 			if($inscriptions_ouvertes) {
 				$html .= <<<EOT
-	<h4><a href="#" id="btn-spoiler-{$event->id}_1">≡ Ajouter une épreuve</a></h4>
+	<button id="btn-spoiler-{$event->id}_1" class="btn btn-red">≡ Ajouter une épreuve</button>
 
 	<div id="spoiler-{$event->id}_1">
 		<!-- Div masquée par défaut -->
@@ -368,7 +369,7 @@ EOT;
 			}
 
 			$html .= <<<EOT
-	<h4><a href="#" id="btn-spoiler-{$event->id}_2">≡ Voir les épreuves</a></h4>
+	<button id="btn-spoiler-{$event->id}_2" class="btn btn-red">≡ Voir les épreuves</button>
 
 	<div id="spoiler-{$event->id}_2">
 		<!-- Div masquée par défaut -->
@@ -405,11 +406,12 @@ EOT;
 
 				$html .= "\t\t<hr><strong>Participants :</strong>\n";
 				$html .= "\t\t<table>\n";
+				$html .= "\t\t\t<tr><th>Nom</th><th>Dossard</th></tr>\n";
 
 				$participants = \sportnet\model\inscrit::findById($epreuve->id);
 				if($participants !== null && $participants !== false) {
 					foreach($participants as $participant) {
-						$html .= "\t\t\t<tr><td>".$participant->participant->nom." ".$participant->participant->prenom."</td><td>dossard ".$participant->dossard."</td></tr>\n";
+						$html .= "\t\t\t<tr><td>".$participant->participant->nom." ".$participant->participant->prenom."</td><td>".$participant->dossard."</td></tr>\n";
 					}
 				}
 
@@ -483,6 +485,7 @@ EOT;
     <head>
         <meta charset="utf-8">
         <title>SportNet</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0">
 		<link rel="shortcut icon" href="{$this->app_root}/favicon.ico">
         <link rel="stylesheet" href="${style_file}">
 		<script type="text/javascript" src="{$this->app_root}/js/sportnet.js"></script>
