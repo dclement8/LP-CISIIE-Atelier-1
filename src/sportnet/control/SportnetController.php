@@ -71,63 +71,126 @@ class SportnetController {
 	// Créer/modifier un événement
 	public function creerEvenement()
 	{
+		// Message d'alerte : $_SESSION["message"]
+		//
+		// [0] : Correspond au code de retour (int)
+		//		0 = Message d'alerte normal (class='alert')
+		//		1 = Message d'alerte de succès (class='alert alert-success')
+		//		2 = Message d'alerte d'information (class='alert alert-info')
+		//		3 = Message d'alerte d'avertissement (class='alert alert-avert')
+		//		4 = Message d'alerte de danger (class='alert alert-danger')
+		//
+		// [1] : Correspond au message d'alerte (string)
 		$auth = new \sportnet\utils\Authentification();
 		
 		if($auth->logged_in == true)
 		{
-			if(isset($this->request->post["nom"]) && isset($this->request->post["etat"]) && isset($this->request->post["date"]) && isset($this->request->post["description"]) && isset($this->request->post["tarif"]) && isset($this->request->post["nom_epreuve"]) && isset($this->request->post["date_epreuve"]) && isset($this->request->post["dist_epreuve"]))
+			if(isset($this->request->post["nom"]) && isset($this->request->post["etat"]) && isset($this->request->post["date"]) && isset($this->request->post["description"]) && isset($this->request->post["tarif"]))
 			{
 				$evenement = null;
-				if(isset($this->request->get["event"]))
+				
+				$nom = filter_var($this->request->post["nom"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$etat = filter_var($this->request->post["etat"], FILTER_SANITIZE_NUMBER_INT);
+				$date = filter_var($this->request->post["date"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$description = filter_var($this->request->post["description"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+				$tarif = filter_var($this->request->post["tarif"], FILTER_SANITIZE_NUMBER_FLOAT);
+				$discipline = filter_var($this->request->post["discipline"], FILTER_SANITIZE_NUMBER_INT);
+				
+				if(!(isset($this->request->get["event"])))
+				{
+					if(isset($this->request->post["nom_epreuve"]) && isset($this->request->post["date_epreuve"]) && isset($this->request->post["dist_epreuve"]))
+					{
+						$evenement = new \sportnet\model\evenement();
+						
+						$nom_epreuve = filter_var($this->request->post["nom_epreuve"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+						$date_epreuve = filter_var($this->request->post["date_epreuve"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+						$dist_epreuve = filter_var($this->request->post["dist_epreuve"], FILTER_SANITIZE_NUMBER_INT);
+						
+						$evenement->nom = $nom;
+						$evenement->description = $description;
+						$evenement->etat = $etat;
+						$evenement->dateheureLimiteInscription = $date;
+						$evenement->tarif = $tarif;
+						$evenement->discipline = \sportnet\model\discipline::findById($discipline);
+						
+						$retour = $evenement->save();
+						
+						$_SESSION["message"] = array();
+						
+						if($retour == true)
+						{
+							$epreuve = new \sportnet\model\epreuve();
+							$epreuve->nom = $nom_epreuve;
+							$epreuve->distance = $dist_epreuve;
+							$epreuve->dateheure = $date_epreuve;
+							$epreuve->evenement = $evenement;
+							
+							
+							$retour = $epreuve->save();
+							
+							if($retour == true)
+							{
+								$_SESSION["message"][] = 1;
+								$_SESSION["message"][] = "Evénement enregistré.";
+								
+								$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+				
+								$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
+								$view->render('espaceOrganisateur');
+							}
+							else
+							{
+								$_SESSION["message"][] = 4;
+								$_SESSION["message"][] = "Erreur lors de l'enregistrement de l'épreuve de l'événement.";
+								
+								$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+				
+								$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
+								$view->render('espaceOrganisateur');
+							}
+						}
+						else
+						{
+							$_SESSION["message"][] = 4;
+							$_SESSION["message"][] = "Erreur lors de l'enregistrement de l'événement de l'événement.";
+							
+							$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+				
+							$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
+							$view->render('espaceOrganisateur');
+						}
+					}
+					else
+					{
+						$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+				
+						$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
+						$view->render('espaceOrganisateur');
+					}
+				}
+				else
 				{
 					$evenement = \sportnet\model\evenement::findById($this->request->get["event"]);
-				}
-				else
-				{
-					$evenement = new \sportnet\model\evenement();
-				}
-				
-				if($evenement == null)
-				{
-					$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
-			
-					$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
-					$view->render('espaceOrganisateur');
-				}
-				else
-				{
-					$nom = filter_var($this->request->post["nom"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$etat = filter_var($this->request->post["etat"], FILTER_SANITIZE_NUMBER_INT);
-					$date = filter_var($this->request->post["date"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$description = filter_var($this->request->post["description"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$tarif = filter_var($this->request->post["tarif"], FILTER_SANITIZE_NUMBER_FLOAT);
-					$discipline = filter_var($this->request->post["discipline"], FILTER_SANITIZE_NUMBER_INT);
 					
-					$nom_epreuve = filter_var($this->request->post["nom_epreuve"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$date_epreuve = filter_var($this->request->post["date_epreuve"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-					$dist_epreuve = filter_var($this->request->post["dist_epreuve"], FILTER_SANITIZE_NUMBER_INT);
-					
-					
-					$evenement->nom = $nom;
-					$evenement->description = $description;
-					$evenement->etat = $etat;
-					$evenement->dateheureLimiteInscription = $date;
-					$evenement->tarif = $tarif;
-					$evenement->discipline = \sportnet\model\discipline::findById($discipline);
-					
-					$retour = $evenement->save();
-					
-					$_SESSION["message"] = array();
-					
-					if($retour == true)
+					if($evenement == null)
 					{
-						$epreuve = new \sportnet\model\epreuve();
-						$epreuve->nom = $nom_epreuve;
-						$epreuve->distance = $dist_epreuve;
-						$epreuve->dateheure = $date_epreuve;
-						$epreuve->evenement = $evenement;
+						$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+				
+						$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
+						$view->render('espaceOrganisateur');
+					}
+					else
+					{
+						$evenement->nom = $nom;
+						$evenement->description = $description;
+						$evenement->etat = $etat;
+						$evenement->dateheureLimiteInscription = $date;
+						$evenement->tarif = $tarif;
+						$evenement->discipline = \sportnet\model\discipline::findById($discipline);
 						
-						$retour = $epreuve->save();
+						$retour = $evenement->save();
+						
+						$_SESSION["message"] = array();
 						
 						if($retour == true)
 						{
@@ -137,28 +200,14 @@ class SportnetController {
 						else
 						{
 							$_SESSION["message"][] = 4;
-							$_SESSION["message"][] = "Erreur lors de l'enregistrement de l'épreuve de l'événement.";
+							$_SESSION["message"][] = "Erreur lors de l'enregistrement de l'événement de l'événement.";
 						}
-					}
-					else
-					{
-						// Message d'alerte : $_SESSION["message"]
-						//
-						// [0] : Correspond au code de retour (int)
-						//		0 = Message d'alerte normal (class='alert')
-						//		1 = Message d'alerte de succès (class='alert alert-success')
-						//		2 = Message d'alerte d'information (class='alert alert-info')
-						//		3 = Message d'alerte d'avertissement (class='alert alert-avert')
-						//		4 = Message d'alerte de danger (class='alert alert-danger')
-						//
-						// [1] : Correspond au message d'alerte (string)
 						
-						$_SESSION["message"][] = 4;
-						$_SESSION["message"][] = "Erreur lors de l'enregistrement de l'événement.";
+						$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+				
+						$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
+						$view->render('espaceOrganisateur');
 					}
-					
-					$view = new \sportnet\view\SportnetView(\sportnet\model\discipline::findAll());
-					$view->render('creerEvenement');
 				}
 			}
 			else
