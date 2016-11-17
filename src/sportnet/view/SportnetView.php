@@ -171,8 +171,11 @@ EOT;
 		$html = <<<EOT
 <div class="event large">
 	<h3 class="centre">{$this->data->nom}</h3>
-	<b>Date limite des inscriptions : </b>{$laDate}
-	<p>Partager l'événement : (cliquez sur le lien pour le copier dans votre presse-papier)<input type="text" id="partager" size="64"></p>
+	<p><b>Date limite des inscriptions : </b>{$laDate}</p><br/>
+	<p><b>Discipline : </b>{$this->data->discipline->nom}</p><br/>
+	<p><b>Tarif : </b>{$this->data->tarif} €</p><br/>
+	<p><b>Organisé par : </b>{$this->data->organisateur->prenom} {$this->data->organisateur->nom}</p><br/>
+	<p><b>Partager l'événement : </b>(cliquez sur le lien pour le copier dans votre presse-papier)<input type="text" id="partager" size="64"></p>
 	<hr>
 	<p class="description">{$this->data->description}</p>
 EOT;
@@ -400,17 +403,22 @@ EOT;
 				<button class="btn delete" id="{$this->script_name}/supprimerEpreuve/?epreuve={$epreuve->id}">Supprimer</button>
 			</p>
 		</form>
-		<hr>
 EOT;
 				if(!$inscriptions_ouvertes) {
 					$html .= <<<EOT
-		<form method="post" enctype="multipart/form-data" action="{$this->script_name}/uploadClassement/?epreuve={$epreuve->id}">
+		<hr><form method="post" enctype="multipart/form-data" action="{$this->script_name}/uploadClassement/?epreuve={$epreuve->id}">
 EOT;
 					
 					if(\sportnet\model\inscrit::findById($epreuve->id) != null)
 					{
 						$html .= <<<EOT
 			<p><a href="{$this->script_name}/telechargerListe/?epreuve={$epreuve->id}" id="liste-{$epreuve->id}">Télécharger liste d&#39;engagement</a></p>
+EOT;
+					}
+					else
+					{
+						$html .= <<<EOT
+			<p>La liste d'engagement n'est pas disponible car il n'y a aucun inscrit.</p>
 EOT;
 					}
 			
