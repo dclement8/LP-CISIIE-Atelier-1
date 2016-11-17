@@ -933,7 +933,7 @@ class SportnetController {
 						for($i = 0; $i < count($tab); $i++) {
 							foreach($tableauInscrit as $unInscrit)
 							{
-								if($unInscrit->dossard = $tab[$i][1])
+								if($unInscrit->dossard == $tab[$i][1])
 								{
 									$objclasser = new \sportnet\model\classer();
 									$heure = $tab[$i][2];
