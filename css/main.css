@@ -212,7 +212,7 @@ input[type="text"], input[type="password"], input[type="number"], input[type="te
     .event h4 a, .bloc h4 a {
       color: white; }
 
-[id*="spoiler-"] {
+[id^="spoiler-"] {
   display: none; }
 
 .btn {
