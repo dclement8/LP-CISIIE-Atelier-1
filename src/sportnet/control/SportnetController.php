@@ -771,18 +771,18 @@ class SportnetController {
 				{
 					$dir = "upload/";
 					$nomFichier = 'listeParticipants_epreuve'.$this->request->get["epreuve"].'_'.time().'.csv';
-					$csv = new SplFileObject($dir.$nomFichier, 'w');
+					$csv = new \SplFileObject($dir.$nomFichier, 'w');
 					
 					// Entête CSV
 					$infoInscrit = array();
-					$infoInscrit[] = "Numéro dossard";
-					$infoInscrit[] = "Numéro participant";
+					$infoInscrit[] = "Numero dossard";
+					$infoInscrit[] = "Numero participant";
 					$infoInscrit[] = "Nom";
-					$infoInscrit[] = "Prénom";
+					$infoInscrit[] = "Prenom";
 					$infoInscrit[] = "Rue";
 					$infoInscrit[] = "Code Postal";
 					$infoInscrit[] = "Ville";
-					$infoInscrit[] = "Téléphone";
+					$infoInscrit[] = "Telephone";
 					$tabInscrits[] = $infoInscrit;
 					
 					foreach($lesInscrits as $unInscrit)
@@ -843,7 +843,7 @@ class SportnetController {
 		
 		if($auth->logged_in == true)
 		{
-
+			
 			$fichier = "NULL";
 			$target_dir = "upload/";
 			$target_file = $target_dir . basename($_FILES["csv"]["name"]);
@@ -854,7 +854,9 @@ class SportnetController {
 
 			if($_FILES["csv"]["tmp_name"] == "")
 			{
-				
+				$_SESSION["message"][] = 3;
+				$_SESSION["message"][] = "Aucun fichier reçu.";
+				$uploadOk = false;
 			}
 			else
 			{
@@ -891,8 +893,8 @@ class SportnetController {
 						//chemin du fichier
 						$fichier = "upload/$nomfichier";
 						$tab = array();
-						$csv = new SplFileObject($fichier); // On instancie l'objet SplFileObject
-						$csv->setFlags(SplFileObject::READ_CSV); // On indique que le fichier est de type CSV
+						$csv = new \SplFileObject($fichier); // On instancie l'objet SplFileObject
+						$csv->setFlags(\SplFileObject::READ_CSV); // On indique que le fichier est de type CSV
 						$csv->setCsvControl(';'); // On indique le caractère délimiteur, ici c'est la virgule
 						foreach($csv as $t) {
 							$tab[] = $t;
@@ -950,13 +952,13 @@ class SportnetController {
 				// Suppression du fichier CSV des fichiers uploadés.
 				unlink("upload/".$nomfichier);
 				
-				$ctrl = new \sportnet\control\SportnetController($this->request);
-				$ctrl->listEvents();
+				$view = new \sportnet\view\SportnetView(\sportnet\model\organisateur::findByLogin($auth->user_login)->getEvenements());
+				$view->render('espaceOrganisateur');
 			}
 			else
 			{
-				$ctrl = new \sportnet\control\SportnetController($this->request);
-				$ctrl->listEvents();
+				$view = new \sportnet\view\SportnetView(\sportnet\model\organisateur::findByLogin($auth->user_login)->getEvenements());
+				$view->render('espaceOrganisateur');
 			}
 		}
 		else

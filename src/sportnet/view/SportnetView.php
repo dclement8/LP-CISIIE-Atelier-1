@@ -364,7 +364,7 @@ EOT;
 					$html .= <<<EOT
 		<form method="post" enctype="multipart/form-data" action="{$this->script_name}/uploadClassement/?epreuve={$epreuve->id}">
 			<a href="{$this->script_name}/telechargerListe/?epreuve={$epreuve->id}" id="liste-{$epreuve->id}">Télécharger liste d&#39;engagement</a><br/>
-			Upload classement : <input type="file" name="csv"> <input type="submit" value="Uploader le classement">
+			Upload classement : <input type="file" name="csv"> <input type="submit" name="uploader" value="Uploader le classement">
 		</form>
 EOT;
 				}
