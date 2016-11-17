@@ -1,4 +1,5 @@
 window.onload = function() {
+	// Spoiler
 	var div;
 	var btn = document.querySelectorAll("[id^='btn-spoiler-']");
 	for(var i=0; i < btn.length; i++) {
@@ -11,6 +12,17 @@ window.onload = function() {
 				div.style.display = 'none';
 			else
 				div.style.display = 'block';
+		};
+	}
+
+	// Champ partager
+	var partager = document.querySelector("#partager");
+	if(partager) {
+		partager.value = window.location.href;
+		partager.readOnly = true;
+		partager.onclick = function() {
+			this.select();
+			document.execCommand("copy");
 		};
 	}
 }
