@@ -55,7 +55,7 @@ EOT;
             </p>
         </div>
         <p>
-            <label>Date limite d''inscription (dd-mm-aaaa hh:mm) :</label>
+            <label>Date limite d&#39;inscription (dd-mm-aaaa hh:mm) :</label>
             <input type="text" name="date" required="required">
         </p>
         <p>
@@ -117,7 +117,7 @@ EOT;
 	protected function listEvents() {
 		// $data contient tous les événements
 		$html = '';
-		
+
 		foreach($this->data as $event) {
 			//var_dump($event);
 			if($event->etat != 1)
@@ -144,9 +144,9 @@ EOT;
 
 	protected function detail() {
 		// $data contient un événement et son/ses épreuve(s)
-		
+
 		$laDate = date_format($this->data->dateheureLimiteInscription,"d-m-Y H:i");
-		
+
 		$html = <<<EOT
 <div class="event large">
 	<h6>Partager : <input type="text" id="partager" size="64"></h6>
@@ -179,7 +179,7 @@ EOT;
 			// L'affichage est différent si les Inscriptions sont ouvertes ou non
 			if($inscriptions_ouvertes) {
 				$html .= <<<EOT
-	<button onclick="spoiler('{$epreuve->id}')">S''Inscrire</button>
+	<button id="btn-spoiler-{$epreuve->id}" class="btn">S&#39;Inscrire</button>
 
 	<div id="spoiler-{$epreuve->id}">
 		<!-- Div masquée par défaut -->
@@ -211,7 +211,7 @@ EOT;
 				$classement = \sportnet\model\classer::findById($epreuve->id);
 				if($classement !== null && $classement !== false) {
 					$html .= <<<EOT
-	<button onclick="spoiler('{$epreuve->id}')">Classement</button>
+	<button id="btn-spoiler-{$epreuve->id}" class="btn">Classement</button>
 
 	<div id="spoiler-{$epreuve->id}">
 		<!-- Div masquée par défaut -->
@@ -286,15 +286,15 @@ EOT;
 EOT;
 			if($event->etat == 3)
 				$html .= ' checked';
-			
+
 			$laDate = date_format($event->dateheureLimiteInscription,"d-m-Y H:i");
-			
+
 			$html .= <<<EOT
 				>
 			</p>
 		</div>
 		<p>
-			<label>Date limite d''inscription :</label>
+			<label>Date limite d&#39;inscription :</label>
 			<input type="text" name="date" value="{$laDate}" required="required">
 		</p>
 		<p>
@@ -322,7 +322,7 @@ EOT;
 
 	<div id="spoiler-{$event->id}-1">
 		<!-- Div masquée par défaut -->
-		<!-- Ajout d''une épreuve -->
+		<!-- Ajout d&#39;une épreuve -->
 		<form method="post" action="{$this->script_name}/creerEpreuve/?event={$event->id}">
 			<p><input type="text" name="nom_epreuve" placeholder="Nom" required="required"></p>
 			<p>
@@ -360,7 +360,7 @@ EOT;
 				if(!$inscriptions_ouvertes) {
 					$html .= <<<EOT
 		<form method="post" enctype="multipart/form-data" action="{$this->script_name}/uploadClassement/?epreuve={$epreuve->id}">
-			<a href="{$this->script_name}/telechargerListe/?epreuve={$epreuve->id}" id="liste-{$epreuve->id}">Télécharger liste d''engagement</a><br/>
+			<a href="{$this->script_name}/telechargerListe/?epreuve={$epreuve->id}" id="liste-{$epreuve->id}">Télécharger liste d&#39;engagement</a><br/>
 			Upload classement : <input type="file" name="csv"> <input type="submit" value="Uploader le classement">
 		</form>
 EOT;
@@ -415,7 +415,7 @@ EOT;
 				$breadcrumb = $this->renderBreadcrumb();
                 $main = $this->listEvents();
 				break;
-			
+
 			default:
                 // Liste des events
                 $breadcrumb = $this->renderBreadcrumb();
@@ -444,10 +444,10 @@ EOT;
     <head>
         <meta charset="utf-8">
         <title>SportNet</title>
-		<link rel="shortcut icon" href="favicon.ico">
+		<link rel="shortcut icon" href="{$this->app_root}/favicon.ico">
         <link rel="stylesheet" href="${style_file}">
-		<script type="text/javascript" src="./js/details.js"></script>
-		<script type="text/javascript" src="./js/spoiler.js"></script>
+		<script type="text/javascript" src="{$this->app_root}/js/details.js"></script>
+		<script type="text/javascript" src="{$this->app_root}/js/spoiler.js"></script>
     </head>
 
     <body>
