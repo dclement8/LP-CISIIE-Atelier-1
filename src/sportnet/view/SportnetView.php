@@ -382,7 +382,7 @@ EOT;
 				$html .= "\t\t</ul>\n";
 			}
 
-			$html .= "\t</div>\n";
+			$html .= "\t</div></div>\n";
 		}
 		}
 		return $html;
