@@ -230,8 +230,8 @@ EOT;
 					<p><input type="text" name="prenom" placeholder="Prénom" required="required"></p>
 					<p><input type="text" name="adresse" placeholder="Adresse" required="required"></p>
 					<p><input type="text" name="ville" placeholder="Ville" required="required"></p>
-					<p><input type="text" name="cp" placeholder="Code Postal" required="required"></p>
-					<p><input type="tel" name="tel" placeholder="Téléphone" required="required"></p>
+					<p><input type="text" name="cp" placeholder="Code Postal" maxlength="5" required="required"></p>
+					<p><input type="tel" name="tel" placeholder="Téléphone" maxlength="10" required="required"></p>
 					<p><input type="submit" class="btn" value="Inscription"></p>
 				</form>
 			</div>
