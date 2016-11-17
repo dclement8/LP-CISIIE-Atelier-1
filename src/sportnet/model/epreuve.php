@@ -1,11 +1,11 @@
 <?php
 namespace sportnet\model;
 class epreuve extends AbstractModel {
-	private $id;
-	private $nom;
-	private $distance;
-	private $dateheure;
-	private $evenement;
+	protected $id;
+	protected $nom;
+	protected $distance;
+	protected $dateheure;
+	protected $evenement;
 	
 	
 	public function __construct()
@@ -16,40 +16,15 @@ class epreuve extends AbstractModel {
 		self::$db->query("SET CHARACTER SET utf8");
 	}
 	
-	public function __get($attr_name)
-	{
-        if (property_exists( $this, $attr_name))
-		{
-			return $this->$attr_name;
-		}
-		else
-		{
-			$emess = $this . ": unknown member $attr_name (__get)";
-			throw new \Exception($emess);
-		}
-    }
-	
-	public function __set($attr_name, $attr_val)
-	{
-        if (property_exists( $this, $attr_name))
-		{
-			$this->$attr_name=$attr_val;
-		} 
-        else
-		{
-            $emess = $this . ": unknown member $attr_name (__set)";
-            throw new \Exception($emess);
-        }
-    }
-	
 	protected function update()
 	{
 		$update = "UPDATE epreuve SET nom = :nom, distance = :distance, dateheure = :dateheure, id_evenement = :id_evenement WHERE id = :id";
 		$update_prep = self::$db->prepare($update);
 		
+		$idEvent = $this->evenement->id;
 		$dateHeureString = date_format(date_create($this->dateheure),"Y-m-d H:i:s");
 		
-		$update_prep->bindParam(':id_evenement', $this->evenement->id, \PDO::PARAM_INT);
+		$update_prep->bindParam(':id_evenement', $idEvent, \PDO::PARAM_INT);
 		$update_prep->bindParam(':nom', $this->nom, \PDO::PARAM_STR);
         $update_prep->bindParam(':distance', $this->distance, \PDO::PARAM_INT);
         $update_prep->bindParam(':dateheure', $dateHeureString, \PDO::PARAM_STR);
@@ -67,12 +42,13 @@ class epreuve extends AbstractModel {
 		$insert = "INSERT INTO epreuve VALUES(NULL, :nom, :distance, :dateheure, :id_evenement)";
         $insert_prep = self::$db->prepare($insert);
 		
+		$idEvent = $this->evenement->id;
 		$dateHeureString = date_format(date_create($this->dateheure),"Y-m-d H:i:s");
 		
 		$insert_prep->bindParam(':nom', $this->nom, \PDO::PARAM_STR);
         $insert_prep->bindParam(':distance', $this->distance, \PDO::PARAM_INT);
         $insert_prep->bindParam(':dateheure', $dateHeureString, \PDO::PARAM_STR);
-		$insert_prep->bindParam(':id_evenement', $this->evenement->id, \PDO::PARAM_INT);
+		$insert_prep->bindParam(':id_evenement', $idEvent, \PDO::PARAM_INT);
 		if($insert_prep->execute()){
 			return true;
 		}
@@ -190,7 +166,10 @@ class epreuve extends AbstractModel {
 	{
 		$select = "SELECT * FROM evenement where id = :id";
         $select_prep = self::$db->prepare($select);
-        $select_prep->bindParam(":id", $this->evenement->id, \PDO::PARAM_INT);
+		
+		$idEvent = $this->evenement->id;
+		
+        $select_prep->bindParam(":id", $idEvent, \PDO::PARAM_INT);
         $select_prep->execute();
 		$obj = null;
 		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
