@@ -108,7 +108,7 @@ class classer extends AbstractModel {
 			self::$db = $connect->makeConnection();
 			self::$db->query("SET CHARACTER SET utf8");
 		}
-        $selectById = "SELECT * FROM classer WHERE id_epreuve = :id_epreuve";
+        $selectById = "SELECT * FROM classer WHERE id_epreuve = :id_epreuve ORDER BY position ASC";
         $selectById_prep = self::$db->prepare($selectById);
         $selectById_prep->bindParam(':id_epreuve', $leIdEpreuve, \PDO::PARAM_INT);
         $selectById_prep->execute();

@@ -37,7 +37,6 @@ class SportnetController {
 				//	1 ==> événement créé mais invisible pour les participants
 				//	2 ==> événement créé et visible
 				//	3 ==> événement ouvert aux inscriptions (si datelimite n'est pas dépassée)
-				//	4 ==> événement où le classement est disponible
 				
 				if($event->etat == 1)
 				{
@@ -442,7 +441,7 @@ class SportnetController {
 		}
 		else
 		{
-			if(isset($this->request->post["login"]) && isset($this->request->post["mdp"]) && isset($this->request->post["mdp2"]) && isset($_GET["nom"]) && isset($_GET["prenom"]) && isset($_GET["adresse"]) && isset($_GET["ville"]) && isset($_GET["cp"]) && isset($_GET["tel"]))
+			if(isset($this->request->post["login"]) && isset($this->request->post["mdp"]) && isset($this->request->post["mdp2"]) && isset($this->request->post["nom"]) && isset($this->request->post["prenom"]) && isset($this->request->post["adresse"]) && isset($this->request->post["ville"]) && isset($this->request->post["cp"]) && isset($this->request->post["tel"]))
 			{
 				$login = filter_var($this->request->post["login"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				$mdp = filter_var($this->request->post["mdp"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -454,45 +453,57 @@ class SportnetController {
 				$cp = filter_var($this->request->post["cp"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				$tel = filter_var($this->request->post["tel"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				
-				if($mdp == $mdp2)
-				{
-					$organisateur = new \sportnet\model\organisateur();
-					
-					$organisateur->login = $login;
-					$organisateur->mdp = password_hash ($mdp, PASSWORD_DEFAULT);
-					$organisateur->nom = $nom;
-					$organisateur->prenom = $prenom;
-					$organisateur->adresse = $adresse;
-					$organisateur->cp = $cp;
-					$organisateur->ville = $ville;
-					$organisateur->tel = $tel;
-					
-					$retour = $organisateur->save();
+				$trouverOrganisateur = \sportnet\model\organisateur::findByLogin($login);
 				
-					$_SESSION["message"] = array();
-					if($retour == true)
+				if($trouverOrganisateur == null)
+				{
+					if($mdp == $mdp2)
 					{
-						$_SESSION["message"][] = 1;
-						$_SESSION["message"][] = "Votre compte organisateur a été créé.";
+						$organisateur = new \sportnet\model\organisateur();
+						
+						$organisateur->login = $login;
+						$organisateur->mdp = password_hash ($mdp, PASSWORD_DEFAULT);
+						$organisateur->nom = $nom;
+						$organisateur->prenom = $prenom;
+						$organisateur->adresse = $adresse;
+						$organisateur->cp = $cp;
+						$organisateur->ville = $ville;
+						$organisateur->tel = $tel;
+						
+						$retour = $organisateur->save();
+					
+						$_SESSION["message"] = array();
+						if($retour == true)
+						{
+							$_SESSION["message"] = array();
+							$_SESSION["message"][] = 1;
+							$_SESSION["message"][] = "Votre compte organisateur a été créé.";
+						}
+						else
+						{
+							$_SESSION["message"] = array();
+							$_SESSION["message"][] = 4;
+							$_SESSION["message"][] = "Erreur lors de la création du compte organisateur.";
+						}
 					}
 					else
 					{
-						$_SESSION["message"][] = 4;
-						$_SESSION["message"][] = "Erreur lors de la création du compte organisateur.";
+						$_SESSION["message"] = array();
+						$_SESSION["message"][] = 3;
+						$_SESSION["message"][] = "Les mots de passe ne correspondent pas";
 					}
-					
-					$view = new \sportnet\view\SportnetView(null);
-					$view->render('authentification');
 				}
 				else
 				{
 					$_SESSION["message"] = array();
 					$_SESSION["message"][] = 3;
-					$_SESSION["message"][] = "Les mots de passe ne correspondent pas";
+					$_SESSION["message"][] = "Le login est déjà utilisé.";
 					
-					$view = new \sportnet\view\SportnetView(null);
-					$view->render('authentification');
+					
 				}
+				
+				$view = new \sportnet\view\SportnetView(null);
+				$view->render('authentification');
 			}
 		}
 	}
