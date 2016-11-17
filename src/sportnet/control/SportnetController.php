@@ -663,28 +663,50 @@ class SportnetController {
 			}
 			else
 			{
-				$inscrit = new \sportnet\model\inscrit();
-				
-				$inscrit->dossard = \sportnet\model\inscrit::getMaxDossard($epreuve) + 1;
-				$inscrit->epreuve = $epreuve;
-				$inscrit->participant = $participant;
-				
-				$retour = $inscrit->save();
-				
-				$_SESSION["message"] = array();
-				if($retour == true)
+				// Vérifier si le participant est déjà inscrit
+				$lesInscrits = \sportnet\model\inscrit::findById($this->request->get["epreuve"]);
+				$estDejaInscrit = false;
+				foreach($lesInscrits as $unInscrit)
 				{
-					$_SESSION["message"][] = 1;
-					$_SESSION["message"][] = "Vous êtes à présent inscrit à cette épreuve.";
+					if($unInscrit->participant->id == $this->request->post["num"])
+					{
+						$estDejaInscrit = true;
+					}
+				}
+				
+				if($estDejaInscrit == true)
+				{
+					$_SESSION["message"][] = 3;
+					$_SESSION["message"][] = "Le participant est déjà inscrit à l'épreuve !";
+					
+					$ctrl = new \sportnet\control\SportnetController($this->request);
+					$ctrl->listEvents();
 				}
 				else
 				{
-					$_SESSION["message"][] = 4;
-					$_SESSION["message"][] = "Erreur lors de l'inscription à l'épreuve";
+					$inscrit = new \sportnet\model\inscrit();
+					
+					$inscrit->dossard = \sportnet\model\inscrit::getMaxDossard($epreuve->id) + 1;
+					$inscrit->epreuve = $epreuve;
+					$inscrit->participant = $participant;
+					
+					$retour = $inscrit->save();
+					
+					$_SESSION["message"] = array();
+					if($retour == true)
+					{
+						$_SESSION["message"][] = 1;
+						$_SESSION["message"][] = "Vous êtes à présent inscrit à cette épreuve.";
+					}
+					else
+					{
+						$_SESSION["message"][] = 4;
+						$_SESSION["message"][] = "Erreur lors de l'inscription à l'épreuve";
+					}
+					
+					$ctrl = new \sportnet\control\SportnetController($this->request);
+					$ctrl->listEvents();
 				}
-				
-				$ctrl = new \sportnet\control\SportnetController($this->request);
-				$ctrl->listEvents();
 			}
 		}
 		else
@@ -729,7 +751,7 @@ class SportnetController {
 				{
 					$inscrit = new \sportnet\model\inscrit();
 				
-					$inscrit->dossard = \sportnet\model\inscrit::getMaxDossard($epreuve) + 1;
+					$inscrit->dossard = \sportnet\model\inscrit::getMaxDossard($epreuve->id) + 1;
 					$inscrit->epreuve = $epreuve;
 					$inscrit->participant = \sportnet\model\participant::getLastParticipant();
 					

@@ -153,7 +153,7 @@ EOT;
 	<h3>{$event->nom}</h3>
 
 	<p>${description}</p>
-	<p>Le {$date}</p>
+	<p><b>Date limite des inscriptions : </b>{$date}</p>
 	<h4 class="bottom_plus"><a href="{$this->script_name}/evenement/?event={$event->id}">≡ En savoir plus</a></h4>
 </div>
 EOT;
@@ -171,8 +171,8 @@ EOT;
 		$html = <<<EOT
 <div class="event large">
 	<h3 class="centre">{$this->data->nom}</h3>
-	Début le {$laDate}
-	<p>Partager : (cliquez sur le lien pour le copier dans votre presse-papier)<input type="text" id="partager" size="64"></p>
+	<b>Date limite des inscriptions : </b>{$laDate}
+	<p>Partager l'événement : (cliquez sur le lien pour le copier dans votre presse-papier)<input type="text" id="partager" size="64"></p>
 	<hr>
 	<p class="description">{$this->data->description}</p>
 EOT;
@@ -187,7 +187,7 @@ EOT;
 		}
 
 		// Récupérer épreuves
-		$html .= "<div class='line'>\n";
+		$html .= "<h5 class='centre'>Les épreuves :</h5><div class='line'>\n";
 		$lesEpreuves = $this->data->getEpreuves();
 		foreach($lesEpreuves as $epreuve) {
 			$laDate = date_format($epreuve->dateheure,"d-m-Y H:i");
@@ -195,8 +195,17 @@ EOT;
 	<div class="epreuve offset-0 span-3">
 		<h4>{$epreuve->nom}</h4>
 		<ul>
-			<li>{$laDate}</li>
-			<li>{$epreuve->distance}m</li>
+			<li><b>Date de l'épreuve : </b>{$laDate}</li>
+EOT;
+
+			if($epreuve->distance != 0)
+			{
+				$html .= <<<EOT
+				<li><b>Distance : </b>{$epreuve->distance} mètres</li>
+EOT;
+			}
+
+			$html .= <<<EOT
 		</ul>
 EOT;
 			// L'affichage est différent si les Inscriptions sont ouvertes ou non
