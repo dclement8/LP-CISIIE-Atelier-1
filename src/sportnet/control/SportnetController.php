@@ -913,9 +913,9 @@ class SportnetController {
 
 			if($uploadOk == true)
 			{
-				if(isset($_GET['epreuve']))
+				if(isset($this->request->get['epreuve']))
 				{
-					if(\sportnet\model\epreuve::findById($_GET['epreuve']))
+					if(\sportnet\model\epreuve::findById($this->request->get['epreuve']))
 					{
 						$tabObjClasser = array();
 						$erreur = false;
@@ -928,7 +928,7 @@ class SportnetController {
 						foreach($csv as $t) {
 							$tab[] = $t;
 						}
-						$tableauInscrit = \sportnet\model\inscrit::findById($_GET['epreuve']);
+						$tableauInscrit = \sportnet\model\inscrit::findById($this->request->get['epreuve']);
 						
 						for($i = 0; $i < count($tab); $i++) {
 							foreach($tableauInscrit as $unInscrit)
