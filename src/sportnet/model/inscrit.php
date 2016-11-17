@@ -29,6 +29,19 @@ class inscrit extends AbstractModel {
 		}
     }
 	
+	public function __set($attr_name, $attr_val)
+	{
+        if (property_exists( $this, $attr_name))
+		{
+			$this->$attr_name=$attr_val;
+		} 
+        else
+		{
+            $emess = $this . ": unknown member $attr_name (__set)";
+            throw new \Exception($emess);
+        }
+    }
+	
 	protected function update()
 	{
 		$update = "UPDATE inscrit SET dossard = :dossard WHERE id_epreuve = :id_epreuve AND id_participant = :id_participant";
@@ -98,7 +111,7 @@ class inscrit extends AbstractModel {
         $selectById_prep->execute();
 		$tab = null;
 		while ($ligne = $selectById_prep->fetch(\PDO::FETCH_ASSOC)) {
-			$obj = new discipline();
+			$obj = new inscrit();
 
 			$obj->dossard = $ligne['dossard'];
 			
@@ -192,12 +205,7 @@ class inscrit extends AbstractModel {
 		$select_prep->execute();
 		$obj = null;
 		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
-			$obj = new inscrit();
-
-			$obj->dossard = $ligne['dossard'];
-			
-			$obj->participant = \sportnet\model\participant::findById($ligne['id_participant']);
-			$obj->epreuve = \sportnet\model\epreuve::findById($ligne['id_epreuve']);
+			$obj = $ligne['leMax'];
 		}
 		return $obj;
 	}

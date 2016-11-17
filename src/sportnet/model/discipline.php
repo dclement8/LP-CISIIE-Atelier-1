@@ -26,6 +26,19 @@ class discipline extends AbstractModel {
 		}
     }
 	
+	public function __set($attr_name, $attr_val)
+	{
+        if (property_exists( $this, $attr_name))
+		{
+			$this->$attr_name=$attr_val;
+		} 
+        else
+		{
+            $emess = $this . ": unknown member $attr_name (__set)";
+            throw new \Exception($emess);
+        }
+    }
+	
 	protected function update()
 	{
 		$update = "UPDATE discipline SET nom = :nom WHERE id = :id";
@@ -149,7 +162,7 @@ class discipline extends AbstractModel {
 	
 	public function getEvenements()
 	{
-		$select = "SELECT * FROM evenement where id = :id";
+		$select = "SELECT * FROM evenement where id_discipline = :id";
         $select_prep = self::$db->prepare($select);
         $select_prep->bindParam(":id", $this->id, \PDO::PARAM_INT);
         $select_prep->execute();

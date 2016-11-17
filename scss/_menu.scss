@@ -6,7 +6,7 @@
     list-style-type: none;
     padding:0px;
 
-    li a
+    a
     {
         background-color:#666;
         font-size:1rem;
@@ -14,17 +14,25 @@
         padding-right:15px;
         display: inline-block;
         height:50px;
-        color:white;
         line-height:50px;
         text-align: center;
         text-decoration: none;
+
+        li
+        {
+            color:white;
+            list-style-type: none;
+        }
     }
 
-    li a:hover:not(.active):not(.disabled)
+    a:hover:not(.active):not(.disabled)
     {
         background-color:#BBB;
-        color:black;
-        cursor:pointer;
+        li
+        {
+            color:black;
+            cursor:pointer;
+        }
     }
 
     .active

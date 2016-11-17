@@ -61,7 +61,7 @@ abstract class AbstractView {
      */
     protected function renderHeader(){
         $html  = "<header class='entete'>\n";
-		$html .= "\t<a href='/'>SportNet</a>\n";
+		$html .= "\t<a href='".$this->script_name."'>SportNet</a>\n";
 		$html .= "</header>\n";
         return $html;
     }
@@ -78,13 +78,13 @@ abstract class AbstractView {
 		$auth = new \sportnet\utils\Authentification();
 		if($auth->logged_in == false)
 		{
-			$html .= "\t\t<li><a href='".$this->script_name."/connexion/'>Espace organisation</a></li>\n";
+			$html .= "\t\t<a href='".$this->script_name."/connexion/'><li>Espace organisation</li></a>\n";
 		}
 		else
 		{
-			$html .= "\t\t<li><a href='".$this->script_name."/creerEvenement/'>Créer un événement</a></li>\n";
-			$html .= "\t\t<li><a href='".$this->script_name."/espace/'>Mes événements</a></li>\n";
-			$html .= "\t\t<li><a href='".$this->script_name."/connexion/'>Déconnexion</a></li>\n";
+			$html .= "\t\t<a href='".$this->script_name."/creerEvenement/'><li>Créer un événement</li></a>\n";
+			$html .= "\t\t<a href='".$this->script_name."/espace/'><li>Mes événements</li></a>\n";
+			$html .= "\t\t<a href='".$this->script_name."/connexion/'><li>Déconnexion</li></a>\n";
 		}
 
         $html .= "\t</ul>\n";
@@ -95,11 +95,11 @@ abstract class AbstractView {
 	protected function renderBreadcrumb($breadcrumb = null) {
 		$html  = "<div>\n";
 		$html .= "\t<ul class='breadcrumb'>\n";
-		$html .= "\t\t<li><a href='/'>Accueil</a></li>\n";
+		$html .= "\t\t<a href='".$this->script_name."'><li>Accueil</li></a>\n";
 
 		if($breadcrumb !== null) {
 			foreach($breadcrumb as $elem)
-				$html .= "\t\t<li>$elem</li>\n";
+				$html .= "\t\t<a href='".$this->script_name.$elem[1]."'><li>".$elem[0]."</li></a>\n";
 		}
 
 		$html .= "\t</ul>\n";

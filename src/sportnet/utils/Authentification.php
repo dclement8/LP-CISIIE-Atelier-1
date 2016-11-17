@@ -20,20 +20,25 @@ class Authentification extends AbstractAuthentification
 	public function login($leLogin, $lePassword)
 	{
 		$infos = \sportnet\model\organisateur::findByLogin($leLogin);
-		if($infos == false)
+		if($infos == null)
 		{
 			// Login introuvable
-			throw new \Exception("Login introuvable");
+			//throw new \Exception("Login introuvable");
+			$this->logged_in = false;
 		}
 		else
 		{
 			// Login trouvé
-			if(password_verify($lePassword, $infos->pass))
+			if(password_verify($lePassword, $infos->mdp))
 			{
 				// Mot de passe juste
 				$this->user_login = $leLogin;
 				$_SESSION["user_login"] = $this->user_login;
 				$this->logged_in = true;
+			}
+			else
+			{
+				$this->logged_in = false;
 			}
 		}
 	}
