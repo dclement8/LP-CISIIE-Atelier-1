@@ -18,7 +18,7 @@ $column: ($width - $nbColumns * $gutter) / $nbColumns; // Largeur d'une colonne
 	flex-direction: column;
 }
 
-.line > div { display: flex; flex-direction: column; }
+.line > div { display: flex; flex-direction: column; margin:0; }
 
 // Ajouter une marge entre les lignes
 
