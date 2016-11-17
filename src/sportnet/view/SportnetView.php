@@ -45,8 +45,8 @@ class SportnetView extends AbstractView{
 		// $data contient les disciplines
 		// ou avoir avec findAll ?
         $html = <<<EOT
-<form method="post" action="{$this->script_name}/creerEvenement/">
-    <div class="event offset-0 span-9">
+<div class="event offset-0 span-4">
+	<form method="post" action="{$this->script_name}/creerEvenement/">
         <h3>Evénement</h3>
         <p><input type="text" name="nom" placeholder="Nom" required="required"></p>
         <p>
@@ -88,19 +88,17 @@ EOT;
             <label>Description :</label><br />
             <textarea name="description" cols="50" rows="7" required="required"></textarea>
         </p>
-    </div>
 
-    <div class="event offset-0 span-3">
         <h3>Ajouter une épreuve</h3>
         <p><input type="text" name="nom_epreuve" placeholder="Nom" required="required"></p>
         <p>
-            <label>Date :</label>
-            <input type="date" name="date_epreuve" required="required">
+            Date :<br />
+            <input type="text" name="date_epreuve" required="required">
         </p>
         <p><input type="number" name="dist_epreuve" placeholder="Distance (en m)" min="1" max="100000" required="required"></p>
-        <p><input type="submit" value="Créer"></p>
-    </div>
-</form>
+        <p><input type="submit" class="btn" value="Créer"></p>
+	</form>
+</div>
 EOT;
         return $html;
     }
@@ -112,7 +110,7 @@ EOT;
 		<h3>Connexion</h3>
 			<p><input type="text" name="login" placeholder="Login" required="required"></p>
 			<p><input type="password" name="mdp" placeholder="Mot de passe" required="required"></p>
-			<p><input type="submit" value="Connexion"></p>
+			<p><input type="submit" class="btn" value="Connexion"></p>
 	</form>
 </div>
 
@@ -129,7 +127,7 @@ EOT;
 		<p><input type="text" name="ville" placeholder="Ville" required="required"></p>
 		<p><input type="text" name="cp" maxlength="5" placeholder="Code Postal" required="required"></p>
 		<p><input type="tel" name="tel" maxlength="10" placeholder="Téléphone" required="required"></p>
-		<p><input type="submit" value="Inscription"></p>
+		<p><input type="submit" class="btn" value="Inscription"></p>
 	</form>
 </div>
 EOT;
@@ -155,7 +153,7 @@ EOT;
 
 	<p>${description}</p>
 	<p>Le {$date}</p>
-	<h4><a href="{$this->script_name}/evenement/?event={$event->id}">≡ En savoir plus</a></h4>
+	<h4 class="bottom_plus"><a href="{$this->script_name}/evenement/?event={$event->id}">≡ En savoir plus</a></h4>
 </div>
 EOT;
 			}
@@ -171,11 +169,11 @@ EOT;
 
 		$html = <<<EOT
 <div class="event large">
-	<h5 class="centre">{$this->data->nom}</h5>
-	<h6>Partager : <input type="text" id="partager" size="64"></h6>
-	<p>Début le {$laDate}</p>
+	<h3 class="centre">{$this->data->nom}</h3>
+	Début le {$laDate}
+	<p>Partager : <input type="text" id="partager" size="64"></p>
 	<hr>
-	<p>{$this->data->description}</p>
+	<p class="description">{$this->data->description}</p>
 EOT;
 
 		if($this->data->etat == 3 && time() <= $this->data->dateheureLimiteInscription->getTimestamp()) {
@@ -188,45 +186,46 @@ EOT;
 		}
 
 		// Récupérer épreuves
+		$html .= "<div class='line'>\n";
 		$lesEpreuves = $this->data->getEpreuves();
 		foreach($lesEpreuves as $epreuve) {
 			$laDate = date_format($epreuve->dateheure,"d-m-Y H:i");
 			$html .= <<<EOT
-<div class="epreuve offset-0 span-3">
-	<h4>{$epreuve->nom}</h4>
-	<ul>
-		<li>{$laDate}</li>
-		<li>{$epreuve->distance}m</li>
-	</ul>
+	<div class="epreuve offset-0 span-3">
+		<h4>{$epreuve->nom}</h4>
+		<ul>
+			<li>{$laDate}</li>
+			<li>{$epreuve->distance}m</li>
+		</ul>
 EOT;
 			// L'affichage est différent si les Inscriptions sont ouvertes ou non
 			if($inscriptions_ouvertes) {
 				$html .= <<<EOT
-	<button id="btn-spoiler-{$epreuve->id}" class="btn">S&#39;Inscrire</button>
+		<button id="btn-spoiler-{$epreuve->id}" class="btn btn-red">↓ S&#39;Inscrire</button>
 
-	<div id="spoiler-{$epreuve->id}">
-		<!-- Div masquée par défaut -->
-		<div>
-			<form method="post" action="{$this->script_name}/inscrireEpreuveViaNum/?epreuve={$epreuve->id}">
-				Numéro de participant :
-				<input type="number" name="num" required="required">
-				<input type="submit" value="Valider l'inscription">
-			</form>
-		</div>
+		<div id="spoiler-{$epreuve->id}">
+			<!-- Div masquée par défaut -->
+			<div>
+				<form method="post" action="{$this->script_name}/inscrireEpreuveViaNum/?epreuve={$epreuve->id}">
+					Numéro de participant :
+					<input type="number" name="num" required="required">
+					<input type="submit" class="btn" value="Valider l'inscription">
+				</form>
+			</div>
 
-		<div>
-			<form method="post" action="{$this->script_name}/inscrireEpreuve/?epreuve={$epreuve->id}">
-				OU
-				<p><input type="text" name="nom" placeholder="Nom" required="required"></p>
-				<p><input type="text" name="prenom" placeholder="Prénom" required="required"></p>
-				<p><input type="text" name="adresse" placeholder="Adresse" required="required"></p>
-				<p><input type="text" name="ville" placeholder="Ville" required="required"></p>
-				<p><input type="text" name="cp" placeholder="Code Postal" required="required"></p>
-				<p><input type="tel" name="tel" placeholder="Téléphone" required="required"></p>
-				<p><input type="submit" value="Inscription"></p>
-			</form>
+			<div>
+				<form method="post" action="{$this->script_name}/inscrireEpreuve/?epreuve={$epreuve->id}">
+					OU
+					<p><input type="text" name="nom" placeholder="Nom" required="required"></p>
+					<p><input type="text" name="prenom" placeholder="Prénom" required="required"></p>
+					<p><input type="text" name="adresse" placeholder="Adresse" required="required"></p>
+					<p><input type="text" name="ville" placeholder="Ville" required="required"></p>
+					<p><input type="text" name="cp" placeholder="Code Postal" required="required"></p>
+					<p><input type="tel" name="tel" placeholder="Téléphone" required="required"></p>
+					<p><input type="submit" class="btn" value="Inscription"></p>
+				</form>
+			</div>
 		</div>
-	</div>
 EOT;
 			}
 			else {
@@ -234,11 +233,11 @@ EOT;
 				$classement = \sportnet\model\classer::findById($epreuve->id);
 				if($classement !== null && $classement !== false) {
 					$html .= <<<EOT
-	<button id="btn-spoiler-{$epreuve->id}" class="btn">Classement</button>
+		<button id="btn-spoiler-{$epreuve->id}" class="btn btn-red">↓ Classement</button>
 
-	<div id="spoiler-{$epreuve->id}">
-		<!-- Div masquée par défaut -->
-		<table>
+		<div id="spoiler-{$epreuve->id}">
+			<!-- Div masquée par défaut -->
+			<table>
 EOT;
 					$i = 1;
 					foreach($classement as $participant) {
@@ -254,6 +253,7 @@ EOT;
 			$html .= "</div>\n";
 		}
 
+		$html .= "</div>\n";
 		return $html;
 	}
 
@@ -270,7 +270,10 @@ EOT;
 	<h3>{$event->nom}</h3>
 
 	<form method="post" action="{$this->script_name}/creerEvenement/?event={$event->id}">
-		<p><input type="text" name="nom" placeholder="Nom" value="{$event->nom}" required="required"></p>
+		<p>
+			<label>Nom :</label>
+			<input type="text" name="nom" placeholder="Nom" value="{$event->nom}" required="required">
+		</p>
 		<p>
 			<label>Discipline :</label>
 			<select name="discipline">
@@ -287,9 +290,8 @@ EOT;
 			$html .= <<<EOT
 			</select>
 		</p>
-		<div>
-			Etat :
-			<p>
+		<fieldset>
+			<legend>Etat :</legend>
 				<label>Invisible :</label>
 				<input type="radio" name="etat" value="1"
 EOT;
@@ -297,18 +299,16 @@ EOT;
 				$html .= ' checked';
 			$html .= <<<EOT
 				>
-			</p>
-			<p>
-				<label>Visible (Inscription fermées) :</label>
+				<br />
+				<label>Visible<br />(Inscription fermées)</label>
 				<input type="radio" name="etat" value="2"
 EOT;
 			if($event->etat == 2)
 				$html .= ' checked';
 			$html .= <<<EOT
 				>
-			</p>
-			<p>
-				<label>Visible (Inscription ouvertes) :</label>
+				<br />
+				<label>Visible<br />(Inscription ouvertes)</label>
 				<input type="radio" name="etat" value="3"
 EOT;
 			if($event->etat == 3)
@@ -318,13 +318,13 @@ EOT;
 
 			$html .= <<<EOT
 				>
-			</p>
-		</div>
+		</fieldset>
 		<p>
-			<label>Date limite d&#39;inscription (dd-mm-aaaa hh:mm) :</label>
+			<label>Date limite d&#39;inscription<br />(dd-mm-aaaa hh:mm)</label>
 			<input type="text" name="date" value="{$laDate}" required="required">
 		</p>
 		<p>
+			<br />
 			<label>Tarif :</label>
 			<input type="number" name="tarif" min="0" value="{$event->tarif}" required="required"> €
 		</p>
@@ -334,8 +334,8 @@ EOT;
 		</p>
 
 		<p>
-			<input type="submit" value="Modifier">
-			<button class="delete" id="{$this->script_name}/supprimerEvenement/?event={$event->id}">Supprimer</button>
+			<input type="submit" class="btn" value="Modifier">
+			<button class="btn delete" id="{$this->script_name}/supprimerEvenement/?event={$event->id}">Supprimer</button>
 		</p>
 	</form>
 EOT;
@@ -357,11 +357,11 @@ EOT;
 		<form method="post" action="{$this->script_name}/creerEpreuve/?event={$event->id}">
 			<p><input type="text" name="nom_epreuve" placeholder="Nom" required="required"></p>
 			<p>
-				<label>Date :</label>
-				<input type="date" name="date_epreuve" required="required">
+				Date :<br />
+				<input type="text" name="date_epreuve" required="required">
 			</p>
 			<p><input type="number" name="dist_epreuve" placeholder="Distance (en m)" min="1" max="100000" required="required"></p>
-			<p><input type="submit" value="Ajouter"></p>
+			<p><input type="submit" class="btn" value="Ajouter"></p>
 		</form>
 	</div>
 EOT;
@@ -381,26 +381,29 @@ EOT;
 		<form method="post" action="{$this->script_name}/creerEpreuve/?event={$event->id}&epreuve={$epreuve->id}">
 			<p><input type="text" name="nom_epreuve" placeholder="Nom" value="{$epreuve->nom}" required="required"></p>
 			<p>
-				<label>Date :</label>
+				Date :<br />
 				<input type="text" name="date_epreuve" value="{$laDate}" required="required">
 			</p>
 			<p><input type="number" name="dist_epreuve" placeholder="Distance (en m)" value="{$epreuve->distance}" min="1" max="100000" required="required"></p>
 			<p>
-				<input type="submit" value="Modifier">
-				<button class="delete" id="{$this->script_name}/supprimerEpreuve/?epreuve={$epreuve->id}">Supprimer</button>
+				<input type="submit" class="btn" value="Modifier">
+				<button class="btn delete" id="{$this->script_name}/supprimerEpreuve/?epreuve={$epreuve->id}">Supprimer</button>
 			</p>
 		</form>
+		<hr>
 EOT;
 				if(!$inscriptions_ouvertes) {
 					$html .= <<<EOT
 		<form method="post" enctype="multipart/form-data" action="{$this->script_name}/uploadClassement/?epreuve={$epreuve->id}">
-			<a href="{$this->script_name}/telechargerListe/?epreuve={$epreuve->id}" id="liste-{$epreuve->id}">Télécharger liste d&#39;engagement</a><br/>
-			Upload classement : <input type="file" name="csv"> <input type="submit" name="uploader" value="Uploader le classement">
+			<p><a href="{$this->script_name}/telechargerListe/?epreuve={$epreuve->id}" id="liste-{$epreuve->id}">Télécharger liste d&#39;engagement</a></p>
+			<p>
+				Upload classement : <input type="file" name="csv"> <input type="submit" class="btn" name="uploader" value="Uploader le classement">
+			</p>
 		</form>
 EOT;
 				}
 
-				$html .= "\t\tParticipants :\n";
+				$html .= "\t\t<hr><strong>Participants :</strong>\n";
 				$html .= "\t\t<table>\n";
 
 				$participants = \sportnet\model\inscrit::findById($epreuve->id);
