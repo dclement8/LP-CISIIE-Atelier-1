@@ -1,4 +1,5 @@
-﻿body
+* { box-sizing: border-box; }
+body
 {
 	font-family: "Arial","Helvetica Neue","Helvetica","sans-serif";
 	font-size:1em;
@@ -175,7 +176,6 @@ ul li
 	.left-item
 	{
 		width:12em;
-		box-sizing:border-box;
 		display:inline-block;
 		background-color:#666699;
 		vertical-align: top;
@@ -187,7 +187,6 @@ ul li
 	{
 		width:calc(100% - 12em);
 		min-width:25em;
-		box-sizing:border-box;
 		display:inline-block;
 		background-color:#DDDDDD;
 		margin:auto;
@@ -217,7 +216,6 @@ section, form
 	//background-color: white;
 	//border: 1px solid #CCC;
 	padding-top: .5rem;
-	box-sizing: border-box;
 	//max-width:300px;
 
 	h1
@@ -235,11 +233,7 @@ section, form
 		margin-bottom:10px;
 	}
 
-	.btn
-	{
-		width:100%;
-		box-sizing: border-box;
-	}
+	.btn { width:100%; }
 }
 
 .line section
