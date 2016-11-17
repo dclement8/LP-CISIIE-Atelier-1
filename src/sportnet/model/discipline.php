@@ -55,10 +55,9 @@ class discipline extends AbstractModel {
 	
 	protected function insert()
 	{
-		$insert = "INSERT INTO discipline VALUES(:id, :nom)";
+		$insert = "INSERT INTO discipline VALUES(NULL, :nom)";
         $insert_prep = self::$db->prepare($insert);
 		$insert_prep->bindParam(':nom', $this->nom, \PDO::PARAM_STR);
-		$insert_prep->bindParam(':id', $this->id, \PDO::PARAM_INT);
 		if($insert_prep->execute()){
 			return true;
 		}

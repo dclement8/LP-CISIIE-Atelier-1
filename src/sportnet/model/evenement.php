@@ -71,7 +71,7 @@ class evenement extends AbstractModel {
 	
 	protected function insert()
 	{
-		$insert = "INSERT INTO evenement VALUES(:id, :login, :mdp, :nom, :prenom, :adresse, :cp, :ville, :tel, :id_discipline, :id_organisateur)";
+		$insert = "INSERT INTO evenement VALUES(NULL, :nom, :description, :etat, :dateheureLimiteInscription, :tarif, :id_discipline, :id_organisateur)";
         $insert_prep = self::$db->prepare($insert);
 		
 		$dateHeureString = date_format(date_create($this->dateheureLimiteInscription),"Y-m-d H:i:s");
@@ -83,7 +83,6 @@ class evenement extends AbstractModel {
 		$insert_prep->bindParam(':tarif', $this->tarif, \PDO::PARAM_STR);
 		$insert_prep->bindParam(':id_discipline', $this->discipline->id, \PDO::PARAM_INT);
 		$insert_prep->bindParam(':id_organisateur', $this->organisateur->id, \PDO::PARAM_INT);
-		$insert_prep->bindParam(':id', $this->id, \PDO::PARAM_INT);
 		if($insert_prep->execute()){
 			return true;
 		}
@@ -262,6 +261,27 @@ class evenement extends AbstractModel {
 
 			$obj->id = $ligne['id'];
 			$obj->nom = $ligne['nom'];
+		}
+		return $obj;
+	}
+	
+	public static function getLastEvenement()
+	{
+		$select = "SELECT * FROM evenement ORDER BY id DESC LIMIT 0, 1";
+        $select_prep = self::$db->prepare($select);
+		$select_prep->execute();
+        $obj = null;
+		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
+			$obj = new evenement();
+
+			$obj->id = $ligne['id'];
+			$obj->nom = $ligne['nom'];
+			$obj->description  = $ligne['description'];
+			$obj->etat = $ligne['etat'];
+			$obj->dateheureLimiteInscription = date_create($ligne['dateheureLimiteInscription']);
+			$obj->tarif = $ligne['tarif'];
+			$obj->discipline = \sportnet\model\discipline::findById($ligne['id_discipline']);
+			$obj->organisateur = \sportnet\model\organisateur::findById($ligne['id_organisateur']);
 		}
 		return $obj;
 	}
