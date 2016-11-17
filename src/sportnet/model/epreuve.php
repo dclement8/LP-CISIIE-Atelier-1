@@ -64,16 +64,15 @@ class epreuve extends AbstractModel {
 	
 	protected function insert()
 	{
-		$insert = "INSERT INTO epreuve VALUES(:id, :nom, :distance, :dateheure, :id_evenement)";
+		$insert = "INSERT INTO epreuve VALUES(NULL, :nom, :distance, :dateheure, :id_evenement)";
         $insert_prep = self::$db->prepare($insert);
 		
 		$dateHeureString = date_format(date_create($this->dateheure),"Y-m-d H:i:s");
 		
-		$insert_prep->bindParam(':id', $this->id, \PDO::PARAM_INT);
 		$insert_prep->bindParam(':nom', $this->nom, \PDO::PARAM_STR);
         $insert_prep->bindParam(':distance', $this->distance, \PDO::PARAM_INT);
         $insert_prep->bindParam(':dateheure', $dateHeureString, \PDO::PARAM_STR);
-		$insert_prep->bindParam(':id_evenement', $this->evenement_id, \PDO::PARAM_INT);
+		$insert_prep->bindParam(':id_evenement', $this->evenement->id, \PDO::PARAM_INT);
 		if($insert_prep->execute()){
 			return true;
 		}

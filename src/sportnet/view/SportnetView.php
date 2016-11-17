@@ -206,7 +206,7 @@ EOT;
 	<div id="spoiler-{$epreuve->id}">
 		<!-- Div masquée par défaut -->
 		<div>
-			<form method="post" action="{$this->script_name}/inscrireEpreuveViaNum/">
+			<form method="post" action="{$this->script_name}/inscrireEpreuveViaNum/?epreuve={$epreuve->id}">
 				Numéro de participant :
 				<input type="number" name="num" required="required">
 				<input type="submit" value="Valider l'inscription">
@@ -214,7 +214,7 @@ EOT;
 		</div>
 
 		<div>
-			<form method="post" action="{$this->script_name}/inscrireEpreuve/">
+			<form method="post" action="{$this->script_name}/inscrireEpreuve/?epreuve={$epreuve->id}">
 				OU
 				<p><input type="text" name="nom" placeholder="Nom" required="required"></p>
 				<p><input type="text" name="prenom" placeholder="Prénom" required="required"></p>
@@ -336,7 +336,8 @@ EOT;
 	</form>
 EOT;
 
-			if($event->etat == 3 && time() <= $this->data->dateheureLimiteInscription->getTimestamp()) {
+			
+			if($event->etat == 3 && time() <= $event->dateheureLimiteInscription->getTimestamp()) {
 				$inscriptions_ouvertes = true;
 			}
 			else
@@ -387,7 +388,7 @@ EOT;
 					$html .= <<<EOT
 		<form method="post" enctype="multipart/form-data" action="{$this->script_name}/uploadClassement/?epreuve={$epreuve->id}">
 			<a href="{$this->script_name}/telechargerListe/?epreuve={$epreuve->id}" id="liste-{$epreuve->id}">Télécharger liste d&#39;engagement</a><br/>
-			Upload classement : <input type="file" name="csv"> <input type="submit" value="Uploader le classement">
+			Upload classement : <input type="file" name="csv"> <input type="submit" name="uploader" value="Uploader le classement">
 		</form>
 EOT;
 				}
@@ -405,7 +406,7 @@ EOT;
 				$html .= "\t\t</table>\n";
 			}
 
-			$html .= "\t</div>\n";
+			$html .= "\t</div></div>\n";
 		}
 		}
 		return $html;

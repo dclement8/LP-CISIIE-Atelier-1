@@ -69,9 +69,8 @@ class organisateur extends AbstractModel {
 	
 	protected function insert()
 	{
-		$insert = "INSERT INTO organisateur VALUES(:id, :login, :mdp, :nom, :prenom, :adresse, :cp, :ville, :tel)";
+		$insert = "INSERT INTO organisateur VALUES(NULL, :login, :mdp, :nom, :prenom, :adresse, :cp, :ville, :tel)";
         $insert_prep = self::$db->prepare($insert);
-		$insert_prep->bindParam(':id', $this->id, \PDO::PARAM_INT);
 		$insert_prep->bindParam(':login', $this->login, \PDO::PARAM_STR);
 		$insert_prep->bindParam(':mdp', $this->mdp, \PDO::PARAM_STR);
 		$insert_prep->bindParam(':nom', $this->nom, \PDO::PARAM_STR);

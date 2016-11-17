@@ -112,6 +112,9 @@ class SportnetController {
 						$evenement->dateheureLimiteInscription = $date;
 						$evenement->tarif = $tarif;
 						$evenement->discipline = \sportnet\model\discipline::findById($discipline);
+						$evenement->organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+						
+						//var_dump($evenement->discipline);
 						
 						$retour = $evenement->save();
 						
@@ -123,7 +126,8 @@ class SportnetController {
 							$epreuve->nom = $nom_epreuve;
 							$epreuve->distance = $dist_epreuve;
 							$epreuve->dateheure = $date_epreuve;
-							$epreuve->evenement = $evenement;
+							
+							$epreuve->evenement = \sportnet\model\evenement::getLastEvenement();
 							
 							
 							$retour = $epreuve->save();
@@ -152,7 +156,7 @@ class SportnetController {
 						else
 						{
 							$_SESSION["message"][] = 4;
-							$_SESSION["message"][] = "Erreur lors de l'enregistrement de l'événement de l'événement.";
+							$_SESSION["message"][] = "Erreur lors de l'enregistrement de l'événement";
 							
 							$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
 				
@@ -187,6 +191,7 @@ class SportnetController {
 						$evenement->dateheureLimiteInscription = $date;
 						$evenement->tarif = $tarif;
 						$evenement->discipline = \sportnet\model\discipline::findById($discipline);
+						$evenement->organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
 						
 						$retour = $evenement->save();
 						
@@ -200,7 +205,7 @@ class SportnetController {
 						else
 						{
 							$_SESSION["message"][] = 4;
-							$_SESSION["message"][] = "Erreur lors de l'enregistrement de l'événement de l'événement.";
+							$_SESSION["message"][] = "Erreur lors de l'enregistrement de l'événement";
 						}
 						
 						$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
@@ -683,9 +688,9 @@ class SportnetController {
 				{
 					$inscrit = new \sportnet\model\inscrit();
 				
-					$inscrit->dossard = \sportnet\model\inscrit::getMaxDossard($epreuve);
+					$inscrit->dossard = \sportnet\model\inscrit::getMaxDossard($epreuve) + 1;
 					$inscrit->epreuve = $epreuve;
-					$inscrit->participant = $participant;
+					$inscrit->participant = \sportnet\model\participant::getLastParticipant();
 					
 					$retour = $inscrit->save();
 					
@@ -693,7 +698,7 @@ class SportnetController {
 					if($retour == true)
 					{
 						$_SESSION["message"][] = 1;
-						$_SESSION["message"][] = "Vous êtes à présent inscrit à cette épreuve. Notez votre numéro de participant : ".\sportnet\model\participant::findByName($nom)->id;
+						$_SESSION["message"][] = "Vous êtes à présent inscrit à cette épreuve. Notez votre numéro de participant : ".\sportnet\model\participant::getLastParticipant()->id;
 					}
 					else
 					{
@@ -766,18 +771,18 @@ class SportnetController {
 				{
 					$dir = "upload/";
 					$nomFichier = 'listeParticipants_epreuve'.$this->request->get["epreuve"].'_'.time().'.csv';
-					$csv = new SplFileObject($dir.$nomFichier, 'w');
+					$csv = new \SplFileObject($dir.$nomFichier, 'w');
 					
 					// Entête CSV
 					$infoInscrit = array();
-					$infoInscrit[] = "Numéro dossard";
-					$infoInscrit[] = "Numéro participant";
+					$infoInscrit[] = "Numero dossard";
+					$infoInscrit[] = "Numero participant";
 					$infoInscrit[] = "Nom";
-					$infoInscrit[] = "Prénom";
+					$infoInscrit[] = "Prenom";
 					$infoInscrit[] = "Rue";
 					$infoInscrit[] = "Code Postal";
 					$infoInscrit[] = "Ville";
-					$infoInscrit[] = "Téléphone";
+					$infoInscrit[] = "Telephone";
 					$tabInscrits[] = $infoInscrit;
 					
 					foreach($lesInscrits as $unInscrit)
@@ -838,7 +843,7 @@ class SportnetController {
 		
 		if($auth->logged_in == true)
 		{
-
+			
 			$fichier = "NULL";
 			$target_dir = "upload/";
 			$target_file = $target_dir . basename($_FILES["csv"]["name"]);
@@ -849,7 +854,9 @@ class SportnetController {
 
 			if($_FILES["csv"]["tmp_name"] == "")
 			{
-				
+				$_SESSION["message"][] = 3;
+				$_SESSION["message"][] = "Aucun fichier reçu.";
+				$uploadOk = false;
 			}
 			else
 			{
@@ -886,8 +893,8 @@ class SportnetController {
 						//chemin du fichier
 						$fichier = "upload/$nomfichier";
 						$tab = array();
-						$csv = new SplFileObject($fichier); // On instancie l'objet SplFileObject
-						$csv->setFlags(SplFileObject::READ_CSV); // On indique que le fichier est de type CSV
+						$csv = new \SplFileObject($fichier); // On instancie l'objet SplFileObject
+						$csv->setFlags(\SplFileObject::READ_CSV); // On indique que le fichier est de type CSV
 						$csv->setCsvControl(';'); // On indique le caractère délimiteur, ici c'est la virgule
 						foreach($csv as $t) {
 							$tab[] = $t;
@@ -945,13 +952,13 @@ class SportnetController {
 				// Suppression du fichier CSV des fichiers uploadés.
 				unlink("upload/".$nomfichier);
 				
-				$ctrl = new \sportnet\control\SportnetController($this->request);
-				$ctrl->listEvents();
+				$view = new \sportnet\view\SportnetView(\sportnet\model\organisateur::findByLogin($auth->user_login)->getEvenements());
+				$view->render('espaceOrganisateur');
 			}
 			else
 			{
-				$ctrl = new \sportnet\control\SportnetController($this->request);
-				$ctrl->listEvents();
+				$view = new \sportnet\view\SportnetView(\sportnet\model\organisateur::findByLogin($auth->user_login)->getEvenements());
+				$view->render('espaceOrganisateur');
 			}
 		}
 		else

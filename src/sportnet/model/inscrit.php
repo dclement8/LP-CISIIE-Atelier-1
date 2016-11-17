@@ -59,11 +59,11 @@ class inscrit extends AbstractModel {
 	
 	protected function insert()
 	{
-		$insert = "INSERT INTO inscrit VALUES(:dossard, :id_epreuve, :id_participant)";
+		$insert = "INSERT INTO inscrit VALUES(:dossard, :id_participant, :id_epreuve)";
         $insert_prep = self::$db->prepare($insert);
 		$insert_prep->bindParam(':dossard', $this->dossard, \PDO::PARAM_INT);
 		$insert_prep->bindParam(':id_epreuve', $this->epreuve->id, \PDO::PARAM_INT);
-		$delete_prep->bindParam(':id_participant', $this->participant->id, \PDO::PARAM_INT);
+		$insert_prep->bindParam(':id_participant', $this->participant->id, \PDO::PARAM_INT);
 		if($insert_prep->execute()){
 			return true;
 		}
@@ -74,12 +74,7 @@ class inscrit extends AbstractModel {
 	
 	public function save()
 	{
-		if(is_null($this->epreuve)){
-			return $this->insert();
-		}
-		else{
-			return $this->update();
-		}
+		return $this->insert();
 	}
 	
 	public function delete()
@@ -203,9 +198,13 @@ class inscrit extends AbstractModel {
 		$select_prep = self::$db->prepare($select);
 		$select_prep->bindParam(":id_epreuve", $leIdEpreuve, \PDO::PARAM_INT);
 		$select_prep->execute();
-		$obj = null;
+		$obj = 0;
 		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
 			$obj = $ligne['leMax'];
+		}
+		if($obj == null)
+		{
+			$obj = 0;
 		}
 		return $obj;
 	}
