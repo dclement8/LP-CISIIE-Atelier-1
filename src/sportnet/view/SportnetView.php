@@ -105,8 +105,8 @@ EOT;
 		<p><input type="text" name="prenom" placeholder="Prénom" required="required"></p>
 		<p><input type="text" name="adresse" placeholder="Adresse" required="required"></p>
 		<p><input type="text" name="ville" placeholder="Ville" required="required"></p>
-		<p><input type="text" name="cp" placeholder="Code Postal" required="required"></p>
-		<p><input type="tel" name="tel" placeholder="Téléphone" required="required"></p>
+		<p><input type="text" name="cp" maxlength="5" placeholder="Code Postal" required="required"></p>
+		<p><input type="tel" name="tel" maxlength="10" placeholder="Téléphone" required="required"></p>
 		<p><input type="submit" value="Inscription"></p>
 	</form>
 </div>
