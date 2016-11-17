@@ -17,6 +17,16 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small, h1.soustitre, h2.sou
 	color:grey;
 	font-size:18px;
 }
+table { margin: auto; }
+td {
+	border: 1px solid #D2D2D2;
+	border-collapse: collapse;
+	padding: .4rem;
+	text-align: left;
+	color: black;
+}
+th { background-color: grey; padding: .4rem; }
+tr:nth-child(odd) { background-color: #D2D2D2; }
 
 mark
 {

@@ -77,13 +77,13 @@ $column: ($width - $nbColumns * $gutter) / $nbColumns; // Largeur d'une colonne
 }
 
 // Mobile
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 800px) {
 	[class*="span-"] { width: 100%; }
 	[class*="offset-"] { margin-left: $gutter/2; margin-right: $gutter/2; }
 	.content { order: -1; }
 }
 
 // Desktop
-@media screen and (min-width: 700px) {
+@media screen and (min-width: 800px) {
 	.line { flex-direction: row; }
 }
