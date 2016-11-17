@@ -189,7 +189,12 @@ header {
     text-decoration: none;
     font-weight: bold;
     color: red;
-    font-size: 1.25em; }
+    font-size: 1.5em; }
+  header a:hover {
+    text-decoration: none;
+    font-weight: bold;
+    color: white;
+    font-size: 1.5em; }
 
 input[type="text"], input[type="password"], input[type="number"], input[type="tel"], select {
   min-height: 20px;
