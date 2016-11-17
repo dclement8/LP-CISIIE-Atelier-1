@@ -406,7 +406,7 @@ EOT;
     			break;
 
             case 'authentification':
-                $breadcrumb = $this->renderBreadcrumb(array(array('Authntification', '/connexion/')));
+                $breadcrumb = $this->renderBreadcrumb(array(array('Authentification', '/connexion/')));
                 $main = $this->authentification();
                 break;
 
