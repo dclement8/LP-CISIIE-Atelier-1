@@ -296,11 +296,7 @@ EOT;
 			</p>
 		</div>
 		<p>
-<<<<<<< HEAD
-			<label>Date limite d&#39;inscription :</label>
-=======
-			<label>Date limite d''inscription (dd-mm-aaaa hh:mm) :</label>
->>>>>>> refs/remotes/origin/master
+			<label>Date limite d&#39;inscription (dd-mm-aaaa hh:mm) :</label>
 			<input type="text" name="date" value="{$laDate}" required="required">
 		</p>
 		<p>
