@@ -666,11 +666,14 @@ class SportnetController {
 				// Vérifier si le participant est déjà inscrit
 				$lesInscrits = \sportnet\model\inscrit::findById($this->request->get["epreuve"]);
 				$estDejaInscrit = false;
-				foreach($lesInscrits as $unInscrit)
+				if($lesInscrits != null)
 				{
-					if($unInscrit->participant->id == $this->request->post["num"])
+					foreach($lesInscrits as $unInscrit)
 					{
-						$estDejaInscrit = true;
+						if($unInscrit->participant->id == $this->request->post["num"])
+						{
+							$estDejaInscrit = true;
+						}
 					}
 				}
 				
