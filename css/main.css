@@ -474,7 +474,10 @@ p {
   background-color: #AAA;
   min-height: 25px;
   list-style-type: none;
-  padding: 0px; }
+  padding: 0px;
+  border-bottom-style: solid;
+  border-bottom-color: red;
+  border-bottom-width: 4px; }
   .breadcrumb li {
     font-size: 1rem;
     padding-left: 15px;
