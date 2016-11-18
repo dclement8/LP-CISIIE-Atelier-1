@@ -1005,7 +1005,17 @@ class SportnetController {
 												$objclasser = new \sportnet\model\classer();
 												$heure = $tab[$i][2];
 												$number = explode(":", $heure);
-												$res = ($number[0]*100*60*60) + ($number[1]*100*60) + ($number[2]*100) + $number[3];
+												
+												// Test si le temps est incorrect.
+												if((isset($number[1])) && (isset($number[2])) && (isset($number[3])))
+												{
+													$res = ($number[0]*100*60*60) + ($number[1]*100*60) + ($number[2]*100) + $number[3];
+												}
+												else
+												{
+													// Cas incorrect alors on met 0
+													$res = 0;
+												}
 
 												$objclasser->position = $tab[$i][0];
 												$objclasser->temps = $res;

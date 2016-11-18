@@ -1,6 +1,6 @@
 // Variables
 $width: 100%;	// Taille de la grille
-$gutter: 2%;	// Taille de la gouttière
+$gutter: 1%;	// Taille de la gouttière
 $nbColumns: 12;	// Nombre de colonnes
 
 $column: ($width - $nbColumns * $gutter) / $nbColumns; // Largeur d'une colonne
@@ -11,14 +11,15 @@ $column: ($width - $nbColumns * $gutter) / $nbColumns; // Largeur d'une colonne
 // Ligne
 .line {
 	padding: 0;
-	width: $width;
+	max-width: $width;
 	display: flex;
+	flex-wrap: wrap;
 
 	// Mobile
 	flex-direction: column;
 }
 
-.line > div { display: flex; flex-direction: column; margin:0; }
+.line > div { display: flex; flex-direction: column; }
 
 // Ajouter une marge entre les lignes
 

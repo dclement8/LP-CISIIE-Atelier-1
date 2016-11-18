@@ -93,7 +93,7 @@ EOT;
         <h3>Ajouter une épreuve</h3>
         <p><input type="text" name="nom_epreuve" placeholder="Nom" required="required"></p>
         <p>
-            Date :<br />
+            Date (dd-mm-aaaa hh:mm) :<br />
             <input type="text" name="date_epreuve" required="required">
         </p>
         <p><input type="number" name="dist_epreuve" placeholder="Distance (en m)" min="1" max="100000" required="required"></p>
@@ -109,7 +109,7 @@ EOT;
 <div class="bloc offset-0 span-6">
 	<form method="post" action="{$this->script_name}/connexion/">
 		<h3>Connexion</h3>
-			<p>En tant qu'organisateur, connectez-vous pour accéder à la gestion de vos événements.</p>
+			<p>En tant qu&#39;organisateur, connectez-vous pour accéder à la gestion de vos événements.</p>
 			<p><input type="text" name="login" placeholder="Login" required="required"></p>
 			<p><input type="password" name="mdp" placeholder="Mot de passe" required="required"></p>
 			<p><input type="submit" class="btn" value="Connexion"></p>
@@ -145,16 +145,16 @@ EOT;
 			if($event->etat != 1)
 			{
 				$description = $event->description;
-				if(strlen($description) > 1000)
-					$description = substr($description, 0, 1000).' [...]';
+				if(strlen($description) > 500)
+					$description = substr($description, 0, 500).' [...]';
 					$date = date_format($event->dateheureLimiteInscription,"d-m-Y H:i");
 
 				$html .= <<<EOT
 <div class="event offset-0 span-3">
 	<h3>{$event->nom}</h3>
 
-	<p>${description}</p>
-	<p><b>Date limite des inscriptions : </b>{$date}</p>
+	<p class="justifie">${description}</p>
+	<p class="padding-bottom"><b>Date limite des inscriptions : </b>{$date}</p>
 	<h4 class="bottom_plus"><a href="{$this->script_name}/evenement/?event={$event->id}">≡ En savoir plus</a></h4>
 </div>
 EOT;
@@ -178,7 +178,7 @@ EOT;
 	<p><b>Organisé par : </b>{$this->data->organisateur->prenom} {$this->data->organisateur->nom}<br/>
 	{$this->data->organisateur->adresse} {$this->data->organisateur->cp} {$this->data->organisateur->ville} ; Téléphone : {$this->data->organisateur->tel}
 	</p><br/>
-	<p><b>Partager l'événement : </b>(cliquez sur le lien pour le copier dans votre presse-papier)<input type="text" id="partager" size="64"></p>
+	<p><b>Partager l&#39;événement : </b>(cliquez sur le lien pour le copier dans votre presse-papier)<input type="text" id="partager" size="64"></p>
 	<hr>
 	<p class="description">{$this->data->description}</p>
 EOT;
@@ -201,7 +201,7 @@ EOT;
 	<div class="epreuve offset-0 span-3">
 		<h4>{$epreuve->nom}</h4>
 		<ul>
-			<li><b>Date de l'épreuve : </b>{$laDate}</li>
+			<li><b>Date de l&#39;épreuve : </b>{$laDate}</li>
 EOT;
 
 			if($epreuve->distance != 0)
@@ -373,7 +373,7 @@ EOT;
 		<form method="post" action="{$this->script_name}/creerEpreuve/?event={$event->id}">
 			<p><input type="text" name="nom_epreuve" placeholder="Nom" required="required"></p>
 			<p>
-				Date :<br />
+				Date (dd-mm-aaaa hh:mm) :<br />
 				<input type="text" name="date_epreuve" required="required">
 			</p>
 			<p><input type="number" name="dist_epreuve" placeholder="Distance (en m)" min="1" max="100000" required="required"></p>
@@ -397,7 +397,7 @@ EOT;
 		<form method="post" action="{$this->script_name}/creerEpreuve/?event={$event->id}&epreuve={$epreuve->id}">
 			<p><input type="text" name="nom_epreuve" placeholder="Nom" value="{$epreuve->nom}" required="required"></p>
 			<p>
-				Date :<br />
+				Date (dd-mm-aaaa hh:mm) :<br />
 				<input type="text" name="date_epreuve" value="{$laDate}" required="required">
 			</p>
 			<p><input type="number" name="dist_epreuve" placeholder="Distance (en m)" value="{$epreuve->distance}" min="1" max="100000" required="required"></p>
@@ -411,7 +411,7 @@ EOT;
 					$html .= <<<EOT
 		<hr><form method="post" enctype="multipart/form-data" action="{$this->script_name}/uploadClassement/?epreuve={$epreuve->id}">
 EOT;
-					
+
 					if(\sportnet\model\inscrit::findById($epreuve->id) != null)
 					{
 						$html .= <<<EOT
@@ -421,13 +421,14 @@ EOT;
 					else
 					{
 						$html .= <<<EOT
-			<p>La liste d'engagement n'est pas disponible car il n'y a aucun inscrit.</p>
+			<p>La liste d&#39;engagement n&#39;est pas disponible car il n'y a aucun inscrit.</p>
 EOT;
 					}
-			
+
 					$html .= <<<EOT
 			<p>
-				Upload classement : <input type="file" name="csv"> <input type="submit" class="btn" name="uploader" value="Uploader le classement">
+				<b>INFO : </b>Pour créer votre classement en CSV vous devez préciser pour chaque ligne, en premier : la position du participant, en deuxième : son numéro de dossard et en dernier son temps sous la forme (hh:mm:ss:cs).<br/>
+				<b>Upload classement : </b><input type="file" name="csv"> <input type="submit" class="btn" name="uploader" value="Uploader le classement">
 			</p>
 		</form>
 EOT;
@@ -530,7 +531,7 @@ EOT;
 		<div class="container line">
 			${main}
 		</div>
-		
+
 		${footer}
     </body>
 </html>
