@@ -5,6 +5,7 @@ body
 	font-size:1em;
 	margin:0;
 	background-color:#E8E8E8;
+	overflow-x: hidden;
 }
 h1, h2, h3, h4, h5, h6
 {
@@ -298,11 +299,6 @@ hr {
 	width: 100%;
 }
 
-.bottom_plus {
-	margin:0;
-	padding: 0;
-}
-
 .epreuve {
 	margin-top: 1rem;
 	border : 1px solid #D2D2D2;
@@ -323,13 +319,28 @@ hr {
 
 .event, .bloc {
 	background-color: white;
-	padding: .4rem;
+	font-size: .8rem;
+	text-align: left;
+	position: relative;
 	h3, h4 {
 		background-color: red;
 		color: white;
+		padding: 0 5px 0;
 		a {
 			color: white;
+			font-size: 1rem;
 		}
+	}
+
+	.padding-bottom { padding-bottom: 30px; }
+
+	.bottom_plus {
+		margin: 0;
+		padding: 0 5px 0;
+		background-color: #333333;
+		bottom: 0;
+		left: 0; right: 0;
+		position: absolute;
 	}
 }
 
@@ -340,8 +351,24 @@ hr {
 footer
 {
 	background-color:black;
-	color:white;
-	padding:15px;
+	color: #D2D2D2;
+	padding: .4rem;
 	width:100%;
-	bottom:0px;
+	font-size: .8rem;
+	position: fixed; bottom: 0; left: 0; right: 0;
+}
+
+div.line div, div.line-margin div {
+	border: 1px solid #CCC;
+	border-radius: .4rem;
+	margin-top: .5rem;
+	margin-bottom: .5rem;
+}
+
+.container {
+	margin-bottom: 3rem;
+}
+
+p {
+	padding: 0 10px 0;
 }
