@@ -109,6 +109,7 @@ EOT;
 <div class="bloc offset-0 span-6">
 	<form method="post" action="{$this->script_name}/connexion/">
 		<h3>Connexion</h3>
+			<p>En tant qu'organisateur, connectez-vous pour accéder à la gestion de vos événements.</p>
 			<p><input type="text" name="login" placeholder="Login" required="required"></p>
 			<p><input type="password" name="mdp" placeholder="Mot de passe" required="required"></p>
 			<p><input type="submit" class="btn" value="Connexion"></p>
@@ -118,7 +119,7 @@ EOT;
 <div class="bloc offset-0 span-6">
 	<form method="post" action="{$this->script_name}/inscrireOrganisateur/">
 		<h3>Inscription</h3>
-
+		<p>Vous êtes organisateur ? Vous n'êtes pas encore inscrit ? Remplissez ce formulaire d'inscription pour gérer vos événements sur la plateforme en ligne SportNet.</p>
 		<p><input type="text" name="login" placeholder="Login" required="required"></p>
 		<p><input type="password" name="mdp" placeholder="Mot de passe" required="required"></p>
 		<p><input type="password" name="mdp2" placeholder="Confirmation" required="required"></p>
@@ -153,7 +154,7 @@ EOT;
 	<h3>{$event->nom}</h3>
 
 	<p>${description}</p>
-	<p>Le {$date}</p>
+	<p><b>Date limite des inscriptions : </b>{$date}</p>
 	<h4 class="bottom_plus"><a href="{$this->script_name}/evenement/?event={$event->id}">≡ En savoir plus</a></h4>
 </div>
 EOT;
@@ -171,8 +172,13 @@ EOT;
 		$html = <<<EOT
 <div class="event large">
 	<h3 class="centre">{$this->data->nom}</h3>
-	Début le {$laDate}
-	<p>Partager : (cliquez sur le lien pour le copier dans votre presse-papier)<input type="text" id="partager" size="64"></p>
+	<p><b>Date limite des inscriptions : </b>{$laDate}</p><br/>
+	<p><b>Discipline : </b>{$this->data->discipline->nom}</p><br/>
+	<p><b>Tarif : </b>{$this->data->tarif} €</p><br/>
+	<p><b>Organisé par : </b>{$this->data->organisateur->prenom} {$this->data->organisateur->nom}<br/>
+	{$this->data->organisateur->adresse} {$this->data->organisateur->cp} {$this->data->organisateur->ville} ; Téléphone : {$this->data->organisateur->tel}
+	</p><br/>
+	<p><b>Partager l'événement : </b>(cliquez sur le lien pour le copier dans votre presse-papier)<input type="text" id="partager" size="64"></p>
 	<hr>
 	<p class="description">{$this->data->description}</p>
 EOT;
@@ -187,7 +193,7 @@ EOT;
 		}
 
 		// Récupérer épreuves
-		$html .= "<div class='line'>\n";
+		$html .= "<h5 class='centre'>Les épreuves :</h5><div class='line'>\n";
 		$lesEpreuves = $this->data->getEpreuves();
 		foreach($lesEpreuves as $epreuve) {
 			$laDate = date_format($epreuve->dateheure,"d-m-Y H:i");
@@ -195,8 +201,17 @@ EOT;
 	<div class="epreuve offset-0 span-3">
 		<h4>{$epreuve->nom}</h4>
 		<ul>
-			<li>{$laDate}</li>
-			<li>{$epreuve->distance}m</li>
+			<li><b>Date de l'épreuve : </b>{$laDate}</li>
+EOT;
+
+			if($epreuve->distance != 0)
+			{
+				$html .= <<<EOT
+				<li><b>Distance : </b>{$epreuve->distance} mètres</li>
+EOT;
+			}
+
+			$html .= <<<EOT
 		</ul>
 EOT;
 			// L'affichage est différent si les Inscriptions sont ouvertes ou non
@@ -221,8 +236,8 @@ EOT;
 					<p><input type="text" name="prenom" placeholder="Prénom" required="required"></p>
 					<p><input type="text" name="adresse" placeholder="Adresse" required="required"></p>
 					<p><input type="text" name="ville" placeholder="Ville" required="required"></p>
-					<p><input type="text" name="cp" placeholder="Code Postal" required="required"></p>
-					<p><input type="tel" name="tel" placeholder="Téléphone" required="required"></p>
+					<p><input type="text" name="cp" placeholder="Code Postal" maxlength="5" required="required"></p>
+					<p><input type="tel" name="tel" placeholder="Téléphone" maxlength="10" required="required"></p>
 					<p><input type="submit" class="btn" value="Inscription"></p>
 				</form>
 			</div>
@@ -254,7 +269,7 @@ EOT;
 			$html .= "</div>\n";
 		}
 
-		$html .= "</div>\n";
+		$html .= "</div></div>\n";
 		return $html;
 	}
 
@@ -391,12 +406,26 @@ EOT;
 				<button class="btn delete" id="{$this->script_name}/supprimerEpreuve/?epreuve={$epreuve->id}">Supprimer</button>
 			</p>
 		</form>
-		<hr>
 EOT;
 				if(!$inscriptions_ouvertes) {
 					$html .= <<<EOT
-		<form method="post" enctype="multipart/form-data" action="{$this->script_name}/uploadClassement/?epreuve={$epreuve->id}">
+		<hr><form method="post" enctype="multipart/form-data" action="{$this->script_name}/uploadClassement/?epreuve={$epreuve->id}">
+EOT;
+					
+					if(\sportnet\model\inscrit::findById($epreuve->id) != null)
+					{
+						$html .= <<<EOT
 			<p><a href="{$this->script_name}/telechargerListe/?epreuve={$epreuve->id}" id="liste-{$epreuve->id}">Télécharger liste d&#39;engagement</a></p>
+EOT;
+					}
+					else
+					{
+						$html .= <<<EOT
+			<p>La liste d'engagement n'est pas disponible car il n'y a aucun inscrit.</p>
+EOT;
+					}
+			
+					$html .= <<<EOT
 			<p>
 				Upload classement : <input type="file" name="csv"> <input type="submit" class="btn" name="uploader" value="Uploader le classement">
 			</p>
@@ -469,6 +498,7 @@ EOT;
         $header 	= $this->renderHeader();
         $menu   	= $this->renderMenu();
 		$messages	= $this->renderMessage();
+		$footer		= $this->renderFooter();
 
 /*
  * Utilisation de la syntaxe HEREDOC pour écrire la chaine de caractère de
@@ -500,6 +530,8 @@ EOT;
 		<div class="container line">
 			${main}
 		</div>
+		
+		${footer}
     </body>
 </html>
 EOT;

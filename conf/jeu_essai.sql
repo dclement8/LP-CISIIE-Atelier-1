@@ -28,7 +28,7 @@ INSERT INTO participant (nom, prenom, rue, cp, ville, tel)
 VALUES ('Fabien', 'Amine', '11 rue Roussaux', '54000', 'Nancy', '03040506');
 
 INSERT INTO participant (nom, prenom, rue, cp, ville, tel)
-VALUES ('fleur', 'Lucie', '23 rue Jean Monnet', '54000', 'Nancy', '03040506');
+VALUES ('Fleur', 'Lucie', '23 rue Jean Monnet', '54000', 'Nancy', '03040506');
 
 INSERT INTO participant (nom, prenom, rue, cp, ville, tel)
 VALUES ('Arthaud', 'Pierre', '78 impasse de la Brasserie', '54000', 'Nancy', '03040506');
@@ -61,31 +61,31 @@ INSERT INTO discipline (nom)
 VALUES ('Hockey');
 
 INSERT INTO evenement (nom, description, etat, dateheureLimiteInscription, tarif, id_discipline, id_organisateur)
-VALUES ('Course de nuit', 'Course de nuit', 4, '2016-02-02 03:30:0', 06, 2, 1);
+VALUES ('Course de nuit', 'Course de nuit', 1, '2016-02-02 03:30:0', 06, 2, 1);
 
 INSERT INTO evenement (nom, description, etat, dateheureLimiteInscription, tarif, id_discipline, id_organisateur)
-VALUES ('Randonnée de noël', 'Randonnée dans les bois de Velaine-en-hais', 2, '2016-12-24 11:00:00', 14, 1, 2);
+VALUES ('Randonnée de noël', 'Randonnée dans les bois de Velaine-en-Haie', 2, '2016-12-24 11:00:00', 14, 1, 2);
 
 INSERT INTO evenement (nom, description, etat, dateheureLimiteInscription, tarif, id_discipline, id_organisateur)
-VALUES ('Tennis en salle', 'Tennis dans le gymnase Jaques Cartier', 3, '2016-09-25 14:30:00', 20, 3, 3);
+VALUES ('Tennis en salle', 'Tennis dans le gymnase Jacques Cartier', 3, '2016-09-25 14:30:00', 20, 3, 3);
 
 INSERT INTO epreuve (nom, distance, dateheure, id_evenement)
-VALUES ('Marathon hivernal', 150, '2016-02-02 12:12:12', 1);
+VALUES ('Marathon hivernal', 15000, '2016-02-02 12:12:12', 1);
 
 INSERT INTO epreuve (nom, distance, dateheure, id_evenement)
-VALUES ('Tir a l arc hivernal', 30, '2016-02-02 12:12:12', 1);
+VALUES ('Biathlon hivernal', 30000, '2016-02-02 12:12:12', 1);
 
 INSERT INTO epreuve (nom, distance, dateheure, id_evenement)
-VALUES ('Marathon hivernal', 150, '2016-02-02 12:12:12', 2);
+VALUES ('Marathon hivernal', 15000, '2016-02-02 12:12:12', 2);
 
 INSERT INTO epreuve (nom, distance, dateheure, id_evenement)
-VALUES ('Epreuve de Tennis', 200, '2016-04-02 12:12:12', 2);
+VALUES ('Epreuve de Tennis', 20000, '2016-04-02 12:12:12', 2);
 
 INSERT INTO epreuve (nom, distance, dateheure, id_evenement)
-VALUES ('Epreuve de course', 250, '2016-08-02 12:12:12', 3);
+VALUES ('Epreuve de course', 25000, '2016-08-02 12:12:12', 3);
 
 INSERT INTO epreuve (nom, distance, dateheure, id_evenement)
-VALUES ('Epreuve de marche nordique', 250, '2016-08-02 12:12:12', 3);
+VALUES ('Epreuve de marche nordique', 2500, '2016-08-02 12:12:12', 3);
 
 INSERT INTO inscrit (dossard, id_participant, id_epreuve)
 VALUES (1, 1, 1);

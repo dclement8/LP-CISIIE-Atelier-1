@@ -270,6 +270,13 @@ hr {
 [id^="spoiler-"] {
   display: none; }
 
+footer {
+  background-color: black;
+  color: white;
+  padding: 15px;
+  width: 100%;
+  bottom: 0px; }
+
 .btn {
   font-size: 16px;
   padding: 7px;
