@@ -427,7 +427,8 @@ EOT;
 			
 					$html .= <<<EOT
 			<p>
-				Upload classement : <input type="file" name="csv"> <input type="submit" class="btn" name="uploader" value="Uploader le classement">
+				<b>INFO : </b>Pour créer votre classement en CSV vous devez préciser pour chaque ligne, en premier : la position du participant, en deuxième : son numéro de dossard et en dernier son temps sous la forme (hh:mm:ss:cs).<br/>
+				<b>Upload classement : </b><input type="file" name="csv"> <input type="submit" class="btn" name="uploader" value="Uploader le classement">
 			</p>
 		</form>
 EOT;
