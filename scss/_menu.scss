@@ -6,29 +6,32 @@
     list-style-type: none;
     padding:0px;
 
-    a
+    li
     {
         background-color:#666;
         font-size:1rem;
-        padding-left:15px;
-        padding-right:15px;
         display: inline-block;
         height:50px;
         line-height:50px;
         text-align: center;
         text-decoration: none;
+        list-style-type: none;
 
-        li
+        a
         {
-            color:white;
-            list-style-type: none;
+            color: white;
+            text-decoration: none;
+            height: 50px;
+            width: 100%;
+            line-height: 50px;
+            padding: 15px;
         }
     }
 
-    a:hover:not(.active):not(.disabled)
+    li:hover:not(.active):not(.disabled)
     {
         background-color:#BBB;
-        li
+        a
         {
             color:black;
             cursor:pointer;

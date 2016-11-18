@@ -5,7 +5,7 @@
     min-height:25px;
     list-style-type: none;
     padding:0px;
-    a
+    li
     {
         font-size:1rem;
         padding-left:15px;
@@ -14,32 +14,31 @@
         height:25px;
         line-height:25px;
         text-align: center;
-        text-decoration: none;
 
-        li
+        a
         {
             color:#222;
             list-style-type: none;
-            display: inline-block;
+            text-decoration: none;
         }
     }
-    a:not(:last-child)::after
+    li:not(:last-child)::after
     {
         content:" > ";
         color:red;
     }
-    a:not(:last-child):hover
+    li:not(:last-child):hover
     {
-        li
+        a
         {
             color:black;
             text-decoration:underline;
             cursor:pointer;
         }
     }
-    a:last-child
+    li:last-child
     {
-        li
+        a
         {
             color:red;
             font-weight: bold;
