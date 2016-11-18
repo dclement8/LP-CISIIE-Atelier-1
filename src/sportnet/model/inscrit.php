@@ -77,6 +77,7 @@ class inscrit extends AbstractModel {
 		}
 	}
 	
+	// Note : on prend l'ID de l'épreuve en paramètre
 	public static function findById($leId)
 	{
 		if(self::$db == null)
@@ -191,7 +192,8 @@ class inscrit extends AbstractModel {
 		$select_prep->bindParam(":id_epreuve", $leIdEpreuve, \PDO::PARAM_INT);
 		$select_prep->execute();
 		$obj = 0;
-		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC)) {
+		while ($ligne = $select_prep->fetch(\PDO::FETCH_ASSOC))
+		{
 			$obj = $ligne['leMax'];
 		}
 		if($obj == null)
