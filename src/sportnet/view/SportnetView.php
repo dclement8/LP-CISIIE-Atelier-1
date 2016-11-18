@@ -195,78 +195,81 @@ EOT;
 		// Récupérer épreuves
 		$html .= "<h5 class='centre'>Les épreuves :</h5><div class='line'>\n";
 		$lesEpreuves = $this->data->getEpreuves();
-		foreach($lesEpreuves as $epreuve) {
-			$laDate = date_format($epreuve->dateheure,"d-m-Y H:i");
-			$html .= <<<EOT
-	<div class="epreuve offset-0 span-3">
-		<h4>{$epreuve->nom}</h4>
-		<ul>
-			<li><b>Date de l&#39;épreuve : </b>{$laDate}</li>
-EOT;
-
-			if($epreuve->distance != 0)
-			{
+		if($lesEpreuves != null)
+		{
+			foreach($lesEpreuves as $epreuve) {
+				$laDate = date_format($epreuve->dateheure,"d-m-Y H:i");
 				$html .= <<<EOT
-				<li><b>Distance : </b>{$epreuve->distance} mètres</li>
+		<div class="epreuve offset-0 span-3">
+			<h4>{$epreuve->nom}</h4>
+			<ul>
+				<li><b>Date de l&#39;épreuve : </b>{$laDate}</li>
 EOT;
-			}
 
-			$html .= <<<EOT
-		</ul>
-EOT;
-			// L'affichage est différent si les Inscriptions sont ouvertes ou non
-			if($inscriptions_ouvertes) {
-				$html .= <<<EOT
-		<button id="btn-spoiler-{$epreuve->id}" class="btn btn-red">↓ S&#39;Inscrire</button>
-
-		<div id="spoiler-{$epreuve->id}">
-			<!-- Div masquée par défaut -->
-			<div>
-				<form method="post" action="{$this->script_name}/inscrireEpreuveViaNum/?epreuve={$epreuve->id}">
-					Numéro de participant :
-					<input type="number" name="num" required="required">
-					<input type="submit" class="btn" value="Valider l'inscription">
-				</form>
-			</div>
-
-			<div>
-				<form method="post" action="{$this->script_name}/inscrireEpreuve/?epreuve={$epreuve->id}">
-					OU
-					<p><input type="text" name="nom" placeholder="Nom" required="required"></p>
-					<p><input type="text" name="prenom" placeholder="Prénom" required="required"></p>
-					<p><input type="text" name="adresse" placeholder="Adresse" required="required"></p>
-					<p><input type="text" name="ville" placeholder="Ville" required="required"></p>
-					<p><input type="text" name="cp" placeholder="Code Postal" maxlength="5" required="required"></p>
-					<p><input type="tel" name="tel" placeholder="Téléphone" maxlength="10" required="required"></p>
-					<p><input type="submit" class="btn" value="Inscription"></p>
-				</form>
-			</div>
-		</div>
-EOT;
-			}
-			else {
-				// Inscriptions fermées
-				$classement = \sportnet\model\classer::findById($epreuve->id);
-				if($classement !== null && $classement !== false) {
+				if($epreuve->distance != 0)
+				{
 					$html .= <<<EOT
-		<button id="btn-spoiler-{$epreuve->id}" class="btn btn-red">↓ Classement</button>
-
-		<div id="spoiler-{$epreuve->id}">
-			<!-- Div masquée par défaut -->
-			<table>
+					<li><b>Distance : </b>{$epreuve->distance} mètres</li>
 EOT;
-					$i = 1;
-					foreach($classement as $participant) {
-						$html .= "\t\t\t<tr><td>".$i."</td><td>".$participant->participant->nom." ".$participant->participant->prenom."</td><td>".$this->afficherTemps($participant->temps)."</td></tr>\n";
-						$i++;
-					}
-
-					$html .= "\t\t</table>\n";
-					$html .= "\t</div>\n";
 				}
-			}
 
-			$html .= "</div>\n";
+				$html .= <<<EOT
+			</ul>
+EOT;
+				// L'affichage est différent si les Inscriptions sont ouvertes ou non
+				if($inscriptions_ouvertes) {
+					$html .= <<<EOT
+			<button id="btn-spoiler-{$epreuve->id}" class="btn btn-red">↓ S&#39;Inscrire</button>
+
+			<div id="spoiler-{$epreuve->id}">
+				<!-- Div masquée par défaut -->
+				<div>
+					<form method="post" action="{$this->script_name}/inscrireEpreuveViaNum/?epreuve={$epreuve->id}">
+						Numéro de participant :
+						<input type="number" name="num" required="required">
+						<input type="submit" class="btn" value="Valider l'inscription">
+					</form>
+				</div>
+
+				<div>
+					<form method="post" action="{$this->script_name}/inscrireEpreuve/?epreuve={$epreuve->id}">
+						OU
+						<p><input type="text" name="nom" placeholder="Nom" required="required"></p>
+						<p><input type="text" name="prenom" placeholder="Prénom" required="required"></p>
+						<p><input type="text" name="adresse" placeholder="Adresse" required="required"></p>
+						<p><input type="text" name="ville" placeholder="Ville" required="required"></p>
+						<p><input type="text" name="cp" placeholder="Code Postal" maxlength="5" required="required"></p>
+						<p><input type="tel" name="tel" placeholder="Téléphone" maxlength="10" required="required"></p>
+						<p><input type="submit" class="btn" value="Inscription"></p>
+					</form>
+				</div>
+			</div>
+EOT;
+				}
+				else {
+					// Inscriptions fermées
+					$classement = \sportnet\model\classer::findById($epreuve->id);
+					if($classement !== null && $classement !== false) {
+						$html .= <<<EOT
+			<button id="btn-spoiler-{$epreuve->id}" class="btn btn-red">↓ Classement</button>
+
+			<div id="spoiler-{$epreuve->id}">
+				<!-- Div masquée par défaut -->
+				<table>
+EOT;
+						$i = 1;
+						foreach($classement as $participant) {
+							$html .= "\t\t\t<tr><td>".$i."</td><td>".$participant->participant->nom." ".$participant->participant->prenom."</td><td>".$this->afficherTemps($participant->temps)."</td></tr>\n";
+							$i++;
+						}
+
+						$html .= "\t\t</table>\n";
+						$html .= "\t</div>\n";
+					}
+				}
+
+				$html .= "</div>\n";
+			}
 		}
 
 		$html .= "</div></div>\n";
@@ -390,62 +393,65 @@ EOT;
 		<!-- Div masquée par défaut -->
 		<!-- Voir/modifier une épreuve -->
 EOT;
-			foreach($event->getEpreuves() as $epreuve) {
-				$laDate = date_format($epreuve->dateheure,"d-m-Y H:i");
-				$html .= <<<EOT
-		<h4>{$epreuve->nom}</h4>
-		<form method="post" action="{$this->script_name}/creerEpreuve/?event={$event->id}&epreuve={$epreuve->id}">
-			<p><input type="text" name="nom_epreuve" placeholder="Nom" value="{$epreuve->nom}" required="required"></p>
-			<p>
-				Date (dd-mm-aaaa hh:mm) :<br />
-				<input type="text" name="date_epreuve" value="{$laDate}" required="required">
-			</p>
-			<p><input type="number" name="dist_epreuve" placeholder="Distance (en m)" value="{$epreuve->distance}" min="1" max="100000" required="required"></p>
-			<p>
-				<input type="submit" class="btn" value="Modifier">
-				<button class="btn delete" id="{$this->script_name}/supprimerEpreuve/?epreuve={$epreuve->id}">Supprimer</button>
-			</p>
-		</form>
-EOT;
-				if(!$inscriptions_ouvertes) {
+			if($event->getEpreuves() != null)
+			{
+				foreach($event->getEpreuves() as $epreuve) {
+					$laDate = date_format($epreuve->dateheure,"d-m-Y H:i");
 					$html .= <<<EOT
-		<hr><form method="post" enctype="multipart/form-data" action="{$this->script_name}/uploadClassement/?epreuve={$epreuve->id}">
+			<h4>{$epreuve->nom}</h4>
+			<form method="post" action="{$this->script_name}/creerEpreuve/?event={$event->id}&epreuve={$epreuve->id}">
+				<p><input type="text" name="nom_epreuve" placeholder="Nom" value="{$epreuve->nom}" required="required"></p>
+				<p>
+					Date (dd-mm-aaaa hh:mm) :<br />
+					<input type="text" name="date_epreuve" value="{$laDate}" required="required">
+				</p>
+				<p><input type="number" name="dist_epreuve" placeholder="Distance (en m)" value="{$epreuve->distance}" min="1" max="100000" required="required"></p>
+				<p>
+					<input type="submit" class="btn" value="Modifier">
+					<button class="btn delete" id="{$this->script_name}/supprimerEpreuve/?epreuve={$epreuve->id}">Supprimer</button>
+				</p>
+			</form>
 EOT;
-
-					if(\sportnet\model\inscrit::findById($epreuve->id) != null)
-					{
+					if(!$inscriptions_ouvertes) {
 						$html .= <<<EOT
-			<p><a href="{$this->script_name}/telechargerListe/?epreuve={$epreuve->id}" id="liste-{$epreuve->id}">Télécharger liste d&#39;engagement</a></p>
+			<hr><form method="post" enctype="multipart/form-data" action="{$this->script_name}/uploadClassement/?epreuve={$epreuve->id}">
 EOT;
-					}
-					else
-					{
+
+						if(\sportnet\model\inscrit::findById($epreuve->id) != null)
+						{
+							$html .= <<<EOT
+				<p><a href="{$this->script_name}/telechargerListe/?epreuve={$epreuve->id}" id="liste-{$epreuve->id}">Télécharger liste d&#39;engagement</a></p>
+EOT;
+						}
+						else
+						{
+							$html .= <<<EOT
+				<p>La liste d&#39;engagement n&#39;est pas disponible car il n'y a aucun inscrit.</p>
+EOT;
+						}
+
 						$html .= <<<EOT
-			<p>La liste d&#39;engagement n&#39;est pas disponible car il n'y a aucun inscrit.</p>
+				<p>
+					<b>INFO : </b>Pour créer votre classement en CSV vous devez préciser pour chaque ligne, en premier : la position du participant, en deuxième : son numéro de dossard et en dernier son temps sous la forme (hh:mm:ss:cs).<br/>
+					<b>Upload classement : </b><input type="file" name="csv"> <input type="submit" class="btn" name="uploader" value="Uploader le classement">
+				</p>
+			</form>
 EOT;
 					}
 
-					$html .= <<<EOT
-			<p>
-				<b>INFO : </b>Pour créer votre classement en CSV vous devez préciser pour chaque ligne, en premier : la position du participant, en deuxième : son numéro de dossard et en dernier son temps sous la forme (hh:mm:ss:cs).<br/>
-				<b>Upload classement : </b><input type="file" name="csv"> <input type="submit" class="btn" name="uploader" value="Uploader le classement">
-			</p>
-		</form>
-EOT;
-				}
+					$html .= "\t\t<hr><strong>Participants :</strong>\n";
+					$html .= "\t\t<table>\n";
+					$html .= "\t\t\t<tr><th>Nom</th><th>Dossard</th></tr>\n";
 
-				$html .= "\t\t<hr><strong>Participants :</strong>\n";
-				$html .= "\t\t<table>\n";
-				$html .= "\t\t\t<tr><th>Nom</th><th>Dossard</th></tr>\n";
-
-				$participants = \sportnet\model\inscrit::findById($epreuve->id);
-				if($participants !== null && $participants !== false) {
-					foreach($participants as $participant) {
-						$html .= "\t\t\t<tr><td>".$participant->participant->nom." ".$participant->participant->prenom."</td><td>".$participant->dossard."</td></tr>\n";
+					$participants = \sportnet\model\inscrit::findById($epreuve->id);
+					if($participants !== null && $participants !== false) {
+						foreach($participants as $participant) {
+							$html .= "\t\t\t<tr><td>".$participant->participant->nom." ".$participant->participant->prenom."</td><td>".$participant->dossard."</td></tr>\n";
+						}
 					}
-				}
 
-				$html .= "\t\t</table>\n";
+					$html .= "\t\t</table>\n";
+				}
 			}
 
 			$html .= "\t</div></div>\n";

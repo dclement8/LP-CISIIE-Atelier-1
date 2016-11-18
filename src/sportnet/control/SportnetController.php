@@ -457,7 +457,7 @@ class SportnetController {
 			$epreuve = null;
 			if(isset($this->request->get["epreuve"]))
 			{
-				$epreuve = \sportnet\model\evenement::findById($this->request->get["epreuve"]);
+				$epreuve = \sportnet\model\epreuve::findById($this->request->get["epreuve"]);
 			}
 			else
 			{
