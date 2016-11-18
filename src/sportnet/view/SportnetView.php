@@ -269,7 +269,7 @@ EOT;
 			$html .= "</div>\n";
 		}
 
-		$html .= "</div>\n";
+		$html .= "</div></div>\n";
 		return $html;
 	}
 
@@ -498,6 +498,7 @@ EOT;
         $header 	= $this->renderHeader();
         $menu   	= $this->renderMenu();
 		$messages	= $this->renderMessage();
+		$footer		= $this->renderFooter();
 
 /*
  * Utilisation de la syntaxe HEREDOC pour écrire la chaine de caractère de
@@ -529,6 +530,8 @@ EOT;
 		<div class="container line">
 			${main}
 		</div>
+		
+		${footer}
     </body>
 </html>
 EOT;

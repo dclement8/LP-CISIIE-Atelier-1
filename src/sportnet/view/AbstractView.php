@@ -65,6 +65,18 @@ abstract class AbstractView {
 		$html .= "</header>\n";
         return $html;
     }
+	
+	
+	/*
+     *  Crée le fragment HTML du footer
+     *
+     */
+    protected function renderFooter(){
+        $html  = "<footer>\n";
+		$html .= "\tAtelier LP CISIIE ; 2016 ; DALICHAMPT Thibaut - PIGUET Charles - HAPPE Hugo - CLEMENT Dylan\n";
+		$html .= "</footer>\n";
+        return $html;
+    }
 
 
     /*
