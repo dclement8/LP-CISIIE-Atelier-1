@@ -170,6 +170,9 @@ ul li {
 
 form {
   text-align: left; }
+  form div {
+    margin: 0 10px 0;
+    padding: 5px 10px 0; }
 
 label {
   float: left;
@@ -177,7 +180,6 @@ label {
   font-size: .8rem; }
 
 section, form {
-  padding: 10px;
   font-size: 100%;
   font: inherit;
   vertical-align: baseline;
@@ -218,7 +220,7 @@ header {
     color: white;
     font-size: 1.5em; }
 
-input:not([type="submit"]):not([type="button"]), select, textarea {
+input:not([type="submit"]):not([type="button"]):not([type="file"]), select, textarea {
   min-height: 20px;
   box-sizing: border-box;
   border-radius: 3px;
@@ -301,8 +303,15 @@ div.line div, div.line-margin div, div.line-margin-1 div, div.line-margin-2 div,
 .container {
   margin-bottom: 3rem; }
 
-p {
+p, fieldset {
   padding: 0 10px 0; }
+
+fieldset {
+  margin: 0 10px 0; }
+
+[id^=spoiler-] h4 {
+  background-color: #FF6464;
+  font-size: 1.2rem; }
 
 .btn {
   font-size: 16px;
