@@ -93,7 +93,7 @@ EOT;
         <h3>Ajouter une épreuve</h3>
         <p><input type="text" name="nom_epreuve" placeholder="Nom" required="required"></p>
         <p>
-            Date :<br />
+            Date (dd-mm-aaaa hh:mm) :<br />
             <input type="text" name="date_epreuve" required="required">
         </p>
         <p><input type="number" name="dist_epreuve" placeholder="Distance (en m)" min="1" max="100000" required="required"></p>
@@ -373,7 +373,7 @@ EOT;
 		<form method="post" action="{$this->script_name}/creerEpreuve/?event={$event->id}">
 			<p><input type="text" name="nom_epreuve" placeholder="Nom" required="required"></p>
 			<p>
-				Date :<br />
+				Date (dd-mm-aaaa hh:mm) :<br />
 				<input type="text" name="date_epreuve" required="required">
 			</p>
 			<p><input type="number" name="dist_epreuve" placeholder="Distance (en m)" min="1" max="100000" required="required"></p>
@@ -397,7 +397,7 @@ EOT;
 		<form method="post" action="{$this->script_name}/creerEpreuve/?event={$event->id}&epreuve={$epreuve->id}">
 			<p><input type="text" name="nom_epreuve" placeholder="Nom" value="{$epreuve->nom}" required="required"></p>
 			<p>
-				Date :<br />
+				Date (dd-mm-aaaa hh:mm) :<br />
 				<input type="text" name="date_epreuve" value="{$laDate}" required="required">
 			</p>
 			<p><input type="number" name="dist_epreuve" placeholder="Distance (en m)" value="{$epreuve->distance}" min="1" max="100000" required="required"></p>
