@@ -95,30 +95,112 @@ class SportnetController {
 				$tarif = filter_var($this->request->post["tarif"], FILTER_SANITIZE_NUMBER_FLOAT);
 				$discipline = filter_var($this->request->post["discipline"], FILTER_SANITIZE_NUMBER_INT);
 				
-				if((\DateTime::createFromFormat("d-m-Y H:i", $date)) == false)
+				if(\sportnet\model\discipline::findById($discipline) != null)
 				{
-					$_SESSION["message"][] = 3;
-					$_SESSION["message"][] = "Date de l'événement invalide";
-					$view = new \sportnet\view\SportnetView(\sportnet\model\organisateur::findByLogin($auth->user_login)->getEvenements());
-					$view->render('espaceOrganisateur');
-				}
-				else
-				{
-					if(!(isset($this->request->get["event"])))
+					if((\DateTime::createFromFormat("d-m-Y H:i", $date)) === false)
 					{
-						if(isset($this->request->post["nom_epreuve"]) && isset($this->request->post["date_epreuve"]) && isset($this->request->post["dist_epreuve"]))
+						$_SESSION["message"][] = 3;
+						$_SESSION["message"][] = "Date de l'événement invalide";
+						$view = new \sportnet\view\SportnetView(\sportnet\model\organisateur::findByLogin($auth->user_login)->getEvenements());
+						$view->render('espaceOrganisateur');
+					}
+					else
+					{
+						if(!(isset($this->request->get["event"])))
 						{
-							$evenement = new \sportnet\model\evenement();
-							
-							$nom_epreuve = filter_var($this->request->post["nom_epreuve"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-							$date_epreuve = filter_var($this->request->post["date_epreuve"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-							$dist_epreuve = filter_var($this->request->post["dist_epreuve"], FILTER_SANITIZE_NUMBER_INT);
-							
-							if((\DateTime::createFromFormat("d-m-Y H:i", $date_epreuve)) == false)
+							if(isset($this->request->post["nom_epreuve"]) && isset($this->request->post["date_epreuve"]) && isset($this->request->post["dist_epreuve"]))
 							{
-								$_SESSION["message"][] = 3;
-								$_SESSION["message"][] = "Date de l'événement invalide";
-								$view = new \sportnet\view\SportnetView(\sportnet\model\organisateur::findByLogin($auth->user_login)->getEvenements());
+								$evenement = new \sportnet\model\evenement();
+								
+								$nom_epreuve = filter_var($this->request->post["nom_epreuve"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+								$date_epreuve = filter_var($this->request->post["date_epreuve"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+								$dist_epreuve = filter_var($this->request->post["dist_epreuve"], FILTER_SANITIZE_NUMBER_INT);
+								
+								if((\DateTime::createFromFormat("d-m-Y H:i", $date_epreuve)) == false)
+								{
+									$_SESSION["message"][] = 3;
+									$_SESSION["message"][] = "Date de l'événement invalide";
+									$view = new \sportnet\view\SportnetView(\sportnet\model\organisateur::findByLogin($auth->user_login)->getEvenements());
+									$view->render('espaceOrganisateur');
+								}
+								else
+								{
+									$evenement->nom = $nom;
+									$evenement->description = $description;
+									$evenement->etat = $etat;
+									$evenement->dateheureLimiteInscription = $date;
+									$evenement->tarif = $tarif;
+									$evenement->discipline = \sportnet\model\discipline::findById($discipline);
+									$evenement->organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+									
+									//var_dump($evenement->discipline);
+									
+									$retour = $evenement->save();
+									
+									$_SESSION["message"] = array();
+									
+									if($retour == true)
+									{
+										$epreuve = new \sportnet\model\epreuve();
+										$epreuve->nom = $nom_epreuve;
+										$epreuve->distance = $dist_epreuve;
+										$epreuve->dateheure = $date_epreuve;
+										
+										$epreuve->evenement = \sportnet\model\evenement::getLastEvenement();
+										
+										
+										$retour = $epreuve->save();
+										
+										if($retour == true)
+										{
+											$_SESSION["message"][] = 1;
+											$_SESSION["message"][] = "Evénement enregistré.";
+											
+											$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+							
+											$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
+											$view->render('espaceOrganisateur');
+										}
+										else
+										{
+											$_SESSION["message"][] = 4;
+											$_SESSION["message"][] = "Erreur lors de l'enregistrement de l'épreuve de l'événement.";
+											
+											$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+							
+											$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
+											$view->render('espaceOrganisateur');
+										}
+									}
+									else
+									{
+										$_SESSION["message"][] = 4;
+										$_SESSION["message"][] = "Erreur lors de l'enregistrement de l'événement";
+										
+										$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+							
+										$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
+										$view->render('espaceOrganisateur');
+									}
+								}
+							}
+							else
+							{
+								$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+						
+								$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
+								$view->render('espaceOrganisateur');
+							}
+						}
+						else
+						{
+							$evenement = \sportnet\model\evenement::findById($this->request->get["event"]);
+							
+							if($evenement == null)
+							{
+								$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
+						
+								$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
 								$view->render('espaceOrganisateur');
 							}
 							else
@@ -131,107 +213,35 @@ class SportnetController {
 								$evenement->discipline = \sportnet\model\discipline::findById($discipline);
 								$evenement->organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
 								
-								//var_dump($evenement->discipline);
-								
 								$retour = $evenement->save();
 								
 								$_SESSION["message"] = array();
 								
 								if($retour == true)
 								{
-									$epreuve = new \sportnet\model\epreuve();
-									$epreuve->nom = $nom_epreuve;
-									$epreuve->distance = $dist_epreuve;
-									$epreuve->dateheure = $date_epreuve;
-									
-									$epreuve->evenement = \sportnet\model\evenement::getLastEvenement();
-									
-									
-									$retour = $epreuve->save();
-									
-									if($retour == true)
-									{
-										$_SESSION["message"][] = 1;
-										$_SESSION["message"][] = "Evénement enregistré.";
-										
-										$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
-						
-										$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
-										$view->render('espaceOrganisateur');
-									}
-									else
-									{
-										$_SESSION["message"][] = 4;
-										$_SESSION["message"][] = "Erreur lors de l'enregistrement de l'épreuve de l'événement.";
-										
-										$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
-						
-										$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
-										$view->render('espaceOrganisateur');
-									}
+									$_SESSION["message"][] = 1;
+									$_SESSION["message"][] = "Evénement enregistré.";
 								}
 								else
 								{
 									$_SESSION["message"][] = 4;
 									$_SESSION["message"][] = "Erreur lors de l'enregistrement de l'événement";
-									
-									$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
-						
-									$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
-									$view->render('espaceOrganisateur');
 								}
-							}
-						}
-						else
-						{
-							$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
-					
-							$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
-							$view->render('espaceOrganisateur');
-						}
-					}
-					else
-					{
-						$evenement = \sportnet\model\evenement::findById($this->request->get["event"]);
+								
+								$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
 						
-						if($evenement == null)
-						{
-							$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
-					
-							$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
-							$view->render('espaceOrganisateur');
-						}
-						else
-						{
-							$evenement->nom = $nom;
-							$evenement->description = $description;
-							$evenement->etat = $etat;
-							$evenement->dateheureLimiteInscription = $date;
-							$evenement->tarif = $tarif;
-							$evenement->discipline = \sportnet\model\discipline::findById($discipline);
-							$evenement->organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
-							
-							$retour = $evenement->save();
-							
-							$_SESSION["message"] = array();
-							
-							if($retour == true)
-							{
-								$_SESSION["message"][] = 1;
-								$_SESSION["message"][] = "Evénement enregistré.";
+								$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
+								$view->render('espaceOrganisateur');
 							}
-							else
-							{
-								$_SESSION["message"][] = 4;
-								$_SESSION["message"][] = "Erreur lors de l'enregistrement de l'événement";
-							}
-							
-							$organisateur = \sportnet\model\organisateur::findByLogin($auth->user_login);
-					
-							$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
-							$view->render('espaceOrganisateur');
 						}
 					}
+				}
+				else
+				{
+					$_SESSION["message"][] = 3;
+					$_SESSION["message"][] = "La discipline n'existe pas.";
+					$view = new \sportnet\view\SportnetView($organisateur->getEvenements());
+					$view->render('espaceOrganisateur');
 				}
 			}
 			else
