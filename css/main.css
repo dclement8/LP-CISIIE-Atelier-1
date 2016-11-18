@@ -415,22 +415,25 @@ footer {
   min-height: 50px;
   list-style-type: none;
   padding: 0px; }
-  .navbar a {
+  .navbar li {
     background-color: #666;
     font-size: 1rem;
-    padding-left: 15px;
-    padding-right: 15px;
     display: inline-block;
     height: 50px;
     line-height: 50px;
     text-align: center;
-    text-decoration: none; }
-    .navbar a li {
+    text-decoration: none;
+    list-style-type: none; }
+    .navbar li a {
       color: white;
-      list-style-type: none; }
-  .navbar a:hover:not(.active):not(.disabled) {
+      text-decoration: none;
+      height: 50px;
+      width: 100%;
+      line-height: 50px;
+      padding: 15px; }
+  .navbar li:hover:not(.active):not(.disabled) {
     background-color: #BBB; }
-    .navbar a:hover:not(.active):not(.disabled) li {
+    .navbar li:hover:not(.active):not(.disabled) a {
       color: black;
       cursor: pointer; }
   .navbar .active {
@@ -445,27 +448,26 @@ footer {
   min-height: 25px;
   list-style-type: none;
   padding: 0px; }
-  .breadcrumb a {
+  .breadcrumb li {
     font-size: 1rem;
     padding-left: 15px;
     padding-right: 15px;
     display: inline-block;
     height: 25px;
     line-height: 25px;
-    text-align: center;
-    text-decoration: none; }
-    .breadcrumb a li {
+    text-align: center; }
+    .breadcrumb li a {
       color: #222;
       list-style-type: none;
-      display: inline-block; }
-  .breadcrumb a:not(:last-child)::after {
+      text-decoration: none; }
+  .breadcrumb li:not(:last-child)::after {
     content: " > ";
     color: red; }
-  .breadcrumb a:not(:last-child):hover li {
+  .breadcrumb li:not(:last-child):hover a {
     color: black;
     text-decoration: underline;
     cursor: pointer; }
-  .breadcrumb a:last-child li {
+  .breadcrumb li:last-child a {
     color: red;
     font-weight: bold; }
 
